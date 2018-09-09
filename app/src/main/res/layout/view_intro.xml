@@ -2,10 +2,109 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/colorPrimary"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nick"/>
+        android:text="Configuración:"
+        android:textSize="18sp"
+        android:textColor="#fff"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/IntroTextView"
+            android:text="Nick:" />
+
+        <EditText
+            android:id="@+id/nick"
+            style="@style/IntroEditText"
+            android:hint="Nombre"
+            android:inputType="textPersonName|textCapWords"/>
+    </LinearLayout>
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+    style="@style/IntroTextView"
+    android:text="Teléf:"/>
+
+    <EditText
+        android:id="@+id/cell"
+        style="@style/IntroEditText"
+        android:hint="Cell"
+        android:inputType="phone"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/IntroTextView"
+            android:text="Correo:" />
+
+        <EditText
+            android:id="@+id/email"
+            style="@style/IntroEditText"
+            android:hint="\@nauta.cu"
+            android:inputType="textEmailAddress"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/IntroTextView"
+            android:text="Contraseña:" />
+
+        <EditText
+            android:id="@+id/pass"
+            style="@style/IntroEditText"
+            android:inputType="textPassword" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end">
+
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/okBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:text="OK" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+
+            android:textSize="20dp"
+            android:textColor="#fff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Recuerda ACTIVAR tus datos móviles antes de enviar cada mensaje..."/>
+    </LinearLayout>
 </LinearLayout>

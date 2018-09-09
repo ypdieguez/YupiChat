@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="countries_code">
-        <item>+1</item>
-        <item>+52</item>
+        <item>USA(+1)</item>
+        <item>Canadá(+1)</item>
+        <item>México(+52)</item>
     </string-array>
 </resources>

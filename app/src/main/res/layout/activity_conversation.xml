@@ -23,6 +23,7 @@
     <include layout="@layout/toolbar"/>
 
     <LinearLayout
+        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -30,37 +31,62 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Spinner
                 android:id="@+id/codeCountrySpinner"
-                android:layout_width="100dp"
+                android:layout_width="154dp"
                 android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/numberEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:hint="# Telf."/>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/conversation_compose_divider"
+        <EditText
+            android:id="@+id/composeMessage"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_gravity="bottom"
-            android:background="@drawable/conversation_compose_divider_gradient"
-            android:importantForAccessibility="no" />
+            android:layout_height="wrap_content"
+            android:hint="Mensaje"
+            android:scrollbars="vertical"
+            android:maxLines="14"
+            android:inputType="textCapSentences|textMultiLine"/>
 
-        <!-- Attachments to send, compose message view, media picker. -->
-        <include
-            android:id="@+id/message_compose_view_container"
-            layout="@layout/view_compose_message"
+        <LinearLayout
+            android:gravity="end"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+            <Button
+                android:id="@+id/sendMsgBtn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enviar"/>
+        </LinearLayout>
+
+        <!--<View-->
+            <!--android:id="@+id/conversation_compose_divider"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="4dp"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:background="@drawable/conversation_compose_divider_gradient"-->
+            <!--android:importantForAccessibility="no" />-->
+
+        <!--&lt;!&ndash; Attachments to send, compose message view, media picker. &ndash;&gt;-->
+        <!--<include-->
+            <!--android:id="@+id/message_compose_view_container"-->
+            <!--layout="@layout/view_compose_message"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
