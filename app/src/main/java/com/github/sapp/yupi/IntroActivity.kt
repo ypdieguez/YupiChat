@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.widget.ProgressBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.view_intro.*
@@ -70,7 +70,7 @@ class IntroActivity : AppCompatActivity() {
                 pref.edit().putString(NICK, mNick).apply()
                 pref.edit().putString(CELL, mCell).apply()
 
-                startActivity(Intent(this@IntroActivity, MainActivity::class.java))
+                startActivity(Intent(this@IntroActivity, ConversationActivity::class.java))
             }
         }
     }

@@ -3,4 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="compose_message_view_hint_text">Enviar mensaje</string>
     <string name="mms_text">MMS</string>
+    <string name="name">Nombre</string>
+    <string name="phone_number">Número de teléfono</string>
+    <string name="empty_contacts">No tienes contactos.</string>
 </resources>
