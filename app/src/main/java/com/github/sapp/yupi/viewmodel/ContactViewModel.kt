@@ -1,14 +1,20 @@
 package com.github.sapp.yupi.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.github.sapp.yupi.data.Contact
-import com.github.sapp.yupi.data.ContactDao
 import com.github.sapp.yupi.data.ContactRepository
 
 class ContactViewModel(
-        contactRepository: ContactRepository,
-        id: Int
+        private val repo: ContactRepository
 ) : ViewModel() {
-    var contact: LiveData<Contact> = contactRepository.getContact(id)
+
+    fun getContacts() = repo.getContacts()
+
+    fun getContact(id: Int) = repo.getContact(id)
+
+    fun insert(contact: Contact) = repo.insert(contact)
+
+    fun update(contact: Contact) = repo.update(contact)
+
+    fun delete(contact: Contact) = repo.delete(contact)
 }

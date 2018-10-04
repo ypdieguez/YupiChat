@@ -2,6 +2,7 @@ package com.github.sapp.yupi
 
 import android.content.Context
 import android.preference.PreferenceManager
+import com.github.sapp.yupi.ui.ConfigActivity
 import com.sun.mail.util.MailConnectException
 import javax.mail.AuthenticationFailedException
 import javax.mail.Message
@@ -15,8 +16,8 @@ class MailSender {
         fun send(context: Context, address: String, subject: String, content: String): String {
             try {
                 val pref = PreferenceManager.getDefaultSharedPreferences(context)
-                val user = pref.getString(IntroActivity.EMAIL, "")
-                val pass = pref.getString(IntroActivity.PASS, "")
+                val user = pref.getString(ConfigActivity.EMAIL, "")
+                val pass = pref.getString(ConfigActivity.PASS, "")
 
                 val props = System.getProperties()
                 props["mail.smtp.host"] = "smtp.nauta.cu"

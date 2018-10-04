@@ -14,51 +14,149 @@
             type="com.github.sapp.yupi.data.Contact" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="@{clickListener}">
+        android:layout_height="wrap_content">
 
-        <!--<ImageView-->
-        <!--android:id="@+id/imageView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="16dp"-->
-        <!--android:layout_marginStart="16dp"-->
-        <!--android:layout_marginTop="16dp"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent"-->
-        <!--app:srcCompat="@mipmap/ic_launcher"-->
-        <!--tools:ignore="ContentDescription" />-->
+        <LinearLayout
+            android:id="@+id/view_background_left"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            android:gravity="center_vertical"
+            tools:visibility="gone">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@{contact.name}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Lázaro Díaz" />
+            <LinearLayout
+                android:id="@+id/view_background_left_actions"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@{contact.phone}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            tools:text="+1 191 3053368434" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/edit_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:contentDescription="@null"
+                    android:focusable="true"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    app:srcCompat="@drawable/pencil" />
+
+                <ImageView
+                    android:id="@+id/delete_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:contentDescription="@null"
+                    android:focusable="true"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    app:srcCompat="@drawable/delete" />
+            </LinearLayout>
+
+            <!--<TextView-->
+            <!--android:id="@+id/view_message_count"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="#fff"-->
+            <!--tools:text="100 messages" />-->
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_background_right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            android:gravity="center_vertical|end"
+            tools:visibility="gone">
+
+            <TextView
+                android:id="@+id/phone_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/background"
+                tools:text="+53 52362191" />
+
+            <LinearLayout
+                android:id="@+id/view_background_right_actions"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/phone_action_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@null"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    app:srcCompat="@drawable/phone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/view_foreground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{clickListener}">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:src="@{contact.name}"
+                    app:srcCompat="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{contact.name}"
+                    android:textAppearance="@style/TextAppearance.Title"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView"
+                    tools:text="Lázaro Díaz" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{contact.phone}"
+                    android:textAppearance="@style/TextAppearance.Subtitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView"
+                    app:layout_constraintTop_toTopOf="@+id/guideline"
+                    tools:text="+1 191 3053368434" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="36dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+    </FrameLayout>
 </layout>

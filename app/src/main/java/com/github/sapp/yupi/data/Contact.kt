@@ -4,15 +4,16 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 
 @Entity(tableName = "contacts")
 data class Contact(
         @NonNull
-        val name: String,
+        var name: String,
         @NonNull
-        val phone: String,
+        var phone: String,
         @ColumnInfo(name = "photo_url")
-        val photoUrl: String = ""
+        var photoUrl: String = ""
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

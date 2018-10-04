@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionBarItemBackground">?attr/selectableItemBackground</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -68,6 +69,23 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#fff</item>
         <item name="android:textColorHint">#fff</item>
+    </style>
+
+    <style name="TextAppearance.Title" parent="TextAppearance.AppCompat.Subhead">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Subtitle" parent="TextAppearance.AppCompat.Subhead">
+        <!-- Fake Roboto Medium. -->
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>

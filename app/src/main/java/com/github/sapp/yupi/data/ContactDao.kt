@@ -9,12 +9,6 @@ import androidx.room.*
 @Dao
 interface ContactDao {
 
-    @Query("SELECT * FROM contacts")
-    fun getContacts(): LiveData<List<Contact>>
-
-    @Query("SELECT * FROM contacts WHERE id = :id")
-    fun getContact(id: Int): LiveData<Contact>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(contact: Contact)
 
@@ -23,6 +17,12 @@ interface ContactDao {
 
     @Delete
     fun delete(contact: Contact)
+
+    @Query("SELECT * FROM contacts")
+    fun getContacts(): LiveData<List<Contact>>
+
+    @Query("SELECT * FROM contacts WHERE id = :id")
+    fun getContact(id: Int): LiveData<Contact>
 
     @Query("DELETE FROM contacts")
     fun deleteAll()

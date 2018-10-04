@@ -6,4 +6,15 @@
     <string name="name">Nombre</string>
     <string name="phone_number">Número de teléfono</string>
     <string name="empty_contacts">No tienes contactos.</string>
+    <string name="save">Guardar</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="title_activity_main4">Main4Activity</string>
+
+    <string name="note">
+        Paises disponibles para el envío de mensajes: \n
+           - México: +52 \n
+           - USA: +1 \n
+           - Canadá: +1 \n
+    </string>
 </resources>

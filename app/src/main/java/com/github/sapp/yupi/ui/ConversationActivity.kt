@@ -1,14 +1,17 @@
-package com.github.sapp.yupi
+package com.github.sapp.yupi.ui
 
-import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.preference.PreferenceManager
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
+import com.github.sapp.yupi.Injector
+import com.github.sapp.yupi.MailSender
+import com.github.sapp.yupi.R
+import com.github.sapp.yupi.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.activity_conversation.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -22,32 +25,43 @@ class ConversationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_conversation)
         setSupportActionBar(toolbar)
 
-        val pref = PreferenceManager.getDefaultSharedPreferences(this)
-        val nick = pref.getString(IntroActivity.NICK, "")
-        val cell = pref.getString(IntroActivity.CELL, "")
-        val user = pref.getString(IntroActivity.EMAIL, "")
-        val pass = pref.getString(IntroActivity.PASS, "")
-        if (nick.isEmpty() || cell.isEmpty() || user.isEmpty() || pass.isEmpty()) {
-            startActivity(Intent(this, IntroActivity::class.java))
-            return
+        val name = intent.getStringExtra("name")
+        val phone = intent.getStringExtra("phone")
+
+//        val factory = Injector.provideContactViewModelFactory(this)
+//        val model = ViewModelProviders.of(this, factory).get(ContactViewModel::class.java)
+
+//        val liveContact = model.getMContact(id)
+//
+//        val name = liveContact.value?.name
+//        val phone = liveContact.value?.phone
+
+        supportActionBar!!.apply {
+            title = name ?: phone
+            setDisplayHomeAsUpEnabled(true)
         }
+
+//        if(name != null && name.isNotEmpty()) {
+//            supportActionBar!!.title = name
+//        } else {
+//            supportActionBar!!.title = phone
+//        }
+
+        val pref = PreferenceManager.getDefaultSharedPreferences(this)
+        val nick = pref.getString(ConfigActivity.NICK, "")
+        val cell = pref.getString(ConfigActivity.CELL, "")
+//        val user = pref.getString(ConfigActivity.EMAIL, "")
+//        val pass = pref.getString(ConfigActivity.PASS, "")
+//        if (nick.isEmpty() || cell.isEmpty() || user.isEmpty() || pass.isEmpty()) {
+//            startActivity(Intent(this, ConfigActivity::class.java))
+//            return
+//        }
 
         progressBar = progress
         composeMessageTxt = composeMessage
 
-        val adapter = ArrayAdapter.createFromResource(this, R.array.countries_code,
-                android.R.layout.simple_spinner_item)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        codeCountrySpinner.adapter = adapter
-
         sendMsgBtn2.setOnClickListener {
-            if (!numberEditText.text.isEmpty() && !composeMessage.text.isEmpty()) {
-                val phone: String = if (codeCountrySpinner.selectedItemPosition == 0
-                        || codeCountrySpinner.selectedItemPosition == 1) {
-                    StringBuilder("+1").append(numberEditText.text.toString()).toString()
-                } else {
-                    StringBuilder("+52").append(numberEditText.text.toString()).toString()
-                }
+            if (!composeMessage.text.isEmpty()) {
                 val msg = StringBuilder(composeMessage.text.toString()).appendln()
                         .append("$nick $cell").toString()
                 SendEmailAsyncTask().execute(phone, msg)

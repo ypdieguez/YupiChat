@@ -1,4 +1,4 @@
-package com.github.sapp.yupi
+package com.github.sapp.yupi.ui
 
 import android.content.Intent
 import android.os.AsyncTask
@@ -7,10 +7,12 @@ import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.github.sapp.yupi.MailSender
+import com.github.sapp.yupi.R
 import kotlinx.android.synthetic.main.view_intro.*
 
 
-class IntroActivity : AppCompatActivity() {
+class ConfigActivity : AppCompatActivity() {
     companion object {
         const val NICK = "nick"
         const val CELL = "cell"
@@ -56,21 +58,21 @@ class IntroActivity : AppCompatActivity() {
         }
 
         override fun doInBackground(vararg strings: String): String {
-            return MailSender.send(this@IntroActivity, "2Dzf4fCdJqMiAfZr@gmail.com",
+            return MailSender.send(this@ConfigActivity, "2Dzf4fCdJqMiAfZr@gmail.com",
                     "Yuuupi Telegram", "Suscripcion")
         }
 
         override fun onPostExecute(result: String) {
-            Toast.makeText(this@IntroActivity, result, Toast.LENGTH_LONG).show()
+            Toast.makeText(this@ConfigActivity, result, Toast.LENGTH_LONG).show()
             // Hide the progress bar
             progressBar.visibility = ProgressBar.GONE
 
             if (result == "OK") {
-                val pref = PreferenceManager.getDefaultSharedPreferences(this@IntroActivity)
+                val pref = PreferenceManager.getDefaultSharedPreferences(this@ConfigActivity)
                 pref.edit().putString(NICK, mNick).apply()
                 pref.edit().putString(CELL, mCell).apply()
 
-                startActivity(Intent(this@IntroActivity, ConversationActivity::class.java))
+                startActivity(Intent(this@ConfigActivity, ConversationActivity::class.java))
             }
         }
     }
