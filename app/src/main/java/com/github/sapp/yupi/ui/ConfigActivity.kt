@@ -72,7 +72,7 @@ class ConfigActivity : AppCompatActivity() {
                 pref.edit().putString(NICK, mNick).apply()
                 pref.edit().putString(CELL, mCell).apply()
 
-                startActivity(Intent(this@ConfigActivity, ConversationActivity::class.java))
+                startActivity(Intent(this@ConfigActivity, MainActivity::class.java))
             }
         }
     }
