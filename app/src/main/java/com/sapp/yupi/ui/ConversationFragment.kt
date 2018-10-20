@@ -13,6 +13,7 @@ import com.sapp.yupi.data.Message
 import com.sapp.yupi.databinding.FragmentConversationBinding
 import com.sapp.yupi.viewmodel.MessageViewModel
 import kotlinx.android.synthetic.main.view_compose_message_test.*
+import kotlinx.android.synthetic.main.view_compose_message_test.view.*
 
 class ConversationFragment : Fragment() {
 
@@ -27,7 +28,9 @@ class ConversationFragment : Fragment() {
         val contactId = ConversationFragmentArgs.fromBundle(arguments).contactId
 
         val adapter = MessageAdapter()
-        binding.messageList.adapter = adapter
+        binding.apply {
+            messageList.adapter = adapter
+        }
 
         model.getMessagesForContact(contactId).observe(this, Observer { messages ->
 
@@ -35,7 +38,6 @@ class ConversationFragment : Fragment() {
 
             if (messages != null && messages.isNotEmpty()) {
                 adapter.submitList(messages)
-//                /binding.hasContacts = true
             } else {
                 val messages2: List<Message> = listOf(
                         Message(1, "Hola Mundo", "9:30 am", 1),

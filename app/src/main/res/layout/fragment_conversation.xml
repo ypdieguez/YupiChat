@@ -5,20 +5,11 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1.0">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <!-- This FrameLayout will take all available height (excluding media picker)
-            but setting height to 0dp causes it not to shrink properly in KK, so a height of match_parent
-            works equally well -->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1">
 
                 <!-- Message list -->
@@ -31,7 +22,7 @@
                     android:paddingEnd="@dimen/compose_msg_padding"
                     android:paddingBottom="@dimen/compose_msg_padding"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/list_item_contact" />
+                    tools:listitem="@layout/view_message" />
 
                 <View
                     android:id="@+id/conversation_compose_divider"
@@ -43,13 +34,12 @@
                     android:importantForAccessibility="no" />
             </FrameLayout>
 
-            <!-- Attachments to send, compose message view, media picker. -->
+            <!-- Compose message view. -->
             <include
                 android:id="@+id/message_compose_view_container"
                 layout="@layout/view_compose_message_test"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-        </LinearLayout>
 
     </LinearLayout>
 </layout>
