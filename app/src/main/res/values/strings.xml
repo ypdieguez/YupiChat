@@ -17,4 +17,10 @@
            - USA: +1 \n
            - Canadá: +1 \n
     </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="send">Send</string>
+
+    <string name="sendButtonContentDescription">Send Message</string>
 </resources>

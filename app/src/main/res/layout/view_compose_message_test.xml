@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Holds all views that create the actual compose box -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/message_compose_view_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingTop="@dimen/compose_msg_padding"
+    android:paddingEnd="@dimen/compose_msg_padding">
+
+    <!-- Contains compose message bubble and character counter for SMS which should be left
+    aligned -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/compose_message_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/msg_bubble_input"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:hint="@string/compose_message_view_hint_text"
+            android:imeOptions="actionSend|flagNoEnterAction|flagNoExtractUi"
+            android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textMultiLine"
+            android:maxLines="4"
+            android:minHeight="@dimen/icon_size"
+            android:paddingStart="18dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="25dp"
+            android:paddingBottom="8dp"
+            android:scrollbars="vertical"
+            android:scrollHorizontally="false"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/char_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="9dp"
+            android:fontFamily="sans-serif"
+            android:maxLines="1"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="12sp"
+            android:visibility="invisible"
+            tools:text="160"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/send_message_button"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:background="@drawable/send_arrow_background"
+        android:contentDescription="@string/sendButtonContentDescription"
+        app:srcCompat="@drawable/send" />
+</LinearLayout>

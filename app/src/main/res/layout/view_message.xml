@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="message"
+            type="com.sapp.yupi.data.Message" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/message_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.sapp.yupi.ui.MessageView
+            android:id="@+id/bubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/compose_msg_padding"
+            android:background="@drawable/message_bubble"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dip"
+                android:text="@{message.text}"
+                android:textAppearance="?android:attr/textAppearanceSmallInverse"
+                android:textSize="16sp"
+                tools:text="Hello World"
+                tools:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@{message.date}"
+                android:textAppearance="?android:attr/textAppearanceSmallInverse"
+                android:textSize="12sp"
+                tools:text="9:30 a.m"
+                tools:textColor="#99ffffff" />
+        </com.sapp.yupi.ui.MessageView>
+    </LinearLayout>
+</layout>

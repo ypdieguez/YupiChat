@@ -13,4 +13,12 @@
 
     <color name="background">#fff</color>
     <color name="divider">#fff</color>
+
+    <!--Message Bubble-->
+    <color name="bubble_incoming_color">@color/colorPrimary</color>
+    <color name="bubble_outgoing_color">#FFF</color>
+    <color name="msg_incoming_color">#FFF</color>
+    <color name="msg_outgoing_color">#424242</color>
+    <color name="date_incoming_color">#99FFFFFF</color>
+    <color name="date_outgoing_color">#99323232</color>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.github.sapp.yupi">
+    package="com.sapp.yupi">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,14 +11,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity
-            android:name=".ui.ConversationActivity"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.github.sapp.yupi.ui.MainActivity" />
-        </activity>
         <activity
             android:name=".ui.ConfigActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -30,38 +22,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.ContactActivity"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.github.sapp.yupi.ui.MainActivity" />
-        </activity>
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:parentActivityName=".ui.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.github.sapp.yupi.ui.MainActivity" />
-        </activity>
-        <activity
-            android:name=".Main3Activity"
-            android:label="@string/title_activity_main3"
-            android:parentActivityName=".ui.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.github.sapp.yupi.ui.MainActivity" />
-        </activity>
-        <activity
-            android:name=".Main4Activity"
-            android:label="@string/title_activity_main4"
-            android:parentActivityName=".ui.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.github.sapp.yupi.ui.MainActivity" />
         </activity>
     </application>
 

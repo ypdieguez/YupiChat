@@ -2,16 +2,20 @@
 
 buildscript {
     ext{
-        kotlin_version = '1.2.61'
+        kotlin_version = '1.2.71'
         room_version = '1.1.1'
         lifecycle_version = '1.1.1'
+        nav_version = '1.0.0-alpha06'
     }
     repositories {
         mavenLocal()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.android.tools.build:gradle:3.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+
     }
 }
 

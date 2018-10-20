@@ -1,3 +1,11 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="conversation_bubble_width_snap">20dp</dimen>
+
+    <!--Icon-->
+    <dimen name="icon_size">56dp</dimen>
+    <dimen name="message_bubble_arrow_width">9dp</dimen>
+
+    <!--Bubble-->
+    <dimen name="compose_msg_padding">16dp</dimen>
 </resources>

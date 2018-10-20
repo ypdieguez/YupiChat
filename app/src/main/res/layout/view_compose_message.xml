@@ -1,123 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Copyright (C) 2015 The Android Open Source Project
-    Copyright (C) 2017 Yordan P. Dieguez <ypdieguez@tuta.io>
+        Copyright (C) 2015 The Android Open Source Project
+        Copyright (C) 2018 Yordan P. Dieguez <ypdieguez@gmail.com>
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
 
-         http://www.apache.org/licenses/LICENSE-2.0
+             http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
--->
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+    -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/message_compose_view_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:layout_weight="1"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical">
 
-    <!-- Note it may seem off to have the layout_weight="1" on the compose bar and attachment view
-     when it's the media picker that expands, but this is correct because weight also works when
-     there's not enough space.  Any views with positive weights will be shrunk to make space.
-     When the media picker goes full screen, it fills the parent, leaving no room for the compose
-     bar -->
+    <View
+        android:id="@+id/top_margin"
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+    <!-- Holds all views that create the actual compose box -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:orientation="vertical">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
-        <View
-            android:id="@+id/top_margin"
-            android:layout_width="match_parent"
-            android:layout_height="16dp" />
-
-        <!-- Holds all views that create the actual compose box -->
+        <!-- Contains compose message bubble and character counter for SMS which should be left
+        aligned -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <!-- Contains compose message bubble and character counter for SMS which should be left
-            aligned -->
+            <!-- Contains media button and compose message bubble whose centers should be
+            vertically aligned -->
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:paddingStart="16dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <!-- Contains media button and compose message bubble whose centers should be
-                vertically aligned -->
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <EditText
+                    android:id="@+id/compose_message_text"
+                    style="@style/ConversationComposeSendText"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:hint="@string/compose_message_view_hint_text"
+                    android:background="@drawable/msg_bubble_input"
+                    android:imeOptions="actionSend|flagNoEnterAction|flagNoExtractUi" />
 
-                    <EditText
-                        android:id="@+id/composeMessageText"
-                        style="@style/ConversationComposeSendText"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:hint="@string/compose_message_view_hint_text"
-                        android:imeOptions="actionSend|flagNoEnterAction|flagNoExtractUi" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/char_counter"
-                    style="@style/ComposeMessageViewTextCounterStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:visibility="invisible" />
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="vertical"
+            <TextView
+                android:id="@+id/char_counter"
+                style="@style/ComposeMessageViewTextCounterStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                tools:text="120" />
+        </LinearLayout>
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/ComposeMessageViewFrameLayoutStyle"
-                    android:layout_gravity="top" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-                    <ImageButton
-                        android:id="@+id/sendMsgBtn"
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:background="@drawable/send_arrow_background" />
-                </FrameLayout>
+            <FrameLayout
+                style="@style/ComposeMessageViewFrameLayoutStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top">
 
-                <TextView
-                    android:id="@+id/mms_indicator"
-                    style="@style/MmsIndicatorStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:visibility="invisible"
-                    android:text="@string/mms_text" />
-            </LinearLayout>
+                <ImageButton
+                    android:id="@+id/send_message_button"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/send_arrow_background"
+                    android:contentDescription="@string/send"
+                    app:srcCompat="@drawable/send" />
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/mediapicker_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0" />
-
 </LinearLayout>
