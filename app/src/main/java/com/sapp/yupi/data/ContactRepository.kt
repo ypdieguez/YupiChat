@@ -16,9 +16,9 @@ class ContactRepository private constructor(private val contactDao: ContactDao) 
         runOnIoThread { contactDao.delete(contact) }
     }
 
-    fun getContacts() = contactDao.getContacts()
+    fun getContacts() = contactDao.getLiveContacts()
 
-    fun getContact(id: Int) = contactDao.getContact(id)
+    fun getContact(id: Long) = contactDao.getLiveContact(id)
 
     companion object {
 

@@ -1,4 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="sendButtonContentDescription">Enviar mensaje</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="compose_message_view_hint_text">Enviar mensaje</string>
+    <string name="name">Nombre</string>
+    <string name="phone_number">Número de teléfono</string>
+    <string name="empty_contacts">No tienes contactos.</string>
+    <string name="save">Guardar</string>
+
+    <string name="note">
+        Paises disponibles para el envío de mensajes: \n
+           - México: +52 \n
+           - USA: +1 \n
+           - Canadá: +1 \n
+    </string>
+
+    <!--Intro-->
+    <string name="intro_config_anounce_title">Crear cuenta</string>
+    <string name="intro_config_anounce_description">
+        Llena los datos que se piden a continuación para que la app pueda enviar y recibir mensajes.
+    </string>
+    <string name="intro_country_title">Ubicación</string>
+    <string name="intro_country_description">
+        Con tu ubicación se establecerá el código de país para el número de teléfono.
+    </string>
+    <string name="intro_name_description">
+        Con tu nombre tus contactos sabrán quién les escribe.
+    </string>
+    <string name="intro_phone_description">
+        Con tu número de teléfono tus contactos podrán responderte.
+    </string>
+    <string name="intro_permission_title">Permiso</string>
+    <string name="intro_btn_grant_permission">CONCEDER PERMISO</string>
+    <string name="intro_permission_description">
+        Es necesario el permiso de lectura de sms para obtener los mensajes que envían tus contactos.
+    </string>
+    <string name="settings">AJUSTES</string>
+    <string name="intro_permssion_description_granted">Has concedido el permiso de lectra de sms.</string>
+    <string name="intro_description_permission_denied">
+        No has concedido el permiso de lectura de sms, necesario para el funcionamiento de la app.
+    </string>
+    <string name="intro_conclusion_title">Listo!!!</string>
+    <string name="intro_mail_title">Correo</string>
+    <string name="intro_mail_description">
+        Con tu cuenta de correo <b>@nauta</b> enviarás los mensajes.
+    </string>
+    <string name="intro_pass_title">Contraseña</string>
+    <string name="intro_pass_description">
+        Con tu contraseña accederás a tu cuenta de correo <b>@nauta</b>.
+    </string>
+    <!--Validation-->
+    <string name="name_required">El nombre es requerido</string>
+    <string name="email_required">El correo es requerido</string>
+    <string name="email_not_valid">Ingresa un correo válido</string>
+    <string name="email_is_not_nauta">Ingresa tu correo @nauta.cu</string>
+    <string name="phone_required">El número de teléfono es requerido</string>
+    <string name="phone_not_valid">Ingresa un número de teléfono válido</string>
+    <string name="pass_required">La contraseña es requerida</string>
 </resources>

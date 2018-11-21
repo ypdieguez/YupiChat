@@ -21,7 +21,6 @@
                     android:paddingStart="@dimen/compose_msg_padding"
                     android:paddingEnd="@dimen/compose_msg_padding"
                     android:paddingBottom="@dimen/compose_msg_padding"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/view_message" />
 
                 <View
@@ -36,8 +35,8 @@
 
             <!-- Compose message view. -->
             <include
-                android:id="@+id/message_compose_view_container"
-                layout="@layout/view_compose_message_test"
+                android:id="@+id/compose_message"
+                layout="@layout/view_compose_message_messaging"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

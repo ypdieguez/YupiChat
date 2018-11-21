@@ -14,5 +14,5 @@ class MessageViewModel(
 
     fun delete(message: Message) = repo.delete(message)
 
-    fun getMessagesForContact(contactId: Int) = repo.getMessagesForContact(contactId)
+    fun getMessagesForContact(contactId: Long) = repo.getMessagesForContact(contactId)
 }

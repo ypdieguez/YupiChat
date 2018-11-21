@@ -22,7 +22,7 @@
             android:background="@drawable/input">
 
             <!--<ImageView-->
-                <!--android:id="@+id/emojiButton"-->
+                <!--android:lastSmsIntercepted="@+lastSmsIntercepted/emojiButton"-->
                 <!--android:layout_width="24dp"-->
                 <!--android:layout_height="24dp"-->
                 <!--android:layout_gravity="bottom"-->

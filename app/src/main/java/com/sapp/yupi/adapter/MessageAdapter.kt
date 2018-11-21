@@ -4,15 +4,17 @@ import android.graphics.PorterDuff
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.sapp.yupi.MESSAGE_INCOMING
 import com.sapp.yupi.R
+import com.sapp.yupi.STATUS_SENDING
+import com.sapp.yupi.STATUS_SUCCESS
+import com.sapp.yupi.TYPE_INCOMING
 import com.sapp.yupi.data.Message
 import com.sapp.yupi.databinding.ViewMessageBinding
+import com.sapp.yupi.util.MessageUtils.formatTimeStampString
 
 
 class MessageAdapter : ListAdapter<Message, MessageAdapter.ViewHolder>(MessageDiffCallback()) {
@@ -35,20 +37,20 @@ class MessageAdapter : ListAdapter<Message, MessageAdapter.ViewHolder>(MessageDi
         fun bind(message: Message) {
             binding.apply {
                 setMessage(message)
-                updateViewAppearance(this, message.type == MESSAGE_INCOMING)
+                updateViewAppearance(this, message)
 
                 executePendingBindings()
             }
         }
 
-        private fun updateViewAppearance(binding: ViewMessageBinding, incoming: Boolean) {
+        private fun updateViewAppearance(binding: ViewMessageBinding, msg: Message) {
             binding.apply {
                 val gravity: Int
                 @ColorRes val bubbleColor: Int
                 @ColorRes val messageColor: Int
                 @ColorRes val dateColor: Int
 
-                if (incoming) {
+                if (msg.type == TYPE_INCOMING) {
                     gravity = Gravity.START
                     bubbleColor = R.color.bubble_incoming_color
                     messageColor = R.color.msg_incoming_color
@@ -63,14 +65,23 @@ class MessageAdapter : ListAdapter<Message, MessageAdapter.ViewHolder>(MessageDi
                 // Context
                 val context = root.context
                 // Message Container
-                messageContainer.gravity = gravity
+                messageContainerView.gravity = gravity
                 // Bubble
-                bubble.background.setColorFilter(ContextCompat.getColor(context, bubbleColor),
+                bubbleView.background.setColorFilter(ContextCompat.getColor(context, bubbleColor),
                         PorterDuff.Mode.SRC_ATOP)
                 // Message
-                message.setTextColor(ContextCompat.getColor(context, messageColor))
+                messageView.setTextColor(ContextCompat.getColor(context, messageColor))
                 // Date
-                date.setTextColor(ContextCompat.getColor(context, dateColor))
+                dateView.text = formatTimeStampString(context, msg.date)
+                dateView.setTextColor(ContextCompat.getColor(context, dateColor))
+                // Status
+                statusView.setImageResource(
+                        when (msg.status) {
+                            STATUS_SENDING -> R.mipmap.ic_dots_horizontal
+                            STATUS_SUCCESS -> R.mipmap.ic_check
+                            else -> R.mipmap.ic_exclamation
+                        })
+                statusView.setColorFilter(ContextCompat.getColor(context, dateColor))
             }
         }
     }

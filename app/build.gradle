@@ -15,30 +15,58 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        flavorDimensions "default"
+
+        // Add flavors to ask into code
+        buildConfigField "String", "FLAVOR_WORLD", '"world"' // App for cubans
+        buildConfigField "String", "FLAVOR_CUBA", '"cuba"'   // App for other countries
     }
 
     buildTypes {
-
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        debug{
+        debug {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
         }
     }
 
-    packagingOptions {
-        pickFirst 'META-INF/LICENSE.txt' // picks the JavaMail license file
+    productFlavors {
+        cuba {
+            applicationIdSuffix ".cuba"
+            // Config
+            buildConfigField "String", "HOST", '"imap.gmail.com"'
+            buildConfigField "int", "PORT", "995"
+            buildConfigField "String", "USER", '"gtom20180828@gmail.com"'
+            buildConfigField "String", "PASS", '"GtoM_2018/08/28"'
+            buildConfigField "String", "PROP_SSL_ENABLED", '"true"'
+        }
+
+        world {
+            applicationIdSuffix ".world"
+            // Config
+            buildConfigField "String", "HOST", '"imap.nauta.cu"'
+            buildConfigField "int", "PORT", "143"
+            buildConfigField "String", "USER", '"ypdieguez@nauta.cu"'
+            buildConfigField "String", "PASS", '"DalexS/07/09/14."'
+            buildConfigField "String", "PROP_SSL_ENABLED", '"false"'
+        }
     }
+
     dataBinding {
         enabled = true
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        pickFirst 'META-INF/LICENSE.txt' // picks the JavaMail license file
     }
 }
 
@@ -47,9 +75,11 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    // Android Kotlin
+    implementation 'androidx.core:core-ktx:1.0.1'
 
-    // AppCompact
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // Material
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
@@ -60,8 +90,8 @@ dependencies {
 
     // Test
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
     //JavaMail
     implementation 'com.sun.mail:android-mail:1.6.2'
@@ -80,7 +110,14 @@ dependencies {
     // Navigation
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
-    androidTestImplementation "android.arch.navigation:navigation-testing-ktx:$nav_version"
+    androidTestImplementation "android.arch.navigation:navigation-testing:$nav_version"
+
+    // WorkManager
+    implementation "android.arch.work:work-runtime-ktx:$work_version"
+    androidTestImplementation "android.arch.work:work-testing:$work_version"
+
+    // AppIntro
+    implementation 'com.github.paolorotolo:appintro:v5.1.0'
 
     // libphonenumber
 //    implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.14'

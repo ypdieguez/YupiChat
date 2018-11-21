@@ -46,13 +46,13 @@ class ContactAdapter(listener: Listener)
 
                 clickListener = View.OnClickListener {
                     val action = MainFragmentDirections.actionMainFragmentToConversationFragment()
-                    action.setContactId(contact.id)
+                    action.setContactId(contact.id.toString())
                     it.findNavController().navigate(action)
                 }
 
                 editView.setOnClickListener {
                     val action = MainFragmentDirections.actionMainFragmentToContactFragment()
-                    action.setId(contact.id)
+                    action.setId(contact.id.toString())
                     it.findNavController().navigate(action)
                 }
 

@@ -1,21 +1,30 @@
 package com.sapp.yupi.ui
 
 import android.os.Bundle
+import android.text.method.TextKeyListener
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import com.sapp.yupi.CONTACT_ID
 import com.sapp.yupi.Injector
+import com.sapp.yupi.MESSAGE
 import com.sapp.yupi.adapter.MessageAdapter
-import com.sapp.yupi.data.Message
 import com.sapp.yupi.databinding.FragmentConversationBinding
 import com.sapp.yupi.viewmodel.MessageViewModel
-import kotlinx.android.synthetic.main.view_compose_message_test.*
-import kotlinx.android.synthetic.main.view_compose_message_test.view.*
+import com.sapp.yupi.workers.OutgoingMsgWorker
+
 
 class ConversationFragment : Fragment() {
+
+    private lateinit var model: MessageViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -23,26 +32,49 @@ class ConversationFragment : Fragment() {
         val context = context ?: return binding.root
 
         val factory = Injector.provideMessageViewModelFactory(context)
-        val model = ViewModelProviders.of(this, factory).get(MessageViewModel::class.java)
+        model = ViewModelProviders.of(this, factory).get(MessageViewModel::class.java)
 
-        val contactId = ConversationFragmentArgs.fromBundle(arguments).contactId
+        val contactId = ConversationFragmentArgs.fromBundle(arguments).contactId.toLong()
 
         val adapter = MessageAdapter()
         binding.apply {
-            messageList.adapter = adapter
+            messageList.apply {
+
+                val manager = LinearLayoutManager(activity)
+                manager.stackFromEnd = true
+
+                adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                    override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                        manager.smoothScrollToPosition(this@apply, null,
+                                positionStart + itemCount)
+                    }
+                })
+
+                this.adapter = adapter
+                layoutManager = manager
+            }
+
+            composeMessage.apply {
+                textEditor.requestFocus()
+
+                sendMessageBtn.setOnClickListener {
+                    val msg = textEditor.text.toString()
+                    if (msg.isNotEmpty()) {
+                        // Send msg
+                        sendMsg(contactId, msg)
+                        // Focus to the text editor.
+                        textEditor.requestFocus()
+                        // Clear the text box.
+                        TextKeyListener.clear(textEditor.text)
+                    }
+                }
+            }
         }
 
         model.getMessagesForContact(contactId).observe(this, Observer { messages ->
-
-            adapter.mMaxWith = compose_message_text.width
-
+//            adapter.mMaxWith = compose_message_text.width
             if (messages != null && messages.isNotEmpty()) {
                 adapter.submitList(messages)
-            } else {
-                val messages2: List<Message> = listOf(
-                        Message(1, "Hola Mundo", "9:30 am", 1),
-                        Message(1, "Este es un mensaje mucho mas largo, es para probar portrait y landscape yo te voy a dar duro", "9:30 am", 0))
-                adapter.submitList(messages2)
             }
         })
 
@@ -50,32 +82,27 @@ class ConversationFragment : Fragment() {
         return binding.root
     }
 
+    private fun sendMsg(contactId: Long, txt: String) {
+        val data = Data.Builder()
+                .putLong(CONTACT_ID, contactId)
+                .putString(MESSAGE, txt)
+                .build()
+
+        val sendMsgWorker = OneTimeWorkRequest.Builder(OutgoingMsgWorker::class.java)
+                .setInputData(data)
+                .build()
+
+        val workManager = WorkManager.getInstance()
+        workManager.enqueue(sendMsgWorker)
+        workManager.getStatusByIdLiveData(sendMsgWorker.id)
+                .observe(this, Observer { workStatus ->
+                    if (workStatus != null && workStatus.state.isFinished) {
+                    }
+                })
+    }
+
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.fragment_conversation)
-//        setSupportActionBar(toolbar)
-//
-//        val name = intent.getStringExtra("name")
-//        val phone = intent.getStringExtra("phone")
-//
-////        val factory = Injector.provideContactViewModelFactory(this)
-////        val model = ViewModelProviders.of(this, factory).get(ContactViewModel::class.java)
-//
-////        val liveContact = model.getMContact(id)
-////
-////        val name = liveContact.value?.name
-////        val phone = liveContact.value?.phone
-//
-//        supportActionBar!!.apply {
-//            title = name ?: phone
-//            setDisplayHomeAsUpEnabled(true)
-//        }
-//
-////        if(name != null && name.isNotEmpty()) {
-////            supportActionBar!!.title = name
-////        } else {
-////            supportActionBar!!.title = phone
-////        }
 //
 //        val pref = PreferenceManager.getDefaultSharedPreferences(this)
 //        val nick = pref.getString(ConfigActivity.NICK, "")

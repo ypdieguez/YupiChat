@@ -11,9 +11,9 @@ import javax.mail.Transport
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
 
-class MailSender {
+class Mail {
     companion object {
-        fun send(context: Context, address: String, subject: String, content: String): String {
+        fun send(context: Context, address: String, subject: String, content: String): Byte {
             try {
                 val pref = PreferenceManager.getDefaultSharedPreferences(context)
                 val user = pref.getString(ConfigActivity.EMAIL, "")
@@ -34,13 +34,17 @@ class MailSender {
 
                 Transport.send(msg, user, pass)
 
-                return "OK"
+//                return "OK"
+                return STATUS_SUCCESS
             } catch (e: MailConnectException) {
-                return "No se pudo conectar al host, puede ser por no tener activado el acceso a datos."
+//                return "No se pudo conectar al host, puede ser por no tener activado el acceso a datos."
+                return STATUS_MAIL_CONNECT_EXCEPTION
             } catch (e: AuthenticationFailedException) {
-                return "Usuario o contraseña incorrecto."
+                return STATUS_AUTHENTICATION_FAILED_EXCEPTION
+//                return "Usuario o contraseña incorrecto."
             } catch (e: Exception) {
-                return e.message.toString()
+//                return e.message.toString()
+                return STATUS_OHTER_EXCEPTION
             }
         }
     }

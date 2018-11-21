@@ -18,7 +18,9 @@ package com.sapp.yupi.adapter
 
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
+import com.google.android.material.textfield.TextInputEditText
 import com.sapp.yupi.ui.lettertiles.LetterTileDrawable
 
 @BindingAdapter("isGone")
@@ -34,4 +36,14 @@ fun bindIsGone(view: View, isGone: Boolean) {
 fun bindSrc(view: ImageView, name: String) {
     val drawable = LetterTileDrawable(view.resources).setLetter(name[0]).setIsCircular(true)
     view.setImageDrawable(drawable)
+}
+
+@BindingAdapter("imageFromResource")
+fun imageFromResource(view: ImageView, @DrawableRes resId: Int) {
+    view.setImageResource(resId)
+}
+
+@BindingAdapter("hint")
+fun bindHint(view: TextInputEditText, hint: String) {
+    view.hint = hint
 }

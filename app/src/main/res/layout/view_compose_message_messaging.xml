@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!-- Holds all views that create the actual compose box -->
+<layout>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/message_compose_view_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -10,8 +10,6 @@
     android:paddingTop="@dimen/compose_msg_padding"
     android:paddingEnd="@dimen/compose_msg_padding">
 
-    <!-- Contains compose message bubble and character counter for SMS which should be left
-    aligned -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -19,7 +17,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/compose_message_text"
+            android:id="@+id/text_editor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -32,9 +30,9 @@
             android:maxLines="4"
             android:minHeight="@dimen/icon_size"
             android:paddingStart="18dp"
-            android:paddingTop="8dp"
+            android:paddingTop="16dp"
             android:paddingEnd="25dp"
-            android:paddingBottom="8dp"
+            android:paddingBottom="16dp"
             android:scrollbars="vertical"
             android:scrollHorizontally="false"
             android:textColor="@color/primaryTextColor"
@@ -56,10 +54,11 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/send_message_button"
+        android:id="@+id/send_message_btn"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:background="@drawable/send_arrow_background"
         android:contentDescription="@string/sendButtonContentDescription"
         app:srcCompat="@drawable/send" />
 </LinearLayout>
+</layout>

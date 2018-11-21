@@ -3,6 +3,7 @@ package com.sapp.yupi.data
 import androidx.annotation.NonNull
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
+import java.util.*
 
 @Entity(
         tableName = "messages",
@@ -13,14 +14,19 @@ import androidx.room.ForeignKey.CASCADE
 class Message(
         @NonNull
         @ColumnInfo(name = "contact_id")
-        var contactId: Int,
+        var contactId: Long,
         @NonNull
-        var text: String,
+        @ColumnInfo(name = "msg_id")
+        var msgId: Long,
         @NonNull
-        var date: String,
+        var type: Boolean,
         @NonNull
-        var type: Int
+        var status: Byte,
+        @NonNull
+        var date : Long = Calendar.getInstance().timeInMillis,
+        @NonNull
+        var text: String
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 }

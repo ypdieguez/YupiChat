@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Intro-->
+    <string name="intro_app_description">
+        Contacta con tus familiares y amistades de Canadá, Estados Unidos o México.
+        \n\n
+        Tus mensajes serán enviados usando tu cuenta de correo <b>@nauta</b> a través de los datos
+        móviles y tus contactos los recibirán como <b>sms</b>.
+    </string>
+    <string name="intro_conclusion_description">
+        Has concluido… Activa los dátos móviles y continúa… Si la información introducida es
+        correcta te llegará un mensaje confirmando la activación de tu cuenta.
+    </string>
+</resources>

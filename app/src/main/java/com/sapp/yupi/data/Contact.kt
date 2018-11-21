@@ -19,5 +19,5 @@ data class Contact(
         var photoUrl: String = ""
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 }

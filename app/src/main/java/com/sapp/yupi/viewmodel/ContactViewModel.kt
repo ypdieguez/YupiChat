@@ -10,7 +10,7 @@ class ContactViewModel(
 
     fun getContacts() = repo.getContacts()
 
-    fun getContact(id: Int) = repo.getContact(id)
+    fun getContact(id: Long) = repo.getContact(id)
 
     fun insert(contact: Contact) = repo.insert(contact)
 

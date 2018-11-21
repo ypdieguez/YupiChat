@@ -1,7 +1,10 @@
 package com.sapp.yupi.ui
 
 
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.provider.Telephony
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import com.sapp.yupi.IncomingMsgNotification
 import com.sapp.yupi.Injector
 import com.sapp.yupi.R
 import com.sapp.yupi.adapter.ContactAdapter
 import com.sapp.yupi.data.Contact
 import com.sapp.yupi.databinding.FragmentMainBinding
+import com.sapp.yupi.observers.MmsObserver
+import com.sapp.yupi.observers.SmsObserver
 import com.sapp.yupi.viewmodel.ContactViewModel
 
 
@@ -44,12 +50,40 @@ class MainFragment : Fragment(), ContactAdapter.Listener {
         })
 
         binding.fab.setOnClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToContactFragment()
-            action.setId(0)
             it.findNavController().navigate(R.id.action_mainFragment_to_contactFragment)
         }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+//        IncomingMsgNotification.notify(context!!, "Tienes un mensaje nuevo.", 1)
+
+//        val contentResolver = activity!!.contentResolver
+
+//        val smsObserver = SMSObserver(contentResolver, Handler())
+//        smsObserver.getReceivedMmsInfo()
+//        smsObserver.onChange(false)
+
+//        val mmsObserver = MmsObserver(contentResolver)
+//        mmsObserver.onChange(false)
+
+//        cursor?.apply {
+//            moveToFirst()
+//            for (i in 45..52){
+//                val valor = getString(i)
+//                val a = valor
+//            }
+//        }
+
+
+//        contentResolver.registerContentObserver(
+//                Uri.parse("content://sms/"),
+//                true,
+//                SMSObserver(contentResolver, Handler())
+//        )
     }
 
     override fun delete(contact: Contact) {

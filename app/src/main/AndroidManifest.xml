@@ -4,16 +4,21 @@
     package="com.sapp.yupi">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity
-            android:name=".ui.ConfigActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".ui.appintro.IntroActivity"
+            android:theme="@style/AppIntroTheme"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -23,6 +28,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".services.IncomingSmsMmsService"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>

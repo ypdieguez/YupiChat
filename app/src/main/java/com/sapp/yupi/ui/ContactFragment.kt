@@ -25,7 +25,7 @@ class ContactFragment : Fragment() {
         val factory = Injector.provideContactViewModelFactory(context)
         model = ViewModelProviders.of(this, factory).get(ContactViewModel::class.java)
 
-        val id = ContactFragmentArgs.fromBundle(arguments).id
+        val id = ContactFragmentArgs.fromBundle(arguments).id.toLong()
 
         model.getContact(id).observe(this, Observer { contact ->
             mContact = contact

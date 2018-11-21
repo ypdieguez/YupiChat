@@ -1,1 +1,2 @@
-include ':app'
+include ':app'/*, ':smsradar'*/
+//project ("smsradar").projectDir = new File("../SmsRadar/library")

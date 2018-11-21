@@ -2,9 +2,12 @@
 <resources>
     <color name="colorPrimary">#4CAF50</color>
     <color name="colorPrimaryDark">#087F23</color>
-    <color name="colorAccent">#64DD17</color>
+    <color name="colorAccent">#00C853</color>
     <color name="primaryTextColor">#212121</color>
     <color name="secondaryTextColor">#757575</color>
+    <color name="colorPrimaryInverse">#FFF</color>
+    <color name="primaryTextColorInverse">#FAFAFA</color>
+    <color name="secondaryTextColorInverse">#9E9E9E</color>
 
     <color name="compose_message_send_color_pressed">#999999</color>
     <color name="conversation_compose_divider_start">#44000000</color>
@@ -16,9 +19,9 @@
 
     <!--Message Bubble-->
     <color name="bubble_incoming_color">@color/colorPrimary</color>
-    <color name="bubble_outgoing_color">#FFF</color>
-    <color name="msg_incoming_color">#FFF</color>
-    <color name="msg_outgoing_color">#424242</color>
-    <color name="date_incoming_color">#99FFFFFF</color>
-    <color name="date_outgoing_color">#99323232</color>
+    <color name="bubble_outgoing_color">@color/colorPrimaryInverse</color>
+    <color name="msg_incoming_color">@color/primaryTextColorInverse</color>
+    <color name="msg_outgoing_color">@color/primaryTextColor</color>
+    <color name="date_incoming_color">@color/secondaryTextColorInverse</color>
+    <color name="date_outgoing_color">@color/secondaryTextColor</color>
 </resources>
