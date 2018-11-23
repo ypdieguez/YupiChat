@@ -9,7 +9,7 @@ import java.util.*
         tableName = "messages",
         foreignKeys = [ForeignKey(entity = Contact::class, parentColumns = ["id"],
                 childColumns = ["contact_id"], onDelete = CASCADE, onUpdate = CASCADE)],
-        indices = [Index("text")]
+        indices = [Index(value = ["contact_id"], unique = true)]
 )
 class Message(
         @NonNull

@@ -2,7 +2,9 @@ package com.sapp.yupi
 
 import android.content.Context
 import android.preference.PreferenceManager
-import com.sapp.yupi.ui.ConfigActivity
+import com.sapp.yupi.ui.appintro.PREF_EMAIL
+import com.sapp.yupi.ui.appintro.PREF_EMAIL_PASS
+import com.sapp.yupi.ui.appintro.USER_PREFERENCES
 import com.sun.mail.util.MailConnectException
 import javax.mail.AuthenticationFailedException
 import javax.mail.Message
@@ -15,9 +17,9 @@ class Mail {
     companion object {
         fun send(context: Context, address: String, subject: String, content: String): Byte {
             try {
-                val pref = PreferenceManager.getDefaultSharedPreferences(context)
-                val user = pref.getString(ConfigActivity.EMAIL, "")
-                val pass = pref.getString(ConfigActivity.PASS, "")
+                val pref = context.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE)
+                val user = pref.getString(PREF_EMAIL, "")
+                val pass = pref.getString(PREF_EMAIL_PASS, "")
 
                 val props = System.getProperties()
                 props["mail.smtp.host"] = "smtp.nauta.cu"
