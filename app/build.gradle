@@ -120,7 +120,7 @@ dependencies {
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
 
     // libphonenumber
-//    implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.14'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.1'
 
     // CircleImageView
 //    implementation 'de.hdodenhof:circleimageview:2.2.0'

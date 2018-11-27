@@ -38,20 +38,20 @@ class ConversationFragment : Fragment() {
 
         val adapter = MessageAdapter()
         binding.apply {
-            messageList.apply {
+            messageList.let {
 
                 val manager = LinearLayoutManager(activity)
                 manager.stackFromEnd = true
 
                 adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
                     override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                        manager.smoothScrollToPosition(this@apply, null,
+                        manager.smoothScrollToPosition(it, null,
                                 positionStart + itemCount)
                     }
                 })
 
-                this.adapter = adapter
-                layoutManager = manager
+                it.adapter = adapter
+                it.layoutManager = manager
             }
 
             composeMessage.apply {

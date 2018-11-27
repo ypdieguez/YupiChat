@@ -11,6 +11,7 @@ import androidx.annotation.StringRes
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroTextInputBinding
 
+
 private const val ARG_HINT = "input_hint"
 private const val ARG_TYPE = "input_type"
 private const val ARG_PREFIX = "prefix"

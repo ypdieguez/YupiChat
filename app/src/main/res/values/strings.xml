@@ -41,7 +41,7 @@
     <string name="intro_permssion_description_granted">Has concedido el permiso de lectra de sms.</string>
     <string name="intro_description_permission_denied">No has concedido el permiso de lectura de sms.
         Este permiso es necesario para el funcionamiento de la app.</string>
-    <string name="intro_conclusion_title">Listo!!!</string>
+    <string name="intro_conclusion_title">Listo</string>
     <string name="intro_mail_title">Correo</string>
     <string name="intro_mail_description">
         Con tu cuenta de correo <b>@nauta</b> se enviará los mensajes.
@@ -59,4 +59,10 @@
     <string name="phone_required">Phone is required</string>
     <string name="phone_not_valid">Enter a valid phone</string>
     <string name="pass_required">Password is required</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="denied">Denied</string>
+    <string name="rationale_permission_camera"><![CDATA[To capture photos and videos, allow Whatsapp to access to your camera. Tap Settings > Permission and turn Camera on]]></string>
+    <string name="not_now">Not Now</string>
 </resources>

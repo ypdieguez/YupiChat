@@ -62,6 +62,7 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
                 type = InputType.TYPE_CLASS_PHONE,
                 prefix = if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_WORLD) "+53" else "+1")
 
+        addSlide(PhoneFragment())
         // Add slides
         addSlide(PresentationFragment.newInstance(
                 title = R.string.app_name,
