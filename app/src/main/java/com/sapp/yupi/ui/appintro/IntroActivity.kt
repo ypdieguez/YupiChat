@@ -62,54 +62,55 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
                 type = InputType.TYPE_CLASS_PHONE,
                 prefix = if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_WORLD) "+53" else "+1")
 
-        addSlide(PhoneFragment())
+        addSlide(PhoneFragment.newInstance())
+
         // Add slides
-        addSlide(PresentationFragment.newInstance(
-                title = R.string.app_name,
-                imageRes = R.drawable.icons8_sms_384,
-                description = R.string.intro_app_description))
-        addSlide(PresentationFragment.newInstance(
-                title = R.string.intro_config_anounce_title,
-                imageRes = R.drawable.icons8_phonelink_setup_512,
-                description = R.string.intro_config_anounce_description))
-        addSlide(TextInputFragment.newInstance(
-                fragmentTag = TAG_FRAGMENT_NAME,
-                title = R.string.name,
-                imageRes = R.drawable.icons8_customer_480,
-                description = R.string.intro_name_description,
-                hint = R.string.name,
-                type = InputType.TYPE_TEXT_VARIATION_PERSON_NAME or InputType.TYPE_TEXT_FLAG_CAP_WORDS)
-        )
-
-        if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_CUBA) addSlide(CountryFragment.newInstance())
-        addSlide(mPhoneFragment)
-
-        if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_WORLD) {
-            addSlide(TextInputFragment.newInstance(
-                    fragmentTag = TAG_FRAGMENT_MAIL,
-                    title = R.string.intro_mail_title,
-                    imageRes = R.drawable.icons8_new_post_512,
-                    description = R.string.intro_mail_description,
-                    hint = R.string.intro_mail_title,
-                    type = InputType.TYPE_CLASS_TEXT,
-                    suffix = "@nauta.cu"))
-            addSlide(TextInputFragment.newInstance(
-                    fragmentTag = TAG_FRAGMENT_MAIL_PASS,
-                    title = R.string.intro_pass_title,
-                    imageRes = R.drawable.icons8_password_480,
-                    description = R.string.intro_pass_description,
-                    hint = R.string.intro_pass_title,
-                    type = InputType.TYPE_TEXT_VARIATION_PASSWORD))
-        }
-
-        if (!UIUtils.checkPermission(this)) {
-            addSlide(PermissionFragment())
-        }
-
-        addSlide(PresentationFragment.newInstance(
-                title = R.string.intro_conclusion_title,
-                imageRes = R.drawable.icons8_confetti_512,
-                description = R.string.intro_conclusion_description))
+//        addSlide(PresentationFragment.newInstance(
+//                title = R.string.app_name,
+//                imageRes = R.drawable.icons8_sms_384,
+//                description = R.string.intro_app_description))
+//        addSlide(PresentationFragment.newInstance(
+//                title = R.string.intro_config_anounce_title,
+//                imageRes = R.drawable.icons8_phonelink_setup_512,
+//                description = R.string.intro_config_anounce_description))
+//        addSlide(TextInputFragment.newInstance(
+//                fragmentTag = TAG_FRAGMENT_NAME,
+//                title = R.string.name,
+//                imageRes = R.drawable.icons8_customer_480,
+//                description = R.string.intro_name_description,
+//                hint = R.string.name,
+//                type = InputType.TYPE_TEXT_VARIATION_PERSON_NAME or InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+//        )
+//
+//        if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_CUBA) addSlide(CountryFragment.newInstance())
+//        addSlide(mPhoneFragment)
+//
+//        if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_WORLD) {
+//            addSlide(TextInputFragment.newInstance(
+//                    fragmentTag = TAG_FRAGMENT_MAIL,
+//                    title = R.string.intro_mail_title,
+//                    imageRes = R.drawable.icons8_new_post_512,
+//                    description = R.string.intro_mail_description,
+//                    hint = R.string.intro_mail_title,
+//                    type = InputType.TYPE_CLASS_TEXT,
+//                    suffix = "@nauta.cu"))
+//            addSlide(TextInputFragment.newInstance(
+//                    fragmentTag = TAG_FRAGMENT_MAIL_PASS,
+//                    title = R.string.intro_pass_title,
+//                    imageRes = R.drawable.icons8_password_480,
+//                    description = R.string.intro_pass_description,
+//                    hint = R.string.intro_pass_title,
+//                    type = InputType.TYPE_TEXT_VARIATION_PASSWORD))
+//        }
+//
+//        if (!UIUtils.checkPermission(this)) {
+//            addSlide(PermissionFragment())
+//        }
+//
+//        addSlide(PresentationFragment.newInstance(
+//                title = R.string.intro_conclusion_title,
+//                imageRes = R.drawable.icons8_confetti_512,
+//                description = R.string.intro_conclusion_description))
 
         // Define colors
         val colorPrimary = ContextCompat.getColor(this, R.color.colorPrimary)
