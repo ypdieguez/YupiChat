@@ -59,10 +59,12 @@
     <string name="phone_required">Phone is required</string>
     <string name="phone_not_valid">Enter a valid phone</string>
     <string name="pass_required">Password is required</string>
+    <string name="phone_no_valid_region">Enter a valid phone for your region</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="denied">Denied</string>
+    <!--Permissions-->
+    <string name="permission_read_phone_state">Bla Bla</string>
     <string name="rationale_permission_camera"><![CDATA[To capture photos and videos, allow Whatsapp to access to your camera. Tap Settings > Permission and turn Camera on]]></string>
     <string name="not_now">Not Now</string>
+    <string name="go_on">Continuar</string>
+
 </resources>

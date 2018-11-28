@@ -16,7 +16,7 @@ import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewPermissionBinding
 import com.sapp.yupi.util.UIUtils
 
-class PermissionFragment : Fragment(), ISlidePolicy {
+class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
 
     private lateinit var mBinding: ViewPermissionBinding
 

@@ -1,8 +1,16 @@
 package com.sapp.yupi.ui.appintro
 
 import com.sapp.yupi.R
+import com.sapp.yupi.util.UIUtils
 
 class CountryFragment : IntroFragment() {
+
+//    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+//        super.setUserVisibleHint(isVisibleToUser)
+//        if(isVisibleToUser) {
+//            UIUtils.askForPermission()
+//        }
+//    }
 
     companion object {
         @JvmStatic

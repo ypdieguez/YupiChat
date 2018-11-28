@@ -57,6 +57,12 @@
     <string name="phone_required">El número de teléfono es requerido</string>
     <string name="phone_not_valid">Ingresa un número de teléfono válido</string>
     <string name="pass_required">La contraseña es requerida</string>
-    <string name="denied">Denied</string>
+    <string name="phone_no_valid_region">Ingresa un número de teléfono válido para tu región</string>
+
+    <!--Permissions-->
     <string name="not_now">Not Now</string>
+    <string name="go_on">Continuar</string>
+    <string name="rationale_permission_camera"><![CDATA[To capture photos and videos, allow Whatsapp to access to your camera. Tap Settings > Permission and turn Camera on]]></string>
+    <string name="permission_read_phone_state">Bla Bla</string>
+
 </resources>

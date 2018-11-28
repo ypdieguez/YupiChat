@@ -19,6 +19,7 @@ import com.sapp.yupi.databinding.ViewIntroTextInputBinding
 import com.sapp.yupi.ui.FIRST_LAUNCH
 import com.sapp.yupi.ui.MainActivity
 import com.sapp.yupi.util.UIUtils
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 
 
 const val USER_PREFERENCES = "user_preferences"
@@ -62,55 +63,58 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
                 type = InputType.TYPE_CLASS_PHONE,
                 prefix = if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_WORLD) "+53" else "+1")
 
-        addSlide(PhoneFragment.newInstance())
-
         // Add slides
-//        addSlide(PresentationFragment.newInstance(
-//                title = R.string.app_name,
-//                imageRes = R.drawable.icons8_sms_384,
-//                description = R.string.intro_app_description))
-//        addSlide(PresentationFragment.newInstance(
-//                title = R.string.intro_config_anounce_title,
-//                imageRes = R.drawable.icons8_phonelink_setup_512,
-//                description = R.string.intro_config_anounce_description))
-//        addSlide(TextInputFragment.newInstance(
-//                fragmentTag = TAG_FRAGMENT_NAME,
-//                title = R.string.name,
-//                imageRes = R.drawable.icons8_customer_480,
-//                description = R.string.intro_name_description,
-//                hint = R.string.name,
-//                type = InputType.TYPE_TEXT_VARIATION_PERSON_NAME or InputType.TYPE_TEXT_FLAG_CAP_WORDS)
-//        )
-//
-//        if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_CUBA) addSlide(CountryFragment.newInstance())
-//        addSlide(mPhoneFragment)
-//
-//        if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_WORLD) {
-//            addSlide(TextInputFragment.newInstance(
-//                    fragmentTag = TAG_FRAGMENT_MAIL,
-//                    title = R.string.intro_mail_title,
-//                    imageRes = R.drawable.icons8_new_post_512,
-//                    description = R.string.intro_mail_description,
-//                    hint = R.string.intro_mail_title,
-//                    type = InputType.TYPE_CLASS_TEXT,
-//                    suffix = "@nauta.cu"))
-//            addSlide(TextInputFragment.newInstance(
-//                    fragmentTag = TAG_FRAGMENT_MAIL_PASS,
-//                    title = R.string.intro_pass_title,
-//                    imageRes = R.drawable.icons8_password_480,
-//                    description = R.string.intro_pass_description,
-//                    hint = R.string.intro_pass_title,
-//                    type = InputType.TYPE_TEXT_VARIATION_PASSWORD))
-//        }
-//
-//        if (!UIUtils.checkPermission(this)) {
-//            addSlide(PermissionFragment())
-//        }
-//
-//        addSlide(PresentationFragment.newInstance(
-//                title = R.string.intro_conclusion_title,
-//                imageRes = R.drawable.icons8_confetti_512,
-//                description = R.string.intro_conclusion_description))
+        addSlide(PresentationFragment.newInstance(
+                title = R.string.app_name,
+                imageRes = R.drawable.icons8_sms_384,
+                description = R.string.intro_app_description))
+        addSlide(PresentationFragment.newInstance(
+                title = R.string.intro_config_anounce_title,
+                imageRes = R.drawable.icons8_phonelink_setup_512,
+                description = R.string.intro_config_anounce_description))
+        addSlide(PhoneFragment.newInstance())
+        addSlide(TextInputFragment.newInstance(
+                fragmentTag = TAG_FRAGMENT_NAME,
+                title = R.string.name,
+                imageRes = R.drawable.icons8_customer_480,
+                description = R.string.intro_name_description,
+                hint = R.string.name,
+                type = InputType.TYPE_TEXT_VARIATION_PERSON_NAME or InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+        )
+
+        if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_CUBA) addSlide(CountryFragment.newInstance())
+
+        // TODO: See best way to read phone number
+//        addSlide(PhoneFragment.newInstance())
+
+        addSlide(mPhoneFragment)
+
+        if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_WORLD) {
+            addSlide(TextInputFragment.newInstance(
+                    fragmentTag = TAG_FRAGMENT_MAIL,
+                    title = R.string.intro_mail_title,
+                    imageRes = R.drawable.icons8_new_post_512,
+                    description = R.string.intro_mail_description,
+                    hint = R.string.intro_mail_title,
+                    type = InputType.TYPE_CLASS_TEXT,
+                    suffix = "@nauta.cu"))
+            addSlide(TextInputFragment.newInstance(
+                    fragmentTag = TAG_FRAGMENT_MAIL_PASS,
+                    title = R.string.intro_pass_title,
+                    imageRes = R.drawable.icons8_password_480,
+                    description = R.string.intro_pass_description,
+                    hint = R.string.intro_pass_title,
+                    type = InputType.TYPE_TEXT_VARIATION_PASSWORD))
+        }
+
+        if (!UIUtils.checkPermission(this)) {
+            addSlide(ReadSmsPermissionFragment())
+        }
+
+        addSlide(PresentationFragment.newInstance(
+                title = R.string.intro_conclusion_title,
+                imageRes = R.drawable.icons8_confetti_512,
+                description = R.string.intro_conclusion_description))
 
         // Define colors
         val colorPrimary = ContextCompat.getColor(this, R.color.colorPrimary)
@@ -130,6 +134,10 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
 
         setScrollDurationFactor(2)
         setSwipeLock(true)
+    }
+
+    override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
+        super.onSlideChanged(oldFragment, newFragment)
     }
 
     override fun onDonePressed(currentFragment: Fragment?) {
@@ -166,7 +174,7 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         var msg: String? = null
 
         binding.apply {
-            val name = textInput.text.toString()
+            val name = textInput.text.toString().trim()
             if (name.isEmpty()) {
                 error = true
                 msg = getString(R.string.name_required)
@@ -197,7 +205,6 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
 
             mPhoneFragment.setPrefix(code)
 
-
             return Pair(false, null)
         }
         return Pair(true, null)
@@ -208,16 +215,25 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         var msg: String? = null
 
         binding.apply {
-            val phone = textInput.text.toString()
+            val phone = textInput.text.toString().trim()
             if (phone.isEmpty()) {
                 error = true
                 msg = getString(R.string.phone_required)
-            }
-            if (!Patterns.PHONE.matcher(phone).matches()) {
+            } else if (!Patterns.PHONE.matcher(phone).matches()) {
                 error = true
                 msg = getString(R.string.phone_not_valid)
 
+            } else {
+                val phoneUtil = PhoneNumberUtil.getInstance()
+                val phoneNumber = phoneUtil.parse(phone, null)
+                val isValid = phoneUtil.isValidNumber(phoneNumber)
+
+                if (!isValid) {
+                    error = true
+                    msg = getString(R.string.phone_no_valid_region)
+                }
             }
+
             // Save to Preferences
             pref.edit {
                 putString(PREF_PHONE, phone)
@@ -232,7 +248,7 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         var msg: String? = null
 
         binding.apply {
-            val mail = textInput.text.toString()
+            val mail = textInput.text.toString().trim()
             if (mail.isEmpty()) {
                 error = true
                 msg = getString(R.string.email_required)
@@ -254,7 +270,6 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
 
         return Pair(error, msg)
     }
-
 
     private fun validateEmailPass(binding: ViewIntroTextInputBinding): Pair<Boolean, String?> {
         var error = false
