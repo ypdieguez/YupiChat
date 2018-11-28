@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         val pref = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE)
 
-        if(!pref.getBoolean(FIRST_LAUNCH, true)) {
+        if(/*!pref.getBoolean(FIRST_LAUNCH, true)*/true) {
             startActivity(Intent(this, IntroActivity::class.java))
             finish()
         } else if (!UIUtils.checkPermission(this)) {

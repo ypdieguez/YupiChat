@@ -8,4 +8,7 @@
 
     <!--Bubble-->
     <dimen name="compose_msg_padding">16dp</dimen>
+
+    <!--App corners-->
+    <dimen name="corner">3dp</dimen>
 </resources>

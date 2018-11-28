@@ -14,7 +14,7 @@
 
     <color name="letter_tile_font_color">#fff</color>
 
-    <color name="background">#fff</color>
+    <color name="background">#FFF</color>
     <color name="divider">#fff</color>
 
     <!--Message Bubble-->

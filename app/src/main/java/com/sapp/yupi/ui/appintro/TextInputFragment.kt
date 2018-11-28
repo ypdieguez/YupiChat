@@ -101,23 +101,31 @@ open class TextInputFragment : IntroFragment() {
         }
     }
 
+    fun getBundle(fragmentTag: String, @StringRes title: Int, @DrawableRes imageRes: Int,
+                  @StringRes description: Int, @StringRes hint: Int, type: Int,
+                  prefix: String? = null, suffix: String? = null) =
+            super.getBundle(
+                    layoutRes = R.layout.view_intro_text_input,
+                    fragmentTag = fragmentTag,
+                    title = title,
+                    imageRes = imageRes,
+                    description = description
+            ).apply {
+                putInt(ARG_HINT, hint)
+                putInt(ARG_TYPE, type)
+
+                prefix?.let { putString(ARG_PREFIX, it) }
+                suffix?.let { putString(ARG_SUFFIX, it) }
+            }
+
     companion object {
         @JvmStatic
         fun newInstance(fragmentTag: String, @StringRes title: Int, @DrawableRes imageRes: Int,
                         @StringRes description: Int, @StringRes hint: Int, type: Int,
                         prefix: String? = null, suffix: String? = null) =
                 TextInputFragment().apply {
-                    arguments = getBundle(
-                            R.layout.view_intro_text_input,
-                            fragmentTag,
-                            title, imageRes, description
-                    ).apply {
-                        putInt(ARG_HINT, hint)
-                        putInt(ARG_TYPE, type)
-
-                        prefix?.let { putString(ARG_PREFIX, it) }
-                        suffix?.let { putString(ARG_SUFFIX, it) }
-                    }
+                    arguments = getBundle(fragmentTag, title, imageRes, description, hint, type,
+                            prefix, suffix)
                 }
     }
 }
