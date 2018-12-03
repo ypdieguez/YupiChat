@@ -12,26 +12,23 @@ import androidx.core.content.edit
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.AppIntro
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.sapp.yupi.BuildConfig
 import com.sapp.yupi.R
-import com.sapp.yupi.databinding.ViewIntroCountryBinding
+import com.sapp.yupi.databinding.ViewIntroPhoneBinding
 import com.sapp.yupi.databinding.ViewIntroTextInputBinding
 import com.sapp.yupi.ui.FIRST_LAUNCH
 import com.sapp.yupi.ui.MainActivity
 import com.sapp.yupi.util.UIUtils
-import com.google.i18n.phonenumbers.PhoneNumberUtil
 
 
 const val USER_PREFERENCES = "user_preferences"
 
-const val PREF_COUNTRY_CODE = "country_code"
 const val PREF_PHONE = "phone"
 const val PREF_EMAIL = "email"
 const val PREF_EMAIL_PASS = "email_pass"
 const val PREF_NAME = "name"
 
-
-const val TAG_FRAGMENT_COUNTRY = "fragment_country"
 const val TAG_FRAGMENT_PHONE = "fragment_phone"
 const val TAG_FRAGMENT_MAIL = "fragment_mail"
 const val TAG_FRAGMENT_MAIL_PASS = "fragment_mail_pass"
@@ -40,9 +37,6 @@ const val TAG_FRAGMENT_NAME = "fragment_name"
 class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
 
     private lateinit var pref: SharedPreferences
-
-    //Fragments
-    private lateinit var mPhoneFragment: TextInputFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,16 +47,6 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         // Initialize preferences
         pref = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE)
 
-        // Initialize fragments
-        mPhoneFragment = TextInputFragment.newInstance(
-                fragmentTag = TAG_FRAGMENT_PHONE,
-                title = R.string.phone_number,
-                imageRes = R.drawable.icons8_phone_480,
-                description = R.string.intro_phone_description,
-                hint = R.string.phone_number,
-                type = InputType.TYPE_CLASS_PHONE,
-                prefix = if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_WORLD) "+53" else "+1")
-
         // Add slides
         addSlide(PresentationFragment.newInstance(
                 title = R.string.app_name,
@@ -72,7 +56,6 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
                 title = R.string.intro_config_anounce_title,
                 imageRes = R.drawable.icons8_phonelink_setup_512,
                 description = R.string.intro_config_anounce_description))
-        addSlide(PhoneFragment.newInstance())
         addSlide(TextInputFragment.newInstance(
                 fragmentTag = TAG_FRAGMENT_NAME,
                 title = R.string.name,
@@ -81,13 +64,7 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
                 hint = R.string.name,
                 type = InputType.TYPE_TEXT_VARIATION_PERSON_NAME or InputType.TYPE_TEXT_FLAG_CAP_WORDS)
         )
-
-        if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_CUBA) addSlide(CountryFragment.newInstance())
-
-        // TODO: See best way to read phone number
-//        addSlide(PhoneFragment.newInstance())
-
-        addSlide(mPhoneFragment)
+        addSlide(PhoneFragment.newInstance())
 
         if (BuildConfig.FLAVOR == BuildConfig.FLAVOR_WORLD) {
             addSlide(TextInputFragment.newInstance(
@@ -136,10 +113,6 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         setSwipeLock(true)
     }
 
-    override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
-        super.onSlideChanged(oldFragment, newFragment)
-    }
-
     override fun onDonePressed(currentFragment: Fragment?) {
         pref.edit {
             putBoolean(FIRST_LAUNCH, false)
@@ -149,23 +122,20 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
     }
 
     override fun validate(binding: ViewDataBinding, tag: String): Pair<Boolean, String?> {
-        when (tag) {
+        return when (tag) {
             TAG_FRAGMENT_NAME -> {
-                return validateName(binding as ViewIntroTextInputBinding)
-            }
-            TAG_FRAGMENT_COUNTRY -> {
-                return validateCountry(binding as ViewIntroCountryBinding)
+                validateName(binding as ViewIntroTextInputBinding)
             }
             TAG_FRAGMENT_PHONE -> {
-                return validatePhone(binding as ViewIntroTextInputBinding)
+                validatePhone(binding as ViewIntroPhoneBinding)
             }
             TAG_FRAGMENT_MAIL -> {
-                return validateEmail(binding as ViewIntroTextInputBinding)
+                validateEmail(binding as ViewIntroTextInputBinding)
             }
             TAG_FRAGMENT_MAIL_PASS -> {
-                return validateEmailPass(binding as ViewIntroTextInputBinding)
+                validateEmailPass(binding as ViewIntroTextInputBinding)
             }
-            else -> return Pair(false, null)
+            else -> Pair(false, null)
         }
     }
 
@@ -188,55 +158,42 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         return Pair(error, msg)
     }
 
-    private fun validateCountry(binding: ViewIntroCountryBinding): Pair<Boolean, String?> {
-        val id = binding.input.checkedRadioButtonId
-        if (id != -1) {
-            val code = when (id) {
-                R.id.canada -> "+1"
-                R.id.united_states -> "+1"
-                R.id.mexico -> "+52"
-                else -> "+53"
-            }
-
-            // Save to preferences
-            pref.edit {
-                putString(PREF_COUNTRY_CODE, code)
-            }
-
-            mPhoneFragment.setPrefix(code)
-
-            return Pair(false, null)
-        }
-        return Pair(true, null)
-    }
-
-    private fun validatePhone(binding: ViewIntroTextInputBinding): Pair<Boolean, String?> {
+    private fun validatePhone(binding: ViewIntroPhoneBinding): Pair<Boolean, String?> {
         var error = false
         var msg: String? = null
 
         binding.apply {
-            val phone = textInput.text.toString().trim()
-            if (phone.isEmpty()) {
-                error = true
-                msg = getString(R.string.phone_required)
-            } else if (!Patterns.PHONE.matcher(phone).matches()) {
-                error = true
-                msg = getString(R.string.phone_not_valid)
 
+            val validCountries = resources.getStringArray(R.array.countries_name)
+            val country = textInputCountry.text.toString()
+            if (!validCountries.contains(country)) {
+                error = true
+                msg = getString(R.string.country_not_supported)
             } else {
-                val phoneUtil = PhoneNumberUtil.getInstance()
-                val phoneNumber = phoneUtil.parse(phone, null)
-                val isValid = phoneUtil.isValidNumber(phoneNumber)
 
-                if (!isValid) {
+                val phone = textInputPhone.text.toString().trim()
+                if (phone.isEmpty()) {
                     error = true
-                    msg = getString(R.string.phone_no_valid_region)
-                }
-            }
+                    msg = getString(R.string.phone_required)
+                } else if (!Patterns.PHONE.matcher(phone).matches()) {
+                    error = true
+                    msg = getString(R.string.phone_not_valid)
 
-            // Save to Preferences
-            pref.edit {
-                putString(PREF_PHONE, phone)
+                } else {
+                    val phoneUtil = PhoneNumberUtil.getInstance()
+                    val phoneNumber = phoneUtil.parse(phone, null)
+                    val isValid = phoneUtil.isValidNumber(phoneNumber)
+
+                    if (!isValid) {
+                        error = true
+                        msg = getString(R.string.phone_no_valid_region)
+                    }
+                }
+
+                // Save to Preferences
+                pref.edit {
+                    putString(PREF_PHONE, phone)
+                }
             }
         }
 

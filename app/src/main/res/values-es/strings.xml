@@ -49,6 +49,7 @@
     <string name="intro_pass_description">
         Con tu contraseña accederás a tu cuenta de correo <b>@nauta</b>.
     </string>
+
     <!--Validation-->
     <string name="name_required">El nombre es requerido</string>
     <string name="email_required">El correo es requerido</string>
@@ -58,6 +59,7 @@
     <string name="phone_not_valid">Ingresa un número de teléfono válido</string>
     <string name="pass_required">La contraseña es requerida</string>
     <string name="phone_no_valid_region">Ingresa un número de teléfono válido para tu región</string>
+    <string name="country_not_supported">Este país no está soportado</string>
 
     <!--Permissions-->
     <string name="not_now">Not Now</string>
@@ -65,4 +67,10 @@
     <string name="rationale_permission_camera"><![CDATA[To capture photos and videos, allow Whatsapp to access to your camera. Tap Settings > Permission and turn Camera on]]></string>
     <string name="permission_read_phone_state">Bla Bla</string>
 
+    <!--Avaiable Countries-->
+    <string-array name="countries_name">
+        <item>Canadá</item>
+        <item>Estados Unidos</item>
+        <item>México</item>
+    </string-array>
 </resources>

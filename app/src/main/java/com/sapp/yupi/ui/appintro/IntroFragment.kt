@@ -77,8 +77,8 @@ open class IntroFragment : Fragment(), ISlidePolicy {
         mListener = null
     }
 
-    fun getBundle(@LayoutRes layoutRes: Int, fragmentTag: String, @StringRes title: Int,
-                  @DrawableRes imageRes: Int, @StringRes description: Int) =
+    fun getBundle(@LayoutRes layoutRes: Int, fragmentTag: String, @StringRes title: Int = -1,
+                  @DrawableRes imageRes: Int = -1, @StringRes description: Int = -1) =
             Bundle().apply {
                 putInt(ARG_LAYOUT_RES, layoutRes)
                 putString(ARG_FRAGMENT_TAG, fragmentTag)
