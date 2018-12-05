@@ -20,7 +20,7 @@
     <string name="intro_config_anounce_description">
         Llena los datos que se piden a continuación para que la app pueda enviar y recibir mensajes.
     </string>
-    <string name="intro_country_title">Ubicación</string>
+    <string name="intro_country_title">País</string>
     <string name="intro_country_description">
         Con tu ubicación se establecerá el código de país para el número de teléfono.
     </string>
@@ -58,14 +58,19 @@
     <string name="phone_required">El número de teléfono es requerido</string>
     <string name="phone_not_valid">Ingresa un número de teléfono válido</string>
     <string name="pass_required">La contraseña es requerida</string>
-    <string name="phone_no_valid_region">Ingresa un número de teléfono válido para tu región</string>
-    <string name="country_not_supported">Este país no está soportado</string>
+    <string name="phone_no_valid_region">Ingresa un número de teléfono válido para tu país</string>
+    <string name="country_not_supported">País no está soportado por la app</string>
+    <string name="choose_country">Elige un país</string>
+    <string name="chosse_yuupi_cuba">Para Cuba se encuntra la app Yuupi World</string>
 
     <!--Permissions-->
     <string name="not_now">Not Now</string>
     <string name="go_on">Continuar</string>
     <string name="rationale_permission_camera"><![CDATA[To capture photos and videos, allow Whatsapp to access to your camera. Tap Settings > Permission and turn Camera on]]></string>
-    <string name="permission_read_phone_state">Bla Bla</string>
+    <string name="permission_read_phone_state">
+        <b>Yuupi</b> quiere intentar obtener el país y número de teléfono para ti, concede el permiso
+        necesario para realizar la acción.
+    </string>
 
     <!--Avaiable Countries-->
     <string-array name="countries_name">

@@ -63,10 +63,15 @@
     <string name="country_not_supported">This country is not yet supported</string>
 
     <!--Permissions-->
-    <string name="permission_read_phone_state">Bla Bla</string>
+    <string name="permission_read_phone_state">
+        <b>Yuupi</b> quiere intentar obtener el número de teléfono para ti, concede el permiso
+        necesario para realizar la acción.
+    </string>
     <string name="rationale_permission_camera"><![CDATA[To capture photos and videos, allow Whatsapp to access to your camera. Tap Settings > Permission and turn Camera on]]></string>
     <string name="not_now">Not Now</string>
     <string name="go_on">Continuar</string>
+    <string name="choose_country">Elige un país</string>
+    <string name="chosse_yuupi_cuba">Para Cuba se encuntra la app Yuupi World</string>
 
     <!--Avaiable Countries-->
     <string-array name="countries_name">

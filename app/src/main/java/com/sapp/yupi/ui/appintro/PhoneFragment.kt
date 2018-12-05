@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.telephony.TelephonyManager
 import android.text.InputType
 import android.util.Patterns
+import android.view.KeyEvent
 import android.view.View
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder
@@ -20,38 +21,64 @@ import java.util.*
 
 class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
 
+    private var mFirst = true
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (mBinding as ViewIntroPhoneBinding).apply {
             textInputCountry.apply {
                 inputType = InputType.TYPE_NULL
+
+                setOnTouchListener { _, event ->
+                    if (event.action == KeyEvent.ACTION_UP) {
+                        textInputLayoutCountry.error = null
+                        CountryListDialogFragment.newInstance()
+                                .addListener(this@PhoneFragment)
+                                .show(fragmentManager, "dialog")
+                    }
+                    false
+                }
+
                 onFocusChangeListener =
                         View.OnFocusChangeListener { _, hasFocus ->
                             if (hasFocus) {
                                 text?.let {
                                     if (it.isEmpty())
-                                        setText("Elige un país")
+                                        setText(getString(R.string.choose_country))
                                 }
                             }
                         }
-                setOnClickListener {
-                    textInputLayoutCountry.error = null
-                    CountryListDialogFragment.newInstance()
-                            .addListener(this@PhoneFragment)
-                            .show(fragmentManager, "dialog")
-                }
             }
 
             textInputPhone.apply {
+                setOnTouchListener { v, event ->
+                    if (event.action == KeyEvent.ACTION_DOWN) {
+                        textInputCountry.text.apply {
+                            if(toString() == "Cuba") {
+                                textInputLayoutCountry.error = getString(R.string.chosse_yuupi_cuba)
+                                return@setOnTouchListener true
+                            } else if (!resources.getStringArray(R.array.countries_name)
+                                            .contains(toString())) {
+                                textInputLayoutCountry.error = getString(R.string.choose_country)
+                                return@setOnTouchListener true
+                            }
+                        }
+                    }
+                    return@setOnTouchListener false
+                }
+
                 setOnClickListener {
                     textInputLayoutPhone.error = null
                 }
             }
+
+
         }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
+        if (isVisibleToUser && mFirst) {
+            mFirst = false
             if (UIUtils.askForPermission(activity!!, Manifest.permission.READ_PHONE_STATE,
                             this)) {
                 tryGetPhoneNumber()
@@ -69,9 +96,11 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
     @SuppressLint("MissingPermission", "HardwareIds")
     private fun tryGetPhoneNumber() {
         (mBinding as ViewIntroPhoneBinding).apply {
-            if (textInputCountry.text!!.isEmpty() && textInputPhone.text!!.isEmpty()) {
+            var country = textInputCountry.text?.toString() ?: ""
+            var number = textInputPhone.text?.toString() ?: ""
+            if (country.isEmpty() || country == getString(R.string.choose_country) && number.isEmpty()) {
                 val tMgr = context?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                val number = tMgr.line1Number
+                number = tMgr.line1Number
                 val networkCountryIso = tMgr.networkCountryIso
                 val simCountryIso = tMgr.simCountryIso
 
@@ -80,7 +109,7 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
                     val geocoder = PhoneNumberOfflineGeocoder.getInstance()
                     val phoneNumber = phoneUtil.parse(number, null)
 
-                    val country = geocoder.getDescriptionForNumber(phoneNumber, Locale.getDefault())
+                    country = geocoder.getDescriptionForNumber(phoneNumber, Locale.getDefault())
                     val countryCode = phoneNumber.countryCode
 
                     textInputCountry.setText(country)
@@ -91,7 +120,7 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
                     val iso = (networkCountryIso ?: simCountryIso).toUpperCase()
                     val phoneUtil = PhoneNumberUtil.getInstance()
 
-                    val country = Locale(Locale.getDefault().language, iso).displayCountry
+                    country = Locale(Locale.getDefault().language, iso).displayCountry
                     val countryCode = phoneUtil.getCountryCodeForRegion(iso)
 
                     textInputCountry.setText(country)
@@ -101,7 +130,7 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
                     val phoneUtil = PhoneNumberUtil.getInstance()
                     val locale = Locale.getDefault()
 
-                    val country = locale.displayCountry
+                    country = locale.displayCountry
                     textInputCountry.setText(country)
 
                     val iso = locale.country.toUpperCase()
@@ -130,10 +159,17 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
     override fun onUserIllegallyRequestedNextPage() {
         (mBinding as ViewIntroPhoneBinding).apply {
             if (mError.second.equals(getString(R.string.country_not_supported))) {
-                textInputLayoutCountry.error = mError.second
+                val text = textInputCountry.text.toString()
+                textInputLayoutCountry.apply {
+                    error = when (text) {
+                        getString(R.string.choose_country) -> getString(R.string.choose_country)
+                        "Cuba" -> getString(R.string.chosse_yuupi_cuba)
+                        else -> mError.second
+                    }
+                }
+
                 textInputLayoutPhone.error = null
-            }
-            else {
+            } else {
                 textInputLayoutCountry.error = null
                 textInputLayoutPhone.error = mError.second
             }

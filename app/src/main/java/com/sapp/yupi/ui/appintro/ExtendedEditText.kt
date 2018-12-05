@@ -6,6 +6,9 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import com.google.android.material.textfield.TextInputEditText
 
 class ExtendedEditText(context: Context, attrs: AttributeSet) : TextInputEditText(context, attrs) {
@@ -123,5 +126,18 @@ class ExtendedEditText(context: Context, attrs: AttributeSet) : TextInputEditTex
         } else {
             super.onRestoreInstanceState(state)
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            hideKeyboard()
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    private fun hideKeyboard() {
+            val inputMethodManager =
+                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
 }

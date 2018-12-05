@@ -28,9 +28,7 @@ class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mBinding.btn.setOnClickListener {
-            requestPermissions(arrayOf(Manifest.permission.READ_SMS), 1)
-        }
+        managePermission()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
@@ -40,11 +38,7 @@ class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
                 btn.visibility = View.GONE
                 description.text = getString(R.string.intro_permssion_description_granted)
             } else {
-                btn.setText(R.string.settings)
-                btn.setOnClickListener {
-                    startActivityForResult(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            Uri.parse("package:" + activity!!.packageName)), 1)
-                }
+                managePermission()
             }
         }
     }
@@ -67,6 +61,24 @@ class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
     override fun onUserIllegallyRequestedNextPage() {
         mBinding.apply {
             description.text = getString(R.string.intro_description_permission_denied)
+        }
+    }
+
+    private fun managePermission() {
+        mBinding.btn.apply {
+            if(!shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)){
+                text = getString(R.string.settings)
+                setOnClickListener {
+                    startActivityForResult(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.parse("package:" + activity!!.packageName)), 1)
+                }
+                mBinding.description.text = "Bla Bla"
+            } else {
+                text = getString(R.string.intro_btn_grant_permission)
+                setOnClickListener {
+                    requestPermissions(arrayOf(Manifest.permission.READ_SMS), 1)
+                }
+            }
         }
     }
 }
