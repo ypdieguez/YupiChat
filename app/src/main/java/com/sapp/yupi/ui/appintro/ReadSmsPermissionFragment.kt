@@ -2,7 +2,9 @@ package com.sapp.yupi.ui.appintro
 
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -15,6 +17,9 @@ import com.github.paolorotolo.appintro.ISlidePolicy
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewPermissionBinding
 import com.sapp.yupi.util.UIUtils
+
+private const val PERMISSION_PREFERENCES = "permissions_preferences"
+private const val PREF_FIRST_READ_SMS_PERMISSION = "first_read_sms_permission"
 
 class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
 
@@ -29,6 +34,35 @@ class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         managePermission()
+        // Initialize preferences
+        val pref = context?.getSharedPreferences(PERMISSION_PREFERENCES, Context.MODE_PRIVATE)
+        pref?.apply {
+            if (getBoolean(PREF_FIRST_READ_SMS_PERMISSION, true)) {
+                (mBinding as ViewPermissionBinding).apply {
+                    btn.text = getString(R.string.intro_btn_grant_permission)
+                    btn.setOnClickListener {
+                        requestPermissions(arrayOf(Manifest.permission.READ_SMS), 1)
+                    }
+                    error.visibility = View.GONE
+                }
+            }
+        }
+
+        pref?.takeIf { it.getBoolean("", true) }?.apply {
+            (mBinding as ViewPermissionBinding).apply {
+                btn.text = getString(R.string.intro_btn_grant_permission)
+                btn.setOnClickListener {
+                    requestPermissions(arrayOf(Manifest.permission.READ_SMS), 1)
+                }
+                error.visibility = View.GONE
+            }
+        } ?: (mBinding as ViewPermissionBinding).apply {
+            btn.text = getString(R.string.intro_btn_grant_permission)
+            btn.setOnClickListener {
+                requestPermissions(arrayOf(Manifest.permission.READ_SMS), 1)
+            }
+            error.visibility = View.GONE
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
@@ -66,7 +100,7 @@ class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
 
     private fun managePermission() {
         mBinding.btn.apply {
-            if(!shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)){
+            if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)) {
                 mBinding.error.text = getString(R.string.read_sms_denied_permanetly)
                 text = getString(R.string.settings)
                 setOnClickListener {
@@ -80,5 +114,9 @@ class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
                 }
             }
         }
+    }
+
+    private fun grantPermissionLayout() {
+
     }
 }

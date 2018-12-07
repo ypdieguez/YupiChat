@@ -63,8 +63,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_weight="0.9"
+                    android:gravity="center"
                     android:textColor="@color/secondaryTextColor"
                     tools:text="@string/read_sms_denied_permanetly" />
             </LinearLayout>
