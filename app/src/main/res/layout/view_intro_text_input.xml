@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="0.9"
+                app:errorTextAppearance="@color/secondaryTextColor"
                 app:passwordToggleEnabled="true"
                 app:passwordToggleTint="@color/colorPrimary">
 

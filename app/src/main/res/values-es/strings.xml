@@ -37,9 +37,6 @@
     </string>
     <string name="settings">AJUSTES</string>
     <string name="intro_permssion_description_granted">Has concedido el permiso de lectra de sms.</string>
-    <string name="intro_description_permission_denied">
-        No has concedido el permiso de lectura de sms, necesario para el funcionamiento de la app.
-    </string>
     <string name="intro_conclusion_title">Listo</string>
     <string name="intro_mail_title">Correo</string>
     <string name="intro_mail_description">
@@ -62,6 +59,9 @@
     <string name="country_not_supported">País no está soportado por la app</string>
     <string name="choose_country">Elige un país</string>
     <string name="chosse_yuupi_cuba">Para Cuba se encuntra la app Yuupi World</string>
+    <string name="read_sms_denied_permanetly">
+        Para leer los mensajes permite que <b>Yuupi</b> 
+    </string>
 
     <!--Permissions-->
     <string name="not_now">Not Now</string>

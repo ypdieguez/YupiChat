@@ -60,19 +60,19 @@ class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
 
     override fun onUserIllegallyRequestedNextPage() {
         mBinding.apply {
-            description.text = getString(R.string.intro_description_permission_denied)
+            description.text = getString(R.string.read_sms_denied_permanetly)
         }
     }
 
     private fun managePermission() {
         mBinding.btn.apply {
             if(!shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)){
+                mBinding.error.text = getString(R.string.read_sms_denied_permanetly)
                 text = getString(R.string.settings)
                 setOnClickListener {
                     startActivityForResult(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                             Uri.parse("package:" + activity!!.packageName)), 1)
                 }
-                mBinding.description.text = "Bla Bla"
             } else {
                 text = getString(R.string.intro_btn_grant_permission)
                 setOnClickListener {

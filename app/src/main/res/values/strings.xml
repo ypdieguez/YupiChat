@@ -39,7 +39,7 @@
     </string>
     <string name="settings">SETTINGS</string>
     <string name="intro_permssion_description_granted">Has concedido el permiso de lectra de sms.</string>
-    <string name="intro_description_permission_denied">No has concedido el permiso de lectura de sms.
+    <string name="read_sms_denied_permanetly">No has concedido el permiso de lectura de sms.
         Este permiso es necesario para el funcionamiento de la app.</string>
     <string name="intro_conclusion_title">Listo</string>
     <string name="intro_mail_title">Correo</string>
