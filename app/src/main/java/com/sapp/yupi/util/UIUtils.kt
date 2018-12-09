@@ -33,7 +33,7 @@ class UIUtils {
             activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
         }
 
-        fun checkPermission(context: Context) = ContextCompat.checkSelfPermission(context,
+        fun checkReadSmsPermission(context: Context) = ContextCompat.checkSelfPermission(context,
                 Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
 
         fun askForPermission(context: Context, permission: String, listener: Fragment): Boolean {

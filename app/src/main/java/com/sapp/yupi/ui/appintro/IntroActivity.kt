@@ -84,7 +84,7 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
                     type = InputType.TYPE_TEXT_VARIATION_PASSWORD))
         }
 
-        if (!UIUtils.checkPermission(this)) {
+        if (!UIUtils.checkReadSmsPermission(this)) {
             addSlide(ReadSmsPermissionFragment())
         }
 

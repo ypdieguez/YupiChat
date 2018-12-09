@@ -1,13 +1,10 @@
 package com.sapp.yupi.ui
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -31,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         if(/*!pref.getBoolean(FIRST_LAUNCH, true)*/true) {
             startActivity(Intent(this, IntroActivity::class.java))
             finish()
-        } else if (!UIUtils.checkPermission(this)) {
+        } else if (!UIUtils.checkReadSmsPermission(this)) {
             
         } else {
 

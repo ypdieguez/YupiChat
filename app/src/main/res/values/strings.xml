@@ -23,9 +23,6 @@
         Llena los datos que se piden a continuación para que la app pueda enviar y recibir mensajes.
     </string>
     <string name="intro_country_title">País</string>
-    <string name="intro_country_description">
-        Con tu ubicación se establecerá el código de país para el número de teléfono.
-    </string>
     <string name="intro_name_description">
         Con tu nombre tus contactos sabrán quién les escribe.
     </string>
@@ -38,7 +35,7 @@
         Es necesario el permiso de lectura de sms para obtener los mensajes que envían tus contactos.
     </string>
     <string name="settings">SETTINGS</string>
-    <string name="intro_permssion_description_granted">Has concedido el permiso de lectra de sms.</string>
+    <string name="intro_permission_description_granted">Has concedido el permiso de lectra de sms.</string>
     <string name="read_sms_denied_permanetly">No has concedido el permiso de lectura de sms.
         Este permiso es necesario para el funcionamiento de la app.</string>
     <string name="intro_conclusion_title">Listo</string>
@@ -50,6 +47,7 @@
     <string name="intro_pass_description">
         Con tu contraseña la app accederá a tu cuenta de correo <b>@nauta</b>.
     </string>
+    <string name="read_sms_denied">Este permiso es necesario</string>
 
     <!--Validation-->
     <string name="name_required">Name is required</string>

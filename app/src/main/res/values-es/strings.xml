@@ -21,9 +21,6 @@
         Llena los datos que se piden a continuación para que la app pueda enviar y recibir mensajes.
     </string>
     <string name="intro_country_title">País</string>
-    <string name="intro_country_description">
-        Con tu ubicación se establecerá el código de país para el número de teléfono.
-    </string>
     <string name="intro_name_description">
         Con tu nombre tus contactos sabrán quién les escribe.
     </string>
@@ -31,12 +28,14 @@
         Con tu número de teléfono tus contactos podrán responderte.
     </string>
     <string name="intro_permission_title">Permiso</string>
-    <string name="intro_btn_grant_permission">CONCEDER PERMISO</string>
+    <string name="intro_btn_grant_permission">PERMITIR</string>
     <string name="intro_permission_description">
-        Es necesario el permiso de lectura de sms para obtener los mensajes que envían tus contactos.
+        Para leer los mensajes enviados por tus contactos permite que Yuupi pueda acceder a tus SMS.
+    </string>
+    <string name="intro_permission_description_granted">
+        Yuupi ya puede acceder a tus SMS y mostrarte los mensajes enviados por tus contactos.
     </string>
     <string name="settings">AJUSTES</string>
-    <string name="intro_permssion_description_granted">Has concedido el permiso de lectra de sms.</string>
     <string name="intro_conclusion_title">Listo</string>
     <string name="intro_mail_title">Correo</string>
     <string name="intro_mail_description">
@@ -58,9 +57,10 @@
     <string name="phone_no_valid_region">Ingresa un número de teléfono válido para tu país</string>
     <string name="country_not_supported">País no está soportado por la app</string>
     <string name="choose_country">Elige un país</string>
-    <string name="chosse_yuupi_cuba">Para Cuba se encuntra la app Yuupi World</string>
+    <string name="chosse_yuupi_cuba">Para enviar mensajes desde Cuba instala Yuupi World</string>
+    <string name="read_sms_denied">Este permiso es necesario</string>
     <string name="read_sms_denied_permanetly">
-        Para leer los mensajes permite que <b>Yuupi</b> 
+        Toca AJUSTES > Permisos y activa SMS
     </string>
 
     <!--Permissions-->
