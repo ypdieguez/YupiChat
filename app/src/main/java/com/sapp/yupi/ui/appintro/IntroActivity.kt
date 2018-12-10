@@ -12,6 +12,8 @@ import androidx.core.content.edit
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.AppIntro
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.NumberParseException.ErrorType.*
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.sapp.yupi.BuildConfig
 import com.sapp.yupi.R
@@ -165,28 +167,44 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         binding.apply {
 
             val validCountries = resources.getStringArray(R.array.countries_name)
+            val countriesIso =  resources.getStringArray(R.array.countries_iso)
+
             val country = textInputCountry.text.toString()
-            if (!validCountries.contains(country)) {
+
+            val index = validCountries.indexOf(country)
+            if (index == -1) {
                 error = true
                 msg = getString(R.string.country_not_supported)
             } else {
-
                 val phone = textInputPhone.text.toString().trim()
                 if (phone.isEmpty()) {
                     error = true
                     msg = getString(R.string.phone_required)
-                } else if (!Patterns.PHONE.matcher(phone).matches()) {
+                }/* else if (!Patterns.PHONE.matcher(phone).matches()) {
                     error = true
-                    msg = getString(R.string.phone_not_valid)
+                    msg = getString(R.string.phone_number_not_valid)
 
-                } else {
-                    val phoneUtil = PhoneNumberUtil.getInstance()
-                    val phoneNumber = phoneUtil.parse(phone, null)
-                    val isValid = phoneUtil.isValidNumber(phoneNumber)
+                }*/ else {
+                    try {
+                        val phoneUtil = PhoneNumberUtil.getInstance()
 
-                    if (!isValid) {
+                        val phoneNumber = phoneUtil.parse(phone, countriesIso[index])
+
+                        if (!phoneUtil.isValidNumber(phoneNumber)) {
+                            error = true
+                            msg = getString(R.string.phone_number_not_valid)
+                        }
+                    } catch (e: NumberParseException) {
                         error = true
-                        msg = getString(R.string.phone_no_valid_region)
+
+                        msg = when (e.errorType) {
+                            NOT_A_NUMBER -> getString(R.string.phone_number_not_a_number)
+                            TOO_SHORT_NSN -> getString(R.string.phone_number_too_short_nsn)
+                            TOO_LONG -> getString(R.string.phone_number_too_long)
+                            else -> getString(R.string.phone_number_not_valid)
+//                            INVALID_COUNTRY_CODE -> TODO()
+//                            TOO_SHORT_AFTER_IDD -> TODO()
+                        }
                     }
                 }
 

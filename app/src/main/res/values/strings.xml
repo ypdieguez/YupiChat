@@ -55,9 +55,9 @@
     <string name="email_not_valid">Enter a valid email</string>
     <string name="email_is_not_nauta">Ingresa tu correo @nauta.cu</string>
     <string name="phone_required">Phone is required</string>
-    <string name="phone_not_valid">Enter a valid phone</string>
+    <string name="phone_number_not_valid">Enter a valid phone</string>
     <string name="pass_required">Password is required</string>
-    <string name="phone_no_valid_region">Enter a valid phone for your region</string>
+    <string name="phone_number_not_valid_region">Enter a valid phone for your region</string>
     <string name="country_not_supported">This country is not yet supported</string>
 
     <!--Permissions-->
@@ -70,6 +70,9 @@
     <string name="go_on">Continuar</string>
     <string name="choose_country">Elige un país</string>
     <string name="chosse_yuupi_cuba">Para Cuba se encuntra la app Yuupi World</string>
+    <string name="phone_number_too_long">The string supplied is too long to be a phone number</string>
+    <string name="phone_number_not_a_number">The string supplied did not seem to be a phone number</string>
+    <string name="phone_number_too_short_nsn">The string supplied is too short to be a phone nummber</string>
 
     <!--Avaiable Countries-->
     <string-array name="countries_name">
@@ -83,5 +86,9 @@
         <item>US</item>
         <item>MX</item>
     </string-array>
+
+    <array name="a">
+        <item value = "a"> A </item>
+    </array>
 
 </resources>

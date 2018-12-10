@@ -16,6 +16,9 @@ import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroPhoneBinding
 import com.sapp.yupi.util.UIUtils
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.Unregistrar
+import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
 import java.util.*
 
 
@@ -31,9 +34,17 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
                 setOnTouchListener { _, event ->
                     if (event.action == KeyEvent.ACTION_UP) {
                         textInputLayoutCountry.error = null
-                        CountryListDialogFragment.newInstance()
-                                .addListener(this@PhoneFragment)
-                                .show(fragmentManager, "dialog")
+                        textInputLayoutPhone.error = null
+
+                        if (KeyboardVisibilityEvent.isKeyboardVisible(activity)) {
+                            UIUtil.hideKeyboard(context, this)
+                        } else {
+                            CountryListDialogFragment.newInstance()
+                                    .addListener(this@PhoneFragment)
+                                    .show(fragmentManager, "dialog")
+                        }
+
+
                     }
                     false
                 }
@@ -52,8 +63,9 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
             textInputPhone.apply {
                 setOnTouchListener { v, event ->
                     if (event.action == KeyEvent.ACTION_DOWN) {
+                        textInputLayoutPhone.error = null
                         textInputCountry.text.apply {
-                            if(toString() == "Cuba") {
+                            if (toString() == "Cuba") {
                                 textInputLayoutCountry.error = getString(R.string.chosse_yuupi_cuba)
                                 return@setOnTouchListener true
                             } else if (!resources.getStringArray(R.array.countries_name)
@@ -65,24 +77,40 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
                     }
                     return@setOnTouchListener false
                 }
-
-                setOnClickListener {
-                    textInputLayoutPhone.error = null
-                }
             }
-
-
         }
+    }
+
+    private var unregister: Unregistrar? = null
+    interface UnregisterListener {
+        fun unregister()
+    }
+    private var a = UnregisterListener{
+
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser && mFirst) {
-            mFirst = false
-            if (UIUtils.askForPermission(activity!!, Manifest.permission.READ_PHONE_STATE,
-                            this)) {
-                tryGetPhoneNumber()
+        if (isVisibleToUser) {
+            if (mFirst) {
+                mFirst = false
+                if (UIUtils.askForPermission(activity!!, Manifest.permission.READ_PHONE_STATE,
+                                this)) {
+                    tryGetPhoneNumber()
+                }
             }
+
+            unregister = KeyboardVisibilityEvent
+                    .registerEventListener(activity) { isOpen ->
+                        if (!isOpen) {
+                            CountryListDialogFragment.newInstance()
+                                    .addListener(this@PhoneFragment)
+                                    .show(fragmentManager, "dialog")
+                        }
+                        UnregisterListener()
+                    }
+        } else {
+            unregister?.unregister()
         }
     }
 

@@ -89,7 +89,6 @@ dependencies {
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
 
     // Test
-    implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
@@ -123,6 +122,8 @@ dependencies {
     // libphonenumber
 //    implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.1'
     implementation 'com.googlecode.libphonenumber:geocoder:2.107'
+
+    implementation 'com.github.yshrsmz:KeyboardVisibilityEvent:v2.2.0'
 
 //    debugImplementation 'com.idescout.sql:sqlscout-server:4.1'
 //    releaseImplementation 'com.idescout.sql:sqlscout-server-noop:4.1'
