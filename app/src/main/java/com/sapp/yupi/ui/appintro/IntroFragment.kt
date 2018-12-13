@@ -29,7 +29,7 @@ open class IntroFragment : Fragment(), ISlidePolicy {
          *                                not.
          *                                Second parameter: The message of error or null.
          */
-        fun validate(binding: ViewDataBinding, tag: String): Pair<Boolean, String?>
+        fun validate(binding: ViewDataBinding, tag: String): Pair<Boolean, Int?>
     }
 
     protected var mTitle: Int = -1
@@ -42,7 +42,7 @@ open class IntroFragment : Fragment(), ISlidePolicy {
     protected var mBinding: ViewDataBinding? = null
 
     private var mListener: PolicyListener? = null
-    protected lateinit var mError: Pair<Boolean, String?>
+    protected lateinit var mError: Pair<Boolean, Int?>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

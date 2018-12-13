@@ -25,6 +25,8 @@ import java.util.*
 class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
 
     private var mFirst = true
+    private var mCountryViewTouched = false
+    private var unregistrar: Unregistrar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (mBinding as ViewIntroPhoneBinding).apply {
@@ -37,14 +39,17 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
                         textInputLayoutPhone.error = null
 
                         if (KeyboardVisibilityEvent.isKeyboardVisible(activity)) {
+                            // This code do next:
+                            // 1. Hide Soft keyboard
+                            // 2. Execute the listener registered in setUserVisibleHint
+                            // This code is for harmony when hiding the keyboard and showing the dialogue.
+                            mCountryViewTouched = true
                             UIUtil.hideKeyboard(context, this)
                         } else {
                             CountryListDialogFragment.newInstance()
                                     .addListener(this@PhoneFragment)
                                     .show(fragmentManager, "dialog")
                         }
-
-
                     }
                     false
                 }
@@ -61,7 +66,7 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
             }
 
             textInputPhone.apply {
-                setOnTouchListener { v, event ->
+                setOnTouchListener { _, event ->
                     if (event.action == KeyEvent.ACTION_DOWN) {
                         textInputLayoutPhone.error = null
                         textInputCountry.text.apply {
@@ -81,14 +86,6 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
         }
     }
 
-    private var unregister: Unregistrar? = null
-    interface UnregisterListener {
-        fun unregister()
-    }
-    private var a = UnregisterListener{
-
-    }
-
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
@@ -100,17 +97,18 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
                 }
             }
 
-            unregister = KeyboardVisibilityEvent
+            // This listener is for harmony when hiding the keyboard and showing the dialogue.
+            unregistrar = KeyboardVisibilityEvent
                     .registerEventListener(activity) { isOpen ->
-                        if (!isOpen) {
+                        if (!isOpen && mCountryViewTouched) {
                             CountryListDialogFragment.newInstance()
                                     .addListener(this@PhoneFragment)
                                     .show(fragmentManager, "dialog")
+                            mCountryViewTouched = false
                         }
-                        UnregisterListener()
                     }
         } else {
-            unregister?.unregister()
+            unregistrar?.unregister()
         }
     }
 
@@ -186,20 +184,20 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
 
     override fun onUserIllegallyRequestedNextPage() {
         (mBinding as ViewIntroPhoneBinding).apply {
-            if (mError.second.equals(getString(R.string.country_not_supported))) {
+            if (mError.second!! == R.string.country_not_supported) {
                 val text = textInputCountry.text.toString()
                 textInputLayoutCountry.apply {
                     error = when (text) {
                         getString(R.string.choose_country) -> getString(R.string.choose_country)
                         "Cuba" -> getString(R.string.chosse_yuupi_cuba)
-                        else -> mError.second
+                        else -> getString(mError.second!!)
                     }
                 }
 
                 textInputLayoutPhone.error = null
             } else {
                 textInputLayoutCountry.error = null
-                textInputLayoutPhone.error = mError.second
+                textInputLayoutPhone.error = getString(mError.second!!)
             }
         }
     }

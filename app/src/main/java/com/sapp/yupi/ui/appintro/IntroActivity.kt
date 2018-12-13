@@ -123,7 +123,7 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         finish()
     }
 
-    override fun validate(binding: ViewDataBinding, tag: String): Pair<Boolean, String?> {
+    override fun validate(binding: ViewDataBinding, tag: String): Pair<Boolean, Int?> {
         return when (tag) {
             TAG_FRAGMENT_NAME -> {
                 validateName(binding as ViewIntroTextInputBinding)
@@ -141,15 +141,15 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         }
     }
 
-    private fun validateName(binding: ViewIntroTextInputBinding): Pair<Boolean, String?> {
+    private fun validateName(binding: ViewIntroTextInputBinding): Pair<Boolean, Int?> {
         var error = false
-        var msg: String? = null
+        var msg: Int? = null
 
         binding.apply {
             val name = textInput.text.toString().trim()
             if (name.isEmpty()) {
                 error = true
-                msg = getString(R.string.name_required)
+                msg = R.string.name_required
             }
             // Save to Preferences
             pref.edit {
@@ -160,9 +160,9 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         return Pair(error, msg)
     }
 
-    private fun validatePhone(binding: ViewIntroPhoneBinding): Pair<Boolean, String?> {
+    private fun validatePhone(binding: ViewIntroPhoneBinding): Pair<Boolean, Int?> {
         var error = false
-        var msg: String? = null
+        var msg: Int? = null
 
         binding.apply {
 
@@ -174,17 +174,13 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
             val index = validCountries.indexOf(country)
             if (index == -1) {
                 error = true
-                msg = getString(R.string.country_not_supported)
+                msg = R.string.country_not_supported
             } else {
                 val phone = textInputPhone.text.toString().trim()
                 if (phone.isEmpty()) {
                     error = true
-                    msg = getString(R.string.phone_required)
-                }/* else if (!Patterns.PHONE.matcher(phone).matches()) {
-                    error = true
-                    msg = getString(R.string.phone_number_not_valid)
-
-                }*/ else {
+                    msg = R.string.phone_required
+                } else {
                     try {
                         val phoneUtil = PhoneNumberUtil.getInstance()
 
@@ -192,19 +188,19 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
 
                         if (!phoneUtil.isValidNumber(phoneNumber)) {
                             error = true
-                            msg = getString(R.string.phone_number_not_valid)
+                            msg = R.string.phone_number_not_valid
                         }
                     } catch (e: NumberParseException) {
                         error = true
-
-                        msg = when (e.errorType) {
-                            NOT_A_NUMBER -> getString(R.string.phone_number_not_a_number)
-                            TOO_SHORT_NSN -> getString(R.string.phone_number_too_short_nsn)
-                            TOO_LONG -> getString(R.string.phone_number_too_long)
-                            else -> getString(R.string.phone_number_not_valid)
+                        msg = R.string.phone_number_not_valid
+//                        msg = when (e.errorType) {
+//                            NOT_A_NUMBER -> getString(R.string.phone_number_not_a_number)
+//                            TOO_SHORT_NSN -> getString(R.string.phone_number_too_short_nsn)
+//                            TOO_LONG -> getString(R.string.phone_number_too_long)
+//                            else -> getString(R.string.phone_number_not_valid)
 //                            INVALID_COUNTRY_CODE -> TODO()
 //                            TOO_SHORT_AFTER_IDD -> TODO()
-                        }
+//                        }
                     }
                 }
 
@@ -218,23 +214,23 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         return Pair(error, msg)
     }
 
-    private fun validateEmail(binding: ViewIntroTextInputBinding): Pair<Boolean, String?> {
+    private fun validateEmail(binding: ViewIntroTextInputBinding): Pair<Boolean, Int?> {
         var error = false
-        var msg: String? = null
+        var msg: Int? = null
 
         binding.apply {
             val mail = textInput.text.toString().trim()
             if (mail.isEmpty()) {
                 error = true
-                msg = getString(R.string.email_required)
+                msg = R.string.email_required
             }
             if (!Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
                 error = true
-                msg = getString(R.string.email_not_valid)
+                msg = R.string.email_not_valid
 
             } else if (!mail.endsWith("@nauta.cu")) {
                 error = true
-                msg = getString(R.string.email_is_not_nauta)
+                msg = R.string.email_is_not_nauta
             }
 
             // Save to Preferences
@@ -246,15 +242,15 @@ class IntroActivity : AppIntro(), IntroFragment.PolicyListener {
         return Pair(error, msg)
     }
 
-    private fun validateEmailPass(binding: ViewIntroTextInputBinding): Pair<Boolean, String?> {
+    private fun validateEmailPass(binding: ViewIntroTextInputBinding): Pair<Boolean, Int?> {
         var error = false
-        var msg: String? = null
+        var msg: Int? = null
 
         binding.apply {
             val pass = textInput.text.toString()
             if (pass.isEmpty()) {
                 error = true
-                msg = getString(R.string.pass_required)
+                msg = R.string.pass_required
             }
             // Save to Preferences
             pref.edit {

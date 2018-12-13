@@ -44,36 +44,18 @@ open class TextInputFragment : IntroFragment() {
             description.setText(mDescription)
 
             textInputLayout.hint = getString(mHint)
-            if (mType != InputType.TYPE_TEXT_VARIATION_PASSWORD) textInput.inputType = mType
+            textInput.apply {
+                if (mType != InputType.TYPE_TEXT_VARIATION_PASSWORD) inputType = mType
+
+                setOnTouchListener { _, _ ->
+                    textInputLayout.error = null
+                    false
+                }
+            }
 
             mPrefix?.let { textInput.setPrefix(it) }
             mSuffix?.let { textInput.setSuffix(it) }
 
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        (mBinding as ViewIntroTextInputBinding).apply {
-            textInput.apply {
-                addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(s: Editable?) {
-                        //Do nothing
-                    }
-
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                        //Do nothing
-                    }
-
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                        textInputLayout.apply {
-                            if (error != null) {
-                                error = null
-                            }
-                        }
-                    }
-                })
-            }
         }
     }
 
@@ -97,7 +79,7 @@ open class TextInputFragment : IntroFragment() {
 
     override fun onUserIllegallyRequestedNextPage() {
         (mBinding as ViewIntroTextInputBinding).apply {
-            textInputLayout.error = mError.second
+            textInputLayout.error = getString(mError.second!!)
         }
     }
 
