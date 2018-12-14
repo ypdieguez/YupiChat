@@ -26,12 +26,6 @@
     </string>
     <string name="intro_permission_title">Permiso</string>
     <string name="intro_btn_grant_permission">PERMITIR</string>
-    <string name="intro_permission_description">
-        Para leer los mensajes enviados por tus contactos permite que Yuupi pueda acceder a tus SMS.
-    </string>
-    <string name="intro_permission_description_granted">
-        Yuupi ya puede acceder a tus SMS y mostrarte los mensajes enviados por tus contactos.
-    </string>
     <string name="settings">AJUSTES</string>
     <string name="intro_conclusion_title">Listo</string>
     <string name="intro_mail_title">Correo</string>

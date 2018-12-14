@@ -19,9 +19,6 @@
 
     <!--Intro-->
     <string name="intro_config_anounce_title">Crear cuenta</string>
-    <string name="intro_config_anounce_description">
-        Llena los datos que se piden a continuación para que la app pueda enviar y recibir mensajes.
-    </string>
     <string name="intro_country_title">País</string>
     <string name="intro_name_description">
         Con tu nombre tus contactos sabrán quién les escribe.
