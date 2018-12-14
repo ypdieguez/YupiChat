@@ -161,4 +161,8 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="ass">
+        <item name="android:color">#F44336</item>
+    </style>
+
 </resources>

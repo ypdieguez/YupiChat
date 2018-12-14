@@ -77,7 +77,7 @@ class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 btn.visibility = View.GONE
                 error.visibility = View.GONE
-                description.text = getString(R.string.intro_permission_description_granted)
+                description.setText(R.string.intro_permission_description_granted)
             } else {
                 if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)) {
                     btn.text = getString(R.string.settings)
@@ -108,7 +108,7 @@ class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
             if (UIUtils.checkReadSmsPermission(activity!!)) {
                 btn.visibility = View.GONE
                 error.visibility = View.GONE
-                description.text = getString(R.string.intro_permission_description_granted)
+                description.setText(R.string.intro_permission_description_granted)
             }
         }
     }

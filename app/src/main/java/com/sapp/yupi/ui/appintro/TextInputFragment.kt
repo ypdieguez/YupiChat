@@ -2,12 +2,11 @@ package com.sapp.yupi.ui.appintro
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.Editable
 import android.text.InputType
-import android.text.TextWatcher
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroTextInputBinding
 
@@ -44,6 +43,8 @@ open class TextInputFragment : IntroFragment() {
             description.setText(mDescription)
 
             textInputLayout.hint = getString(mHint)
+            textInputLayout.setErrorTextColor(ContextCompat.getColorStateList(context!!,
+                    R.color.introError))
             textInput.apply {
                 if (mType != InputType.TYPE_TEXT_VARIATION_PASSWORD) inputType = mType
 

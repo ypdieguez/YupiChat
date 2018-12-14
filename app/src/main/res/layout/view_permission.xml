@@ -26,7 +26,7 @@
             <TextView
                 android:id="@+id/description"
                 style="@style/IntroDesc"
-                android:text="@string/intro_permission_description_granted" />
+                android:text="@string/intro_permission_description" />
 
         </LinearLayout>
 
@@ -65,7 +65,8 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.9"
                     android:gravity="center"
-                    android:textColor="@color/secondaryTextColor"
+                    android:textColor="@color/introError"
+                    android:textSize="12sp"
                     tools:text="@string/read_sms_denied_permanetly" />
             </LinearLayout>
 

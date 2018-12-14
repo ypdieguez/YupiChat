@@ -11,6 +11,7 @@ import android.text.InputType
 import android.util.Patterns
 import android.view.KeyEvent
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder
 import com.sapp.yupi.R
@@ -83,6 +84,11 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
                     return@setOnTouchListener false
                 }
             }
+
+            textInputLayoutCountry.setErrorTextColor(ContextCompat.getColorStateList(context!!,
+                    R.color.introError))
+            textInputLayoutPhone.setErrorTextColor(ContextCompat.getColorStateList(context!!,
+                    R.color.introError))
         }
     }
 

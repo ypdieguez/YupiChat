@@ -50,8 +50,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="0.9"
-                    app:errorTextAppearance="@color/secondaryTextColor">
+                    android:layout_weight="0.9">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/text_input_country"
@@ -81,8 +80,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="0.9"
-                    app:errorTextAppearance="@color/secondaryTextColor">
+                    android:layout_weight="0.9">
 
                     <com.sapp.yupi.ui.appintro.ExtendedEditText
                         android:id="@+id/text_input_phone"

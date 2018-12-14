@@ -18,6 +18,6 @@
         Para leer los mensajes enviados por tus contactos permite que <b>Yuupi Cuba</b> pueda acceder a tus SMS.
     </string>
     <string name="intro_permission_description_granted">
-        Hola mundo. <b>Yuupi Cuba</b>  ya puede acceder a tus SMS y mostrar los mensajes enviados por tus contactos.
+        <b>Yuupi Cuba</b> ya puede acceder a tus SMS y mostrar los mensajes enviados por tus contactos.
     </string>
 </resources>
