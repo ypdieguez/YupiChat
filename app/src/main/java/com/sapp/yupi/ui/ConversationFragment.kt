@@ -94,7 +94,7 @@ class ConversationFragment : Fragment() {
 
         val workManager = WorkManager.getInstance()
         workManager.enqueue(sendMsgWorker)
-        workManager.getStatusByIdLiveData(sendMsgWorker.id)
+        workManager.getWorkInfoByIdLiveData(sendMsgWorker.id)
                 .observe(this, Observer { workStatus ->
                     if (workStatus != null && workStatus.state.isFinished) {
                     }

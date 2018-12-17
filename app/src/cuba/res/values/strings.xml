@@ -23,4 +23,9 @@
         <b>Yuupi Cuba</b> ya puede acceder a tus SMS y mostrar los mensajes enviados por tus
         contactos.
     </string>
+    <string name="permission_read_phone_state">
+        <b>Yuupi Cuba</b> quiere obtener el país y número de teléfono para ponerlo por ti, permite
+        que pueda leer el estado del teléfono para realizar esta acción.
+    </string>
+    <string name="country_not_supported">This country is not supported yet</string>
 </resources>

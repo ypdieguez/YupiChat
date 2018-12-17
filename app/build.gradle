@@ -79,7 +79,6 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.1'
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // Material
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
@@ -90,12 +89,8 @@ dependencies {
 
     // Test
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-
-    //JavaMail
-    implementation 'com.sun.mail:android-mail:1.6.2'
-    implementation 'com.sun.mail:android-activation:1.6.2'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
     // Room
     implementation 'androidx.room:room-runtime:2.0.0'
@@ -116,17 +111,18 @@ dependencies {
     implementation "android.arch.work:work-runtime-ktx:$work_version"
     androidTestImplementation "android.arch.work:work-testing:$work_version"
 
+    //JavaMail
+    implementation 'com.sun.mail:android-mail:1.6.3'
+    implementation 'com.sun.mail:android-activation:1.6.3'
+
     // AppIntro
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
 
     // libphonenumber
-//    implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.1'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.1'
     implementation 'com.googlecode.libphonenumber:geocoder:2.107'
 
-    implementation 'com.github.yshrsmz:KeyboardVisibilityEvent:v2.2.0'
-
-//    debugImplementation 'com.idescout.sql:sqlscout-server:4.1'
-//    releaseImplementation 'com.idescout.sql:sqlscout-server-noop:4.1'
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.2.0'
 
     // CircleImageView
 //    implementation 'de.hdodenhof:circleimageview:2.2.0'

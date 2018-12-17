@@ -54,22 +54,13 @@
     <string name="phone_required">Phone is required</string>
     <string name="phone_number_not_valid">Enter a valid phone</string>
     <string name="pass_required">Password is required</string>
-    <string name="phone_number_not_valid_region">Enter a valid phone for your region</string>
-    <string name="country_not_supported">This country is not yet supported</string>
 
     <!--Permissions-->
-    <string name="permission_read_phone_state">
-        <b>Yuupi</b> quiere intentar obtener el número de teléfono para ti, concede el permiso
-        necesario para realizar la acción.
-    </string>
-    <string name="rationale_permission_camera"><![CDATA[To capture photos and videos, allow Whatsapp to access to your camera. Tap Settings > Permission and turn Camera on]]></string>
     <string name="not_now">Not Now</string>
     <string name="go_on">Continuar</string>
     <string name="choose_country">Elige un país</string>
-    <string name="chosse_yuupi_cuba">Para Cuba se encuntra la app Yuupi World</string>
-    <string name="phone_number_too_long">The string supplied is too long to be a phone number</string>
-    <string name="phone_number_not_a_number">The string supplied did not seem to be a phone number</string>
-    <string name="phone_number_too_short_nsn">The string supplied is too short to be a phone nummber</string>
+    <string name="chosse_yuupi_cuba">Para Cuba se encuentra la app Yuupi World</string>
+    <string name="tap_settings_phone"><![CDATA[Toca AJUSTES > Permisos y activa Teléfono]]></string>
 
     <!--Avaiable Countries-->
     <string-array name="countries_name">

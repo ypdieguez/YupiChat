@@ -32,6 +32,6 @@ class OutgoingMsgWorker(context: Context, params: WorkerParameters)
         msg.status = status
         db.messageDao().update(msg)
 
-        return Result.SUCCESS
+        return Result.Success.success()
     }
 }

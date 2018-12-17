@@ -106,6 +106,10 @@ class ExtendedEditText(context: Context, attrs: AttributeSet) : TextInputEditTex
         }
     }
 
+    fun getPrefix(): String?{
+        return mPrefix
+    }
+
     fun setSuffix(suffix: String) {
         mSuffix = suffix
     }

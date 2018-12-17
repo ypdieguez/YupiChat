@@ -4,6 +4,7 @@ package com.sapp.yupi.ui.appintro
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.telephony.TelephonyManager
@@ -16,6 +17,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroPhoneBinding
+import com.sapp.yupi.ui.FIRST_LAUNCH
 import com.sapp.yupi.util.UIUtils
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar
@@ -96,11 +98,10 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
             if (mFirst) {
-                mFirst = false
-                if (UIUtils.askForPermission(activity!!, Manifest.permission.READ_PHONE_STATE,
-                                this)) {
+                if (UIUtils.askForPermission(Manifest.permission.READ_PHONE_STATE, this)) {
                     tryGetPhoneNumber()
                 }
+                mFirst = false
             }
 
             // This listener is for harmony when hiding the keyboard and showing the dialogue.
@@ -121,6 +122,12 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
                                             grantResults: IntArray) {
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            tryGetPhoneNumber()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (UIUtils.checkReadPhoneStatePermission(context!!)) {
             tryGetPhoneNumber()
         }
     }

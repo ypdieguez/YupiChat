@@ -54,6 +54,6 @@ class IncomingMsgWorker(context: Context, workerParams: WorkerParameters)
             IncomingMsgNotification.notify(applicationContext, "Tienes un mensaje nuevo.", 1)
         }
 
-        return Result.SUCCESS
+        return Result.Success.success()
     }
 }
