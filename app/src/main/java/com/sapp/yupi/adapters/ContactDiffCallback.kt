@@ -1,4 +1,4 @@
-package com.sapp.yupi.adapter
+package com.sapp.yupi.adapters
 
 import androidx.recyclerview.widget.DiffUtil
 import com.sapp.yupi.data.Contact

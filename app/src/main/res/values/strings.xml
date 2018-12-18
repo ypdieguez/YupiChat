@@ -18,7 +18,7 @@
     <string name="sendButtonContentDescription">Send message</string>
 
     <!--Intro-->
-    <string name="intro_config_anounce_title">Crear cuenta</string>
+    <string name="intro_config_anounce_title">Cuenta</string>
     <string name="intro_country_title">País</string>
     <string name="intro_name_description">
         Con tu nombre tus contactos sabrán quién les escribe.
@@ -61,6 +61,7 @@
     <string name="choose_country">Elige un país</string>
     <string name="chosse_yuupi_cuba">Para Cuba se encuentra la app Yuupi World</string>
     <string name="tap_settings_phone"><![CDATA[Toca AJUSTES > Permisos y activa Teléfono]]></string>
+    <string name="active_account">Activar cuenta</string>
 
     <!--Avaiable Countries-->
     <string-array name="countries_name">

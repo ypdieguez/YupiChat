@@ -1,4 +1,4 @@
-package com.sapp.yupi.adapter
+package com.sapp.yupi.adapters
 
 import android.graphics.PorterDuff
 import android.view.Gravity

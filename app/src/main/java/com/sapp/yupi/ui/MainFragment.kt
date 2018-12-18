@@ -1,10 +1,7 @@
 package com.sapp.yupi.ui
 
 
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.provider.Telephony
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
-import com.sapp.yupi.IncomingMsgNotification
 import com.sapp.yupi.Injector
 import com.sapp.yupi.R
-import com.sapp.yupi.adapter.ContactAdapter
+import com.sapp.yupi.adapters.ContactAdapter
 import com.sapp.yupi.data.Contact
 import com.sapp.yupi.databinding.FragmentMainBinding
-import com.sapp.yupi.observers.MmsObserver
-import com.sapp.yupi.observers.SmsObserver
 import com.sapp.yupi.viewmodel.ContactViewModel
 
 

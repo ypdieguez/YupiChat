@@ -11,7 +11,7 @@ import java.util.*
                 childColumns = ["contact_id"], onDelete = CASCADE, onUpdate = CASCADE)],
         indices = [Index(value = ["contact_id"], unique = true)]
 )
-class Message(
+data class Message(
         @NonNull
         @ColumnInfo(name = "contact_id")
         var contactId: Long,

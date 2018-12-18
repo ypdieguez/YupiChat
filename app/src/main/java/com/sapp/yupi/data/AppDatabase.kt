@@ -13,12 +13,17 @@ import com.sapp.yupi.DATABASE_NAME
 /**
  * The Room database for this app
  */
-@Database(entities = [Contact::class, Message::class], version = 1, exportSchema = false)
+@Database(
+        entities = [Contact::class, Message::class, Email::class],
+        version = 1,
+        exportSchema = false
+)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun contactDao(): ContactDao
     abstract fun messageDao(): MessageDao
+    abstract fun emailDao(): EmailDao
 
     companion object {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sapp.yupi.adapter
+package com.sapp.yupi.adapters
 
 import android.view.View
 import android.widget.ImageView

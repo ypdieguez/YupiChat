@@ -16,7 +16,7 @@
     </string>
 
     <!--Intro-->
-    <string name="intro_config_anounce_title">Crear cuenta</string>
+    <string name="intro_config_anounce_title">Cuenta</string>
     <string name="intro_country_title">País</string>
     <string name="intro_name_description">
         Para que tus contactos sepan quien les escribe ingresa tu nombre.
@@ -56,6 +56,7 @@
     <string name="not_now">Ahora no</string>
     <string name="go_on">Continuar</string>
     <string name="tap_settings_phone"><![CDATA[Toca AJUSTES > Permisos y activa Teléfono]]></string>
+    <string name="active_account">Activar cuenta</string>
 
     <!--Avaiable Countries-->
     <string-array name="countries_name">

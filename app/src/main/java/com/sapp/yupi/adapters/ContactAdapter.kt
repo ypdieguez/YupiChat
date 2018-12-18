@@ -1,4 +1,4 @@
-package com.sapp.yupi.adapter
+package com.sapp.yupi.adapters
 
 import android.content.Intent
 import android.net.Uri

@@ -16,7 +16,7 @@ import androidx.work.WorkManager
 import com.sapp.yupi.CONTACT_ID
 import com.sapp.yupi.Injector
 import com.sapp.yupi.MESSAGE
-import com.sapp.yupi.adapter.MessageAdapter
+import com.sapp.yupi.adapters.MessageAdapter
 import com.sapp.yupi.databinding.FragmentConversationBinding
 import com.sapp.yupi.viewmodel.MessageViewModel
 import com.sapp.yupi.workers.OutgoingMsgWorker
