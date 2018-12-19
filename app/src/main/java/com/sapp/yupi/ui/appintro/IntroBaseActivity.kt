@@ -20,6 +20,7 @@ import com.sapp.yupi.R
 import com.sapp.yupi.data.AppDatabase
 import com.sapp.yupi.data.Contact
 import com.sapp.yupi.databinding.ViewIntroTextInputBinding
+import com.sapp.yupi.observers.SmsObserver
 import com.sapp.yupi.ui.FIRST_LAUNCH
 import com.sapp.yupi.ui.MainActivity
 import com.sapp.yupi.util.UIUtils
@@ -76,6 +77,8 @@ abstract class IntroBaseActivity : AppIntro(), IntroFragment.PolicyListener {
         pref.edit {
             putBoolean(FIRST_LAUNCH, false)
         }
+
+        val observer = SmsObserver(contentResolver)
 
         thread {
             val id = AppDatabase.getInstance(this).contactDao().insert(
