@@ -9,7 +9,7 @@ interface EmailDao {
     fun insert(email: Email): Long
 
     @Delete
-    fun delete()
+    fun delete(email: Email)
 
     @Query("SELECT * FROM emails")
     fun getAllEmails(): List<Email>

@@ -37,7 +37,7 @@ const val PREF_EMAIL_PASS = "email_pass"
 
 const val TAG_FRAGMENT_NAME = "fragment_name"
 const val TAG_FRAGMENT_PHONE = "fragment_phone"
-const val TAG_FRAGMENT_MAIL = "fragment_mail"
+const val TAG_FRAGMENT_EMAIL = "fragment_mail"
 const val TAG_FRAGMENT_MAIL_PASS = "fragment_mail_pass"
 
 abstract class IntroBaseActivity : AppIntro(), IntroFragment.PolicyListener {

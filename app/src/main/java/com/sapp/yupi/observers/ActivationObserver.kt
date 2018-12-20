@@ -5,72 +5,27 @@ import android.database.ContentObserver
 import android.database.Cursor
 import android.provider.Telephony
 import android.telephony.PhoneNumberUtils
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import com.sapp.yupi.workers.IncomingMsgWorker
+import com.sapp.yupi.workers.KEY_BODY
+import com.sapp.yupi.workers.KEY_DATE
+import com.sapp.yupi.workers.KEY_MSG_ID
 
 interface ActivationListener {
     fun success()
 }
 
 class ActivationObserver(
-        private val contentResolver: ContentResolver,
-        private val listener: ActivationListener) : ContentObserver(null) {
-    var lastSmsIntercepted = 0L
+        contentResolver: ContentResolver,
+        private val listener: ActivationListener
+) : SmsObserver(contentResolver) {
 
-    override fun onChange(selfChange: Boolean) {
-        super.onChange(selfChange)
-
-        // Check if SMS is received
-        val cursor = getLastSms()
-        cursor?.apply {
-            if (moveToFirst()) {
-                val id = getLong(getColumnIndex(Telephony.Sms._ID))
-                if (id != lastSmsIntercepted) {
-                    val type = getInt(getColumnIndex(Telephony.Sms.TYPE))
-                    if (type == Telephony.Sms.MESSAGE_TYPE_INBOX) {
-                        // It's received SMS
-                        receiveSms(this)
-                    }
-
-                    lastSmsIntercepted = id
-                }
-            }
-
-            close()
-        }
-
-    }
-
-    private fun getLastSms(): Cursor? {
-        val projection = arrayOf(
-                Telephony.Sms._ID,
-                Telephony.Sms.TYPE,
-                Telephony.Sms.DATE,
-                Telephony.Sms.ADDRESS,
-                Telephony.Sms.BODY
-        )
-        val sortOrder = Telephony.Sms.DEFAULT_SORT_ORDER + " LIMIT 1"
-
-        return contentResolver.query(Telephony.Sms.CONTENT_URI, projection, null,
-                null, sortOrder)
-    }
-
-    private fun receiveSms(cursor: Cursor) {
-        cursor.apply {
-            val address = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS))
-            if (PhoneNumberUtils.compare(address, "+5352871805")) {
-                // Get data
-                val id = getLong(getColumnIndex(Telephony.Sms._ID))
-                val date = cursor.getLong(cursor.getColumnIndex(Telephony.Sms.DATE))
-                val body = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY))
-
-                // Do the work
-                readSms(body)
-            }
-        }
-    }
-
-    private fun readSms(body: String) {
+    override fun handleMsg(id: Long, date: Long, body: String) {
+        // Do the work
         if (body.contentEquals("Cuenta activada.")) {
-
+            listener.success()
         }
     }
 }

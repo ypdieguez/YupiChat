@@ -11,7 +11,7 @@ import com.sapp.yupi.workers.KEY_MSG_ID
 
 open class MessageObserver : ContentObserver(null) {
 
-    protected fun insertMsg(id:Long, date:Long, body: String) {
+    protected open fun handleMsg(id:Long, date:Long, body: String) {
         // Do the work
         val data = Data.Builder()
                 .putLong(KEY_MSG_ID, id)

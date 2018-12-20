@@ -80,7 +80,7 @@ class MmsObserver(private val contentResolver: ContentResolver) : MessageObserve
                             }
                         } while (partCursor.moveToNext())
 
-                        insertMsg(id, date, body)
+                        handleMsg(id, date, body)
                     }
 
                     close()

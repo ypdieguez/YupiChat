@@ -1,7 +1,7 @@
 package com.sapp.yupi.data
 
-import androidx.annotation.NonNull
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "emails")
-class Email(@NonNull var address: String)
+class Email(@PrimaryKey var address: String)

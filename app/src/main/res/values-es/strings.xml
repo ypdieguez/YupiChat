@@ -28,8 +28,8 @@
     <string name="intro_btn_grant_permission">PERMITIR</string>
     <string name="settings">AJUSTES</string>
     <string name="intro_conclusion_title">Listo</string>
-    <string name="intro_mail_title">Correo</string>
-    <string name="intro_mail_description">
+    <string name="intro_email_title">Correo</string>
+    <string name="intro_email_description">
         Para enviar los mensajes ingresa tu cuenta de correo <b>@nauta</b>
     </string>
     <string name="intro_pass_title">Contraseña</string>

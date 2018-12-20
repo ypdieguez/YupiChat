@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.provider.Telephony
 import android.telephony.PhoneNumberUtils
 
-class SmsObserver(private val contentResolver: ContentResolver) : MessageObserver() {
+open class SmsObserver(private val contentResolver: ContentResolver) : MessageObserver() {
 
     var lastSmsIntercepted = 0L
 
@@ -57,7 +57,7 @@ class SmsObserver(private val contentResolver: ContentResolver) : MessageObserve
                 val body = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY))
 
                 // Do the work
-                insertMsg(id, date, body)
+                handleMsg(id, date, body)
             }
         }
     }

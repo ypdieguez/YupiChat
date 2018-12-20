@@ -36,8 +36,8 @@
     <string name="read_sms_denied_permanetly">No has concedido el permiso de lectura de sms.
         Este permiso es necesario para el funcionamiento de la app.</string>
     <string name="intro_conclusion_title">Listo</string>
-    <string name="intro_mail_title">Correo</string>
-    <string name="intro_mail_description">
+    <string name="intro_email_title">Correo</string>
+    <string name="intro_email_description">
         Con tu cuenta de correo <b>@nauta</b> se enviará los mensajes.
     </string>
     <string name="intro_pass_title">Contraseña</string>

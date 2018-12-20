@@ -12,20 +12,14 @@ import javax.mail.Session
 import javax.mail.Transport
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
-import kotlin.random.Random
 
 class Mail {
     companion object {
-        fun send(context: Context, subject: String, content: String): Byte {
+        fun send(context: Context, address: String, subject: String, content: String): Byte {
             try {
                 val pref = context.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE)
                 val user = pref.getString(PREF_EMAIL, "")
                 val pass = pref.getString(PREF_EMAIL_PASS, "")
-
-                val db = AppDatabase.getInstance(context)
-                val emails = db.emailDao().getAllEmails()
-                val address = emails[Random(emails.size).nextInt(0, emails.size - 1)]
-                        .address
 
                 val props = System.getProperties()
                 props["mail.smtp.host"] = "smtp.nauta.cu"

@@ -17,25 +17,25 @@ class IntroActivity : IntroBaseActivity() {
         super.onCreate(savedInstanceState)
 
         // Add slides
-        commonSlidesStart()
-
-        addSlide(TextInputFragment.newInstance(
-                fragmentTag = TAG_FRAGMENT_MAIL,
-                title = R.string.intro_mail_title,
-                imageRes = R.drawable.icons8_new_post_512,
-                description = R.string.intro_mail_description,
-                hint = R.string.intro_mail_title,
-                type = InputType.TYPE_CLASS_TEXT,
-                suffix = "@nauta.cu"))
-        addSlide(TextInputFragment.newInstance(
-                fragmentTag = TAG_FRAGMENT_MAIL_PASS,
-                title = R.string.intro_pass_title,
-                imageRes = R.drawable.icons8_password_480,
-                description = R.string.intro_pass_description,
-                hint = R.string.intro_pass_title,
-                type = InputType.TYPE_TEXT_VARIATION_PASSWORD))
-
-        commonSlidesEnd()
+        addSlide(EmailFragment.newInstance())
+//        commonSlidesStart()
+//        addSlide(TextInputFragment.newInstance(
+//                fragmentTag = TAG_FRAGMENT_EMAIL,
+//                title = R.string.intro_email_title,
+//                imageRes = R.drawable.icons8_new_post_512,
+//                description = R.string.intro_email_description,
+//                hint = R.string.intro_email_title,
+//                type = InputType.TYPE_CLASS_TEXT,
+//                suffix = "@nauta.cu"))
+//        addSlide(TextInputFragment.newInstance(
+//                fragmentTag = TAG_FRAGMENT_MAIL_PASS,
+//                title = R.string.intro_pass_title,
+//                imageRes = R.drawable.icons8_password_480,
+//                description = R.string.intro_pass_description,
+//                hint = R.string.intro_pass_title,
+//                type = InputType.TYPE_TEXT_VARIATION_PASSWORD))
+//
+//        commonSlidesEnd()
     }
 
     override fun validate(binding: ViewDataBinding, tag: String): Pair<Boolean, Int?> {
@@ -46,7 +46,7 @@ class IntroActivity : IntroBaseActivity() {
             TAG_FRAGMENT_PHONE -> {
                 validatePhone(binding as ViewIntroPhoneBinding)
             }
-            TAG_FRAGMENT_MAIL -> {
+            TAG_FRAGMENT_EMAIL -> {
                 validateEmail(binding as ViewIntroTextInputBinding)
             }
             TAG_FRAGMENT_MAIL_PASS -> {

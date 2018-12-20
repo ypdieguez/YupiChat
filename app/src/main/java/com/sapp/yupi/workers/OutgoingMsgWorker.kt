@@ -21,19 +21,14 @@ class OutgoingMsgWorker(context: Context, params: WorkerParameters)
         val db = AppDatabase.getInstance(applicationContext)
 
         // Insert msg into db
-        val msg = Message(contactId, 0, TYPE_OUTGOING, STATUS_SENDING, text = txt!!)
+        val msg = Message(contactId, 0,TYPE_OUTGOING, STATUS_SENDING, text = txt!!)
         val id = db.messageDao().insert(msg)
 
         // Send msg
         val phone  = db.contactDao().getContact(contactId).phone
-        val status = Mail.send(applicationContext, phone, txt)
+        val status = Mail.send(applicationContext, "gtom20180828@gmail.com", phone, txt)
 
-        if (status  != STATUS_SUCCESS) {
-
-        }
-
-
-        // Update msg status into db
+        // Update msg into db
         msg.id = id
         msg.status = status
         db.messageDao().update(msg)
