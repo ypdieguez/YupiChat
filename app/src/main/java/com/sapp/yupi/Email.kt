@@ -1,6 +1,7 @@
 package com.sapp.yupi
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.sapp.yupi.data.AppDatabase
 import com.sapp.yupi.ui.appintro.PREF_EMAIL
 import com.sapp.yupi.ui.appintro.PREF_EMAIL_PASS
@@ -13,11 +14,27 @@ import javax.mail.Transport
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
 
-class Mail {
+/**
+ * Email status
+ */
+const val STATUS_MAIL_CONNECT_EXCEPTION: Byte = 3
+const val STATUS_AUTHENTICATION_FAILED_EXCEPTION: Byte = 4
+const val STATUS_OHTER_EXCEPTION: Byte = 5
+
+/**
+ * Must be init in App.
+ */
+class Email {
     companion object {
-        fun send(context: Context, address: String, subject: String, content: String): Byte {
+
+        private lateinit var pref: SharedPreferences
+
+        fun init(context: Context) {
+            pref = context.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE)
+        }
+
+        fun send(address: String, subject: String, content: String): Byte {
             try {
-                val pref = context.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE)
                 val user = pref.getString(PREF_EMAIL, "")
                 val pass = pref.getString(PREF_EMAIL_PASS, "")
 
@@ -44,9 +61,6 @@ class Mail {
             } catch (e: AuthenticationFailedException) {
                 return STATUS_AUTHENTICATION_FAILED_EXCEPTION
 //                return "Usuario o contraseña incorrecto."
-            } catch (e: Exception) {
-//                return e.message.toString()
-                return STATUS_OHTER_EXCEPTION
             }
         }
     }

@@ -46,7 +46,7 @@ public class ItemTouchListener implements RecyclerView.OnItemTouchListener {
 
         /*
           This will ensure that this helper is paused during recycler view scrolling.
-          If a scroll listener is already assigned, the caller should still pass scroll changes through
+          If a scroll listener is already assigned, the caller should still pass scroll isPrefChanged through
           to this listener.
          */
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

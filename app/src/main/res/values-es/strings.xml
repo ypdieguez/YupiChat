@@ -58,6 +58,12 @@
     <string name="tap_settings_phone"><![CDATA[Toca AJUSTES > Permisos y activa Teléfono]]></string>
     <string name="active_account">Activar cuenta</string>
 
+    <string name="validate_network_conection">
+        Error de conexión. Comprueba la configuración de tu red e inténetelo de nuevo</string>
+    <string name="validate_user_password">Usuario o contraseña incorrecto</string>
+    <string name="unknow_error">Ha ocurrido un error, inténtelo mas tarde</string>
+    <string name="error_not_conected">Error de conexión. No te encuentras conectado</string>
+
     <!--Avaiable Countries-->
     <string-array name="countries_name">
         <item>Canadá</item>

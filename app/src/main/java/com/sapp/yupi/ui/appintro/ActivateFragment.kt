@@ -4,10 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
-import android.os.MessageQueue
 import android.provider.Telephony
 import android.view.View
-import com.sapp.yupi.Mail
+import com.sapp.yupi.Email
 import com.sapp.yupi.R
 import com.sapp.yupi.STATUS_SUCCESS
 import com.sapp.yupi.databinding.ViewIntroActivationBinding
@@ -31,7 +30,7 @@ class ActivateFragment : IntroFragment() {
                 thread {
                     val context = context!!
                     val pref = context.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE)
-                    val status = Mail.send(context, "gtom20180828@gmail.com", "", "")
+                    val status = Email.send("gtom20180828@gmail.com", "", "")
 
                     if (status != STATUS_SUCCESS) {
                         Handler().post {

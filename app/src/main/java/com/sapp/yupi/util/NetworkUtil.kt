@@ -15,6 +15,6 @@ class NetworkUtil {
             cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         }
 
-        fun isConnected() = cm.activeNetworkInfo.isConnected
+        fun isConnected() = cm.activeNetworkInfo?.isConnected == true
     }
 }

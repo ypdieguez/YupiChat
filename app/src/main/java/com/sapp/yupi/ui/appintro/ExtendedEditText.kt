@@ -132,16 +132,16 @@ class ExtendedEditText(context: Context, attrs: AttributeSet) : TextInputEditTex
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_ENTER) {
-            hideKeyboard()
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
-    private fun hideKeyboard() {
-            val inputMethodManager =
-                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
-    }
+//    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+//        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+//            hideKeyboard()
+//        }
+//        return super.onKeyDown(keyCode, event)
+//    }
+//
+//    private fun hideKeyboard() {
+//            val inputMethodManager =
+//                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+//    }
 }

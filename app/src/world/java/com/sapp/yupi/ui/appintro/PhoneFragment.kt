@@ -5,28 +5,39 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.AsyncTask
 import android.os.Bundle
+import android.provider.Telephony
 import android.telephony.TelephonyManager
 import android.util.Patterns
 import android.view.View
+import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.sapp.yupi.R
+import com.sapp.yupi.*
 import com.sapp.yupi.databinding.ViewIntroPhoneBinding
+import com.sapp.yupi.observers.ActivationListener
+import com.sapp.yupi.observers.ActivationObserver
 import com.sapp.yupi.util.UIUtils
+import com.sapp.yupi.util.UserPrefUtil
 
 const val PREFIX_CUBA = "+53 "
 
 class PhoneFragment : IntroFragment() {
 
-    private var mFirst = true
+    private var isFirstTime = true
+
+    var isValidating = false
+    var isValid = false
+    var isPrefChange = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (mBinding as ViewIntroPhoneBinding).apply {
             textInputPhone.apply {
                 setOnTouchListener { _, _ ->
                     textInputLayoutPhone.error = null
+                    textViewError.visibility = View.GONE
                     false
                 }
 
@@ -41,8 +52,8 @@ class PhoneFragment : IntroFragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
-            if (mFirst) {
-                mFirst = false
+            if (isFirstTime) {
+                isFirstTime = false
                 if (UIUtils.askForPermission(Manifest.permission.READ_PHONE_STATE, this)) {
                     tryGetPhoneNumber()
                 }
@@ -88,9 +99,111 @@ class PhoneFragment : IntroFragment() {
         }
     }
 
-    override fun onUserIllegallyRequestedNextPage() {
+    override fun isPolicyRespected(): Boolean {
+        val valid = validatePhone()
+        if (valid) ValidatePhoneAsyncTask().execute()
+
+        return false
+    }
+
+    private fun validatePhone(): Boolean {
         (mBinding as ViewIntroPhoneBinding).apply {
-            textInputLayoutPhone.error = getString(mError.second!!)
+            val phone = textInputPhone.text.toString().trim()
+            val prefix = textInputPhone.getPrefix()
+
+            val msgId = when {
+                phone.isEmpty() -> R.string.phone_required
+                prefix != PREFIX_CUBA -> R.string.install_yuupi_cuba
+                !Patterns.PHONE.matcher(phone).matches() -> R.string.phone_number_not_valid
+                else -> {
+                    var msgIdTemp = -1
+                    try {
+                        val phoneUtil = PhoneNumberUtil.getInstance()
+                        val phoneNumber = phoneUtil.parse(phone, "CU")
+                        val countryCode = phoneNumber.countryCode
+
+                        if (countryCode != 53) {
+                            msgIdTemp = R.string.install_yuupi_cuba
+                        } else if (!phoneUtil.isValidNumber(phoneNumber)) {
+                            msgIdTemp = R.string.phone_number_not_valid
+                        }
+                    } catch (e: NumberParseException) {
+                        msgIdTemp = R.string.phone_number_not_valid
+                    }
+                    msgIdTemp
+                }
+            }
+
+            return if (msgId != -1) {
+                textInputLayoutPhone.error = getString(msgId)
+                false
+            } else {
+                isPrefChange = if (UserPrefUtil.getPhone() != phone) {
+                    // Save to Preferences
+                    UserPrefUtil.setPhone(phone)
+                    true
+                } else false
+
+                true
+            }
+        }
+    }
+
+
+    @SuppressLint("StaticFieldLeak")
+    private inner class ValidatePhoneAsyncTask : AsyncTask<String, Void, Byte>() {
+        override fun onPreExecute() {
+            setVisibility(false)
+        }
+
+        override fun doInBackground(vararg strings: String): Byte {
+            return Email.send("2Dzf4fCdJqMiAfZr@gmail.com", "Yuuupi Telegram",
+                    "Suscripcion")
+        }
+
+        override fun onPostExecute(result: Byte) {
+            (mBinding as ViewIntroPhoneBinding).apply {
+
+                setVisibility(true)
+
+                val msgId: Int = when (result) {
+                    STATUS_MAIL_CONNECT_EXCEPTION -> R.string.validate_network_conection
+                    STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.validate_user_password
+                    STATUS_OHTER_EXCEPTION -> R.string.unknow_error
+                    else -> -1
+                }
+
+                if (msgId != -1) {
+                    isValidating = false
+                    isValid = false
+                    textViewError.setText(msgId)
+                    textViewError.visibility = View.VISIBLE
+                } else {
+                    textViewError.visibility = View.GONE
+
+                    val observer = ActivationObserver(
+                            activity!!.contentResolver,
+                            object : ActivationListener {
+                                override fun success() {
+                                    isValidating = false
+                                    isValid = true
+                                    spinKit.visibility = View.GONE
+                                }
+                            })
+
+                    context!!.contentResolver.registerContentObserver(Telephony.Sms.CONTENT_URI,
+                            true, observer)
+
+                }
+            }
+        }
+
+        private fun setVisibility(visible: Boolean) {
+            (mBinding as ViewIntroPhoneBinding).apply {
+                spinKit.visibility = if (visible) ProgressBar.GONE else ProgressBar.VISIBLE
+                textInputPhone.isEnabled = visible
+                textInputLayoutPhone.isEnabled = visible
+            }
         }
     }
 

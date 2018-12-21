@@ -24,10 +24,16 @@ class UserPrefUtil {
             pref.edit { putString(PREF_EMAIL, email) }
         }
 
-        fun getEmail() = pref.getString(PREF_EMAIL, "")
+        fun getEmail() = pref.getString(PREF_EMAIL, "")!!
 
-        fun setEmailPass(pass: String) {
+        fun setPass(pass: String) {
             pref.edit { putString(PREF_EMAIL_PASS, pass) }
+        }
+
+        fun getPass() = pref.getString(PREF_EMAIL_PASS, "")
+
+        fun setPhone(phone: String) {
+            pref.edit { putString(PREF_PHONE, phone) }
         }
 
         fun getPhone() = pref.getString(PREF_PHONE, "")

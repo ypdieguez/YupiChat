@@ -34,7 +34,7 @@ class ConversationFragment : Fragment() {
         val factory = Injector.provideMessageViewModelFactory(context)
         model = ViewModelProviders.of(this, factory).get(MessageViewModel::class.java)
 
-        val contactId = ConversationFragmentArgs.fromBundle(arguments).contactId.toLong()
+        val contactId = ConversationFragmentArgs.fromBundle(arguments!!).contactId.toLong()
 
         val adapter = MessageAdapter()
         binding.apply {
@@ -95,8 +95,9 @@ class ConversationFragment : Fragment() {
         val workManager = WorkManager.getInstance()
         workManager.enqueue(sendMsgWorker)
         workManager.getWorkInfoByIdLiveData(sendMsgWorker.id)
-                .observe(this, Observer { workStatus ->
-                    if (workStatus != null && workStatus.state.isFinished) {
+                .observe(this, Observer { info ->
+                    if (info != null && info.state.isFinished) {
+                        info.outputData
                     }
                 })
     }
