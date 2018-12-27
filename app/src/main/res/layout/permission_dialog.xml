@@ -35,7 +35,7 @@
             android:padding="16dp"
             android:textColor="@color/secondaryTextColor"
             android:textSize="16sp"
-            tools:text="@string/permission_read_phone_state"/>
+            tools:text="@string/perm_read_sms"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"

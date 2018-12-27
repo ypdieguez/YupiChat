@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sendButtonContentDescription">Enviar mensaje</string>
-    <string name="action_settings">Ajustes</string>
+    <!--MainFragment-->
+    <string name="empty_contacts">No tienes contactos.</string>
+
+    <!--Converstation fragment-->
     <string name="compose_message_view_hint_text">Enviar mensaje</string>
+    <string name="save">Guardar</string>
     <string name="name">Nombre</string>
     <string name="phone_number">Número de teléfono</string>
-    <string name="empty_contacts">No tienes contactos.</string>
-    <string name="save">Guardar</string>
-
     <string name="note">
         Paises disponibles para el envío de mensajes: \n
            - México: +52 \n
@@ -16,29 +16,18 @@
     </string>
 
     <!--Intro-->
-    <string name="intro_config_anounce_title">Cuenta</string>
-    <string name="intro_country_title">País</string>
-    <string name="intro_name_description">
-        Para que tus contactos sepan quien les escribe ingresa tu nombre.
-    </string>
+    <string name="country">País</string>
     <string name="intro_phone_description">
         Para que tus contactos puedan responderte ingresa tu número de teléfono
     </string>
-    <string name="intro_permission_title">Permiso</string>
-    <string name="intro_btn_grant_permission">PERMITIR</string>
-    <string name="settings">AJUSTES</string>
     <string name="intro_conclusion_title">Listo</string>
+
     <string name="intro_email_title">Correo</string>
     <string name="intro_email_description">
         Para enviar los mensajes ingresa tu cuenta de correo <b>@nauta</b>
     </string>
-    <string name="intro_pass_title">Contraseña</string>
-    <string name="intro_pass_description">
-        Para enviar los mensajes ingresa tu contraseña de la cuenta de correo <b>@nauta</b>.
-    </string>
 
-    <!--Validation-->
-    <string name="name_required">El nombre es requerido</string>
+    <!--Intro Validation-->
     <string name="email_required">El correo es requerido</string>
     <string name="email_not_valid">Ingresa un correo válido</string>
     <string name="email_is_not_nauta">Ingresa tu correo @nauta.cu</string>
@@ -52,17 +41,25 @@
         Este permiso es necesario. Toca AJUSTES > Permisos y activa SMS
     </string>
 
+    <!--Dialog Permissions-->
+    <string name="settings">AJUSTES</string>
+
+
+
     <!--Permissions-->
     <string name="not_now">Ahora no</string>
     <string name="go_on">Continuar</string>
     <string name="tap_settings_phone"><![CDATA[Toca AJUSTES > Permisos y activa Teléfono]]></string>
     <string name="active_account">Activar cuenta</string>
 
-    <string name="validate_network_conection">
-        Error de conexión. Comprueba la configuración de tu red e inténetelo de nuevo</string>
+    <string name="host_not_connected">
+       No se pudo conectar al servidor. Comprueba los ajustes de la red.
+    </string>
     <string name="validate_user_password">Usuario o contraseña incorrecto</string>
     <string name="unknow_error">Ha ocurrido un error, inténtelo mas tarde</string>
-    <string name="error_not_conected">Error de conexión. No te encuentras conectado</string>
+    <string name="error_not_connected">
+        Active los datos móviles o conéctese a una red Wi-Fi.
+    </string>
 
     <!--WhatsApp permisisons-->
     <string name="perm_read_phone_state_and_read_sms">

@@ -23,6 +23,7 @@ import com.sapp.yupi.*
 import com.sapp.yupi.databinding.ViewIntroPhoneBinding
 import com.sapp.yupi.observers.ActivationListener
 import com.sapp.yupi.observers.ActivationObserver
+import com.sapp.yupi.util.NetworkUtil
 
 abstract class PhoneBaseFragment : IntroFragment() {
     var isFirstTime = true
@@ -42,7 +43,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
     override fun isPolicyRespected(): Boolean {
         if (!isValidating) {
             setShowError(false)
-            if (validatePhone() && !isValid) {
+            if (validatePhone() && validateNetworkConnected() && !isValid) {
                 ValidatePhoneAsyncTask().execute()
                 isValidating = true
             }
@@ -81,6 +82,19 @@ abstract class PhoneBaseFragment : IntroFragment() {
                 askForPermissions()
             }
         }
+    }
+
+    protected abstract fun tryGetPhoneNumber()
+
+    protected abstract fun validatePhone(): Boolean
+
+    private fun validateNetworkConnected(): Boolean {
+        errorMsgId = when {
+            !NetworkUtil.isConnected() -> R.string.error_not_connected
+            else -> -1
+        }
+
+        return errorMsgId == -1
     }
 
     private fun askForPermissions() {
@@ -183,7 +197,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
 
                     val textView = findViewById<AppCompatTextView>(R.id.permission_text)
                     textView.setText(text)
-                    textView.append(appendText)
+                    textView.append(" $appendText")
 
                     val positiveBtn = findViewById<AppCompatButton>(R.id.permission_yes)
                     positiveBtn.apply {
@@ -231,7 +245,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
                 setViewStateInActivationMode(true)
 
                 val msgId: Int = when (result) {
-                    STATUS_MAIL_CONNECT_EXCEPTION -> R.string.validate_network_conection
+                    STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected
                     STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.validate_user_password
                     STATUS_OHTER_EXCEPTION -> R.string.unknow_error
                     else -> -1
@@ -254,7 +268,6 @@ abstract class PhoneBaseFragment : IntroFragment() {
                                     spinKit.visibility = View.GONE
                                 }
                             })
-
                     context!!.contentResolver.registerContentObserver(Telephony.Sms.CONTENT_URI,
                             true, observer)
 
@@ -263,9 +276,6 @@ abstract class PhoneBaseFragment : IntroFragment() {
         }
     }
 
-    protected abstract fun tryGetPhoneNumber()
 
-    protected abstract fun validatePhone(): Boolean
-
-    abstract fun setViewStateInActivationMode(activating: Boolean)
+    abstract fun setViewStateInActivationMode(enable: Boolean)
 }

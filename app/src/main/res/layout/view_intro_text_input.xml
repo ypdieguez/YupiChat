@@ -26,7 +26,7 @@
             <TextView
                 android:id="@+id/description"
                 style="@style/IntroDesc"
-                tools:text="@string/intro_name_description" />
+                tools:text="@string/intro_phone_description" />
 
         </LinearLayout>
 

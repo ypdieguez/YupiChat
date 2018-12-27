@@ -8,6 +8,7 @@ import android.text.InputType
 import android.util.Patterns
 import android.view.KeyEvent
 import android.view.View
+import android.view.WindowManager
 import android.widget.ProgressBar
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
@@ -33,7 +34,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
 
                 setOnTouchListener { _, event ->
                     if (event.action == KeyEvent.ACTION_UP) {
-                        textViewError.error = null
+                        textViewError.visibility = View.GONE
 
                         if (KeyboardVisibilityEvent.isKeyboardVisible(activity)) {
                             // This code do next:
@@ -50,30 +51,23 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                     }
                     false
                 }
-
-                onFocusChangeListener =
-                        View.OnFocusChangeListener { _, hasFocus ->
-                            if (hasFocus) {
-                                text?.let {
-                                    if (it.isEmpty())
-                                        setText(getString(R.string.choose_country))
-                                }
-                            }
-                        }
             }
 
             textInputPhone.apply {
                 setOnTouchListener { _, event ->
                     if (event.action == KeyEvent.ACTION_DOWN) {
-                        textViewError.error = null
                         textInputCountry.text.apply {
                             if (toString() == "Cuba" || getPrefix() == "+53") {
-                                textViewError.error = getString(R.string.chosse_yuupi_cuba)
+                                textViewError.text = getString(R.string.chosse_yuupi_cuba)
+                                textViewError.visibility = View.VISIBLE
                                 return@setOnTouchListener true
                             } else if (!resources.getStringArray(R.array.countries_name)
                                             .contains(toString())) {
-                                textViewError.error = getString(R.string.choose_country)
+                                textViewError.text = getString(R.string.choose_country)
+                                textViewError.visibility = View.VISIBLE
                                 return@setOnTouchListener true
+                            } else {
+                                textViewError.visibility = View.GONE
                             }
                         }
                     }
@@ -91,9 +85,14 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                 isFirstTime = false
             }
 
+            // Code added to avoid exception:
+            // Parameter:activity window SoftInputMethod is not ADJUST_RESIZE
+            activity!!.window.attributes.softInputMode =
+                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+
             // This listener is for harmony when hiding the keyboard and showing the dialogue.
             unregistrar = KeyboardVisibilityEvent
-                    .registerEventListener(activity) { isOpen ->
+                    .registerEventListener(activity!!) { isOpen ->
                         if (!isOpen && mCountryViewTouched) {
                             CountryListDialogFragment.newInstance()
                                     .addListener(this@PhoneFragment)
@@ -169,31 +168,13 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
         }
     }
 
-    override fun onUserIllegallyRequestedNextPage() {
+    override fun setViewStateInActivationMode(enable: Boolean) {
         (mBinding as ViewIntroPhoneBinding).apply {
-            if (mError.second!! == R.string.country_not_supported) {
-                val text = textInputCountry.text.toString()
-                textInputLayoutCountry.apply {
-                    error = when (text) {
-                        getString(R.string.choose_country) -> getString(R.string.choose_country)
-                        "Cuba" -> getString(R.string.chosse_yuupi_cuba)
-                        else -> getString(mError.second!!)
-                    }
-                }
-
-                textInputLayoutPhone.error = null
-            } else {
-                textInputLayoutCountry.error = null
-                textInputLayoutPhone.error = getString(mError.second!!)
-            }
-        }
-    }
-
-    override fun setViewStateInActivationMode(activating: Boolean) {
-        (mBinding as ViewIntroPhoneBinding).apply {
-            spinKit.visibility = if (activating) ProgressBar.GONE else ProgressBar.VISIBLE
-            textInputPhone.isEnabled = activating
-            textInputLayoutPhone.isEnabled = activating
+            spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
+            textInputCountry.isEnabled = enable
+            textInputLayoutCountry.isEnabled = enable
+            textInputPhone.isEnabled = enable
+            textInputLayoutPhone.isEnabled = enable
         }
     }
 
@@ -203,41 +184,37 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
             val countriesIso = resources.getStringArray(R.array.countries_iso)
 
             val country = textInputCountry.text.toString()
-
             val index = validCountries.indexOf(country)
-            if (index == -1) {
-                errorMsgId = R.string.country_not_supported
-            } else {
-                val phone = textInputPhone.text.toString().trim()
-                when {
-                    phone.isEmpty() -> {
-                        errorMsgId = R.string.phone_required
-                    }
-                    !Patterns.PHONE.matcher(phone).matches() -> {
-                        errorMsgId = R.string.phone_number_not_valid
-                    }
-                    else -> try {
-                        val phoneUtil = PhoneNumberUtil.getInstance()
+            val phone = textInputPhone.text.toString().trim()
 
-                        val phoneNumber = phoneUtil.parse(phone, countriesIso[index])
+            errorMsgId = when {
+                country.isEmpty() -> R.string.choose_country
+                country == getString(R.string.choose_country) -> R.string.choose_country
+                country == "Cuba" -> R.string.chosse_yuupi_cuba
+                index == -1 -> R.string.country_not_supported
+                phone.isEmpty() -> R.string.phone_required
+                !Patterns.PHONE.matcher(phone).matches() -> R.string.phone_number_not_valid
+                else -> try {
+                    val phoneUtil = PhoneNumberUtil.getInstance()
+                    val phoneNumber = phoneUtil.parse(phone, countriesIso[index])
 
-                        if (!phoneUtil.isValidNumber(phoneNumber)) {
-                            errorMsgId = R.string.phone_number_not_valid
-                        } else {
-                            if (UserPrefUtil.getPhone() != phone) {
-                                // Save to Preferences
-                                UserPrefUtil.setPhone(phone)
-                                isValid = false
-                            }
+                    if (!phoneUtil.isValidNumber(phoneNumber)) {
+                        R.string.phone_number_not_valid
+                    } else {
+                        if (UserPrefUtil.getPhone() != phone) {
+                            // Save to Preferences
+                            UserPrefUtil.setPhone(phone)
+                            isValid = false
                         }
-                    } catch (e: NumberParseException) {
-                        errorMsgId = R.string.phone_number_not_valid
+                        -1
                     }
+                } catch (e: NumberParseException) {
+                    R.string.phone_number_not_valid
                 }
             }
-
-            return errorMsgId == -1
         }
+
+        return errorMsgId == -1
     }
 
     companion object {

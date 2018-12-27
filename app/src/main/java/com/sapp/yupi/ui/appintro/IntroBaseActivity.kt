@@ -97,52 +97,15 @@ abstract class IntroBaseActivity : AppIntro(), IntroFragment.PolicyListener {
                 imageRes = R.drawable.icons8_sms_384,
                 description = R.string.intro_app_description))
 
-        addSlide(PresentationFragment.newInstance(
-                title = R.string.intro_config_anounce_title,
-                imageRes = R.drawable.icons8_phonelink_setup_512,
-                description = R.string.intro_config_anounce_description))
-
-        addSlide(TextInputFragment.newInstance(
-                fragmentTag = TAG_FRAGMENT_NAME,
-                title = R.string.name,
-                imageRes = R.drawable.icons8_customer_480,
-                description = R.string.intro_name_description,
-                hint = R.string.name,
-                type = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PERSON_NAME or
-                        InputType.TYPE_TEXT_FLAG_CAP_WORDS)
-        )
 
         addSlide(PhoneFragment.newInstance())
     }
 
     protected fun commonSlidesEnd() {
-        if (!UIUtils.checkReadSmsPermission(this)) {
-            addSlide(ReadSmsPermissionFragment())
-        }
-
         addSlide(PresentationFragment.newInstance(
                 title = R.string.intro_conclusion_title,
                 imageRes = R.drawable.icons8_confetti_512,
                 description = R.string.intro_conclusion_description))
-    }
-
-    protected fun validateName(binding: ViewIntroTextInputBinding): Pair<Boolean, Int?> {
-        var error = false
-        var msg: Int? = null
-
-        binding.apply {
-            val name = textInput.text.toString().trim()
-            if (name.isEmpty()) {
-                error = true
-                msg = R.string.name_required
-            }
-            // Save to Preferences
-            pref.edit {
-                putString(PREF_NAME, name)
-            }
-        }
-
-        return Pair(error, msg)
     }
 
     private fun sendMsg(contactId: Long, txt: String) {

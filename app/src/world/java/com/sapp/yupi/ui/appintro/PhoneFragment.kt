@@ -58,16 +58,16 @@ class PhoneFragment : PhoneBaseFragment() {
         }
     }
 
-    private fun setVisibility(visible: Boolean) {
+    override fun setViewStateInActivationMode(activating: Boolean) {
         (mBinding as ViewIntroPhoneBinding).apply {
-            spinKit.visibility = if (visible) ProgressBar.GONE else ProgressBar.VISIBLE
-            textInputPhone.isEnabled = visible
-            textInputLayoutPhone.isEnabled = visible
+            spinKit.visibility = if (activating) ProgressBar.GONE else ProgressBar.VISIBLE
+            textInputPhone.isEnabled = activating
+            textInputLayoutPhone.isEnabled = activating
         }
     }
 
     @SuppressLint("MissingPermission", "HardwareIds")
-    private fun tryGetPhoneNumber() {
+    override fun tryGetPhoneNumber() {
         (mBinding as ViewIntroPhoneBinding).apply {
             textInputPhone.apply {
                 val text = text.toString()
@@ -92,7 +92,7 @@ class PhoneFragment : PhoneBaseFragment() {
         }
     }
 
-    private fun validatePhone(): Boolean {
+    override fun validatePhone(): Boolean {
         (mBinding as ViewIntroPhoneBinding).apply {
             val phone = textInputPhone.text.toString().trim()
             val prefix = textInputPhone.getPrefix()
