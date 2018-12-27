@@ -17,8 +17,16 @@ class IntroActivity : IntroBaseActivity() {
         super.onCreate(savedInstanceState)
 
         // Add slides
-        addSlide(EmailFragment.newInstance())
+
+//        addSlide(EmailFragment.newInstance())
+        addSlide(PresentationFragment.newInstance(
+                title = R.string.app_name,
+                imageRes = R.drawable.icons8_sms_384,
+                description = R.string.intro_app_description))
+
         addSlide(PhoneFragment.newInstance())
+
+
 //        commonSlidesStart()
 //        addSlide(TextInputFragment.newInstance(
 //                fragmentTag = TAG_FRAGMENT_EMAIL,

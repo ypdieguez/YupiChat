@@ -10,17 +10,12 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/primary"
+        android:id="@+id/icons_container"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:background="@drawable/dialog_top_bg">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/permission_icon"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/phone" />
     </LinearLayout>
 
     <LinearLayout
@@ -67,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:fontFamily="@font/roboto"
-                android:text="@string/settings"
+                android:text="@string/go_on"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 

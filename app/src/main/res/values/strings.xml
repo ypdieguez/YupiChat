@@ -67,6 +67,28 @@
     <string name="unknow_error">Ha ocurrido un error, inténtelo mas tarde</string>
     <string name="error_not_conected">Error de conexión. No te encuentras conectado</string>
 
+    <!--WhatsApp permisisons-->
+    <string name="perm_read_phone_state_and_read_sms">
+        Para obtener el número de teléfono y activar la cuenta, permite que Yuupi pueda acceder a tu
+        Teléfono y SMS.
+    </string>
+    <string name="perm_read_phone_state_and_read_sms_permanetly_denied">
+        Toca AJUSTES > Permisos, y activa Teléfono y SMS
+    </string>
+    <string name="perm_read_phone_state">
+        Para obtener el número de teléfono, permite que Yuupi pueda acceder a tu
+        Teléfono.
+    </string>
+    <string name="perm_read_phone_state_permanetly_denied">
+        Toca AJUSTES > Permisos, y activa Teléfono
+    </string>
+    <string name="perm_read_sms">
+        Para activar la cuenta, permite que Yuupi pueda acceder a tus SMS.
+    </string>
+    <string name="perm_read_sms_permanetly_denied">
+        Toca AJUSTES > Permisos, y activa SMS
+    </string>
+
     <!--Avaiable Countries-->
     <string-array name="countries_name">
         <item>Canada</item>

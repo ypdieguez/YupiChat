@@ -1,33 +1,28 @@
 package com.sapp.yupi.ui.appintro
 
-
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.telephony.TelephonyManager
 import android.text.InputType
 import android.util.Patterns
 import android.view.KeyEvent
 import android.view.View
-import androidx.core.content.ContextCompat
+import android.widget.ProgressBar
+import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroPhoneBinding
-import com.sapp.yupi.ui.FIRST_LAUNCH
-import com.sapp.yupi.util.UIUtils
+import com.sapp.yupi.util.UserPrefUtil
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
 import java.util.*
 
 
-class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
+class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
 
-    private var mFirst = true
     private var mCountryViewTouched = false
     private var unregistrar: Unregistrar? = null
 
@@ -38,8 +33,7 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
 
                 setOnTouchListener { _, event ->
                     if (event.action == KeyEvent.ACTION_UP) {
-                        textInputLayoutCountry.error = null
-                        textInputLayoutPhone.error = null
+                        textViewError.error = null
 
                         if (KeyboardVisibilityEvent.isKeyboardVisible(activity)) {
                             // This code do next:
@@ -71,14 +65,14 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
             textInputPhone.apply {
                 setOnTouchListener { _, event ->
                     if (event.action == KeyEvent.ACTION_DOWN) {
-                        textInputLayoutPhone.error = null
+                        textViewError.error = null
                         textInputCountry.text.apply {
-                            if (toString() == "Cuba") {
-                                textInputLayoutCountry.error = getString(R.string.chosse_yuupi_cuba)
+                            if (toString() == "Cuba" || getPrefix() == "+53") {
+                                textViewError.error = getString(R.string.chosse_yuupi_cuba)
                                 return@setOnTouchListener true
                             } else if (!resources.getStringArray(R.array.countries_name)
                                             .contains(toString())) {
-                                textInputLayoutCountry.error = getString(R.string.choose_country)
+                                textViewError.error = getString(R.string.choose_country)
                                 return@setOnTouchListener true
                             }
                         }
@@ -86,22 +80,15 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
                     return@setOnTouchListener false
                 }
             }
-
-            textInputLayoutCountry.setErrorTextColor(ContextCompat.getColorStateList(context!!,
-                    R.color.introError))
-            textInputLayoutPhone.setErrorTextColor(ContextCompat.getColorStateList(context!!,
-                    R.color.introError))
         }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
-            if (mFirst) {
-                if (UIUtils.askForPermission(Manifest.permission.READ_PHONE_STATE, this)) {
-                    tryGetPhoneNumber()
-                }
-                mFirst = false
+            if (isFirstTime) {
+                checkPermissions()
+                isFirstTime = false
             }
 
             // This listener is for harmony when hiding the keyboard and showing the dialogue.
@@ -119,21 +106,8 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                            grantResults: IntArray) {
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            tryGetPhoneNumber()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (UIUtils.checkReadPhoneStatePermission(context!!)) {
-            tryGetPhoneNumber()
-        }
-    }
-
     @SuppressLint("MissingPermission", "HardwareIds")
-    private fun tryGetPhoneNumber() {
+    override fun tryGetPhoneNumber() {
         (mBinding as ViewIntroPhoneBinding).apply {
             var country = textInputCountry.text?.toString() ?: ""
             var number = textInputPhone.text?.toString() ?: ""
@@ -212,6 +186,57 @@ class PhoneFragment : IntroFragment(), CountryListDialogFragment.Listener {
                 textInputLayoutCountry.error = null
                 textInputLayoutPhone.error = getString(mError.second!!)
             }
+        }
+    }
+
+    override fun setViewStateInActivationMode(activating: Boolean) {
+        (mBinding as ViewIntroPhoneBinding).apply {
+            spinKit.visibility = if (activating) ProgressBar.GONE else ProgressBar.VISIBLE
+            textInputPhone.isEnabled = activating
+            textInputLayoutPhone.isEnabled = activating
+        }
+    }
+
+    override fun validatePhone(): Boolean {
+        (mBinding as ViewIntroPhoneBinding).apply {
+            val validCountries = resources.getStringArray(R.array.countries_name)
+            val countriesIso = resources.getStringArray(R.array.countries_iso)
+
+            val country = textInputCountry.text.toString()
+
+            val index = validCountries.indexOf(country)
+            if (index == -1) {
+                errorMsgId = R.string.country_not_supported
+            } else {
+                val phone = textInputPhone.text.toString().trim()
+                when {
+                    phone.isEmpty() -> {
+                        errorMsgId = R.string.phone_required
+                    }
+                    !Patterns.PHONE.matcher(phone).matches() -> {
+                        errorMsgId = R.string.phone_number_not_valid
+                    }
+                    else -> try {
+                        val phoneUtil = PhoneNumberUtil.getInstance()
+
+                        val phoneNumber = phoneUtil.parse(phone, countriesIso[index])
+
+                        if (!phoneUtil.isValidNumber(phoneNumber)) {
+                            errorMsgId = R.string.phone_number_not_valid
+                        } else {
+                            if (UserPrefUtil.getPhone() != phone) {
+                                // Save to Preferences
+                                UserPrefUtil.setPhone(phone)
+                                isValid = false
+                            }
+                        }
+                    } catch (e: NumberParseException) {
+                        errorMsgId = R.string.phone_number_not_valid
+                    }
+                }
+            }
+
+            return errorMsgId == -1
         }
     }
 

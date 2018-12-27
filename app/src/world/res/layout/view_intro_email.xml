@@ -81,7 +81,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.9"
                     app:passwordToggleEnabled="true"
-                    app:passwordToggleTint="@color/colorPrimary">
+                    app:passwordToggleTint="@color/secondaryTextColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/text_input_pass"

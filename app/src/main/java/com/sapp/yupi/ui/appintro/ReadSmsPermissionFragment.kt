@@ -15,12 +15,14 @@ import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.ISlidePolicy
+import com.sapp.yupi.PERMISSION_PREFERENCES
+import com.sapp.yupi.PREF_FIRST_READ_SMS_PERMISSION
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewPermissionBinding
 import com.sapp.yupi.util.UIUtils
 
-private const val PERMISSION_PREFERENCES = "permissions_preferences"
-private const val PREF_FIRST_READ_SMS_PERMISSION = "first_read_sms_permission"
+//private const val PERMISSION_PREFERENCES = "permissions_preferences"
+//private const val PREF_FIRST_READ_SMS_PERMISSION = "first_read_sms_permission"
 
 class ReadSmsPermissionFragment : Fragment(), ISlidePolicy {
 

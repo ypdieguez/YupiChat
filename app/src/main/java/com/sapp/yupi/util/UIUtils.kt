@@ -14,13 +14,14 @@ import android.view.WindowManager
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.sapp.yupi.R
 
-private const val PERMISSION_PREFERENCES = "permissions_preferences"
-private const val PREF_FIRST_READ_PHONE_STATE_PERMISSION = "first_read_phone_state_permission"
+const val PERMISSION_PREFERENCES = "permissions_preferences"
+const val PREF_FIRST_READ_PHONE_STATE_PERMISSION = "first_read_phone_state_permission"
 
 class UIUtils {
 
@@ -57,75 +58,75 @@ class UIUtils {
          *
          * @return Boolean
          */
-        fun askForPermission(permission: String, listener: Fragment): Boolean {
-            val activity = listener.activity!!
-            if (ContextCompat.checkSelfPermission(activity, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                val firstTime: Boolean = activity.getSharedPreferences(PERMISSION_PREFERENCES,
-                        Context.MODE_PRIVATE).run {
-                    val r = getBoolean(PREF_FIRST_READ_PHONE_STATE_PERMISSION,
-                        true)
-                    if (r) edit { putBoolean(PREF_FIRST_READ_PHONE_STATE_PERMISSION, false) }
-
-                    r
-                }
-
-                val icon: Int
-                val text: Int
-                val appendText: String
-
-                when (permission) {
-                    Manifest.permission.READ_PHONE_STATE -> {
-                        icon = R.drawable.phone
-                        text = R.string.permission_read_phone_state
-                        appendText = activity.getString(R.string.tap_settings_phone)
-                    }
-                    else -> {
-                        icon = -1
-                        text = -1
-                        appendText = ""
-                    }
-                }
-
-                val dialog = Dialog(activity)
-                dialog.apply {
-                    setContentView(R.layout.permission_dialog)
-                    window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                    setCanceledOnTouchOutside(false)
-
-                    findViewById<AppCompatImageView>(R.id.permission_icon).setImageResource(icon)
-
-                    val permText = findViewById<AppCompatTextView>(R.id.permission_text)
-                    val btnYes = findViewById<AppCompatButton>(R.id.permission_yes)
-
-                    permText.setText(text)
-                    if (!firstTime && !listener.shouldShowRequestPermissionRationale(permission)) {
-                        permText.append(appendText)
-                        btnYes.setText(R.string.settings)
-                        btnYes.setOnClickListener {
-                            listener.startActivityForResult(Intent(
-                                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                    Uri.parse("package:" + activity.packageName)),
-                                    1)
-                            dismiss()
-                        }
-                    } else {
-                        btnYes.setText(R.string.go_on)
-                        btnYes.setOnClickListener {
-                            listener.requestPermissions(arrayOf(permission), 1)
-                            dismiss()
-                        }
-                    }
-
-                    findViewById<AppCompatButton>(R.id.permission_no).setOnClickListener {
-                        dismiss()
-                    }
-                }.show()
-
-                return false
-            }
-            return true
-        }
+//        fun askForPermission(permission: String, listener: Fragment): Boolean {
+//            val activity = listener.activity!!
+//            if (ContextCompat.checkSelfPermission(activity, permission)
+//                    != PackageManager.PERMISSION_GRANTED) {
+//
+//                val firstTime: Boolean = activity.getSharedPreferences(PERMISSION_PREFERENCES,
+//                        Context.MODE_PRIVATE).run {
+//                    val r = getBoolean(PREF_FIRST_READ_PHONE_STATE_PERMISSION,
+//                        true)
+//                    if (r) edit { putBoolean(PREF_FIRST_READ_PHONE_STATE_PERMISSION, false) }
+//
+//                    r
+//                }
+//
+//                val icon: Int
+//                val text: Int
+//                val appendText: String
+//
+//                when (permission) {
+//                    Manifest.permission.READ_PHONE_STATE -> {
+//                        icon = R.drawable.phone
+//                        text = R.string.permission_read_phone_state
+//                        appendText = activity.getString(R.string.tap_settings_phone)
+//                    }
+//                    else -> {
+//                        icon = -1
+//                        text = -1
+//                        appendText = ""
+//                    }
+//                }
+//
+//                val dialog = Dialog(activity)
+//                dialog.apply {
+//                    setContentView(R.layout.permission_dialog)
+//                    window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//                    setCanceledOnTouchOutside(false)
+//
+//                    findViewById<AppCompatImageView>(R.id.permission_icon).setImageResource(icon)
+//
+//                    val permText = findViewById<AppCompatTextView>(R.id.permission_text)
+//                    val btnYes = findViewById<AppCompatButton>(R.id.permission_yes)
+//
+//                    permText.setText(text)
+//                    if (!firstTime && !listener.shouldShowRequestPermissionRationale(permission)) {
+//                        permText.append(appendText)
+//                        btnYes.setText(R.string.settings)
+//                        btnYes.setOnClickListener {
+//                            listener.startActivityForResult(Intent(
+//                                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+//                                    Uri.parse("package:" + activity.packageName)),
+//                                    1)
+//                            dismiss()
+//                        }
+//                    } else {
+//                        btnYes.setText(R.string.go_on)
+//                        btnYes.setOnClickListener {
+//                            listener.requestPermissions(arrayOf(permission), 1)
+//                            dismiss()
+//                        }
+//                    }
+//
+//                    findViewById<AppCompatButton>(R.id.permission_no).setOnClickListener {
+//                        dismiss()
+//                    }
+//                }.show()
+//
+//                return false
+//            }
+//            return true
+//        }
     }
 }

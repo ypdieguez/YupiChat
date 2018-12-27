@@ -24,6 +24,7 @@
         correcta te llegará un mensaje confirmando la activación de tu cuenta.
     </string>
     <string name="install_yuupi_cuba">Para enviar mensajes fuera de Cuba instala Yuupi Cuba</string>
+
     <string name="permission_read_phone_state">
         <b>Yuupi World</b> quiere obtener el número de teléfono y ponerlo por ti, permite que pueda
         leer el estado del teléfono para realizar esta acción.

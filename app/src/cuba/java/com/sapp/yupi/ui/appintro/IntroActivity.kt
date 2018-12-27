@@ -26,61 +26,10 @@ class IntroActivity : IntroBaseActivity() {
             TAG_FRAGMENT_NAME -> {
                 validateName(binding as ViewIntroTextInputBinding)
             }
-            TAG_FRAGMENT_PHONE -> {
-                validatePhone(binding as ViewIntroPhoneBinding)
-            }
+//            TAG_FRAGMENT_PHONE -> {
+//                validatePhone(binding as ViewIntroPhoneBinding)
+//            }
             else -> Pair(false, null)
         }
-    }
-
-    private fun validatePhone(binding: ViewIntroPhoneBinding): Pair<Boolean, Int?> {
-        var error = false
-        var msg: Int? = null
-
-        binding.apply {
-
-            val validCountries = resources.getStringArray(R.array.countries_name)
-            val countriesIso = resources.getStringArray(R.array.countries_iso)
-
-            val country = textInputCountry.text.toString()
-
-            val index = validCountries.indexOf(country)
-            if (index == -1) {
-                error = true
-                msg = R.string.country_not_supported
-            } else {
-                val phone = textInputPhone.text.toString().trim()
-                when {
-                    phone.isEmpty() -> {
-                        error = true
-                        msg = R.string.phone_required
-                    }
-                    !Patterns.PHONE.matcher(phone).matches() -> {
-                        error = true
-                        msg = R.string.phone_number_not_valid
-                    }
-                    else -> try {
-                        val phoneUtil = PhoneNumberUtil.getInstance()
-
-                        val phoneNumber = phoneUtil.parse(phone, countriesIso[index])
-
-                        if (!phoneUtil.isValidNumber(phoneNumber)) {
-                            error = true
-                            msg = R.string.phone_number_not_valid
-                        }
-                    } catch (e: NumberParseException) {
-                        error = true
-                        msg = R.string.phone_number_not_valid
-                    }
-                }
-
-                // Save to Preferences
-                pref.edit {
-                    putString(PREF_PHONE, phone)
-                }
-            }
-        }
-
-        return Pair(error, msg)
     }
 }

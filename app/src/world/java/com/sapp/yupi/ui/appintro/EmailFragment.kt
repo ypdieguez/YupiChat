@@ -1,11 +1,13 @@
 package com.sapp.yupi.ui.appintro
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import com.github.paolorotolo.appintro.AppIntroBase
 import com.sapp.yupi.*
 import com.sapp.yupi.databinding.ViewIntroEmailBinding
@@ -21,7 +23,7 @@ class EmailFragment : IntroFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (mBinding as ViewIntroEmailBinding).apply {
             textInputEmail.apply {
-//                setSuffix("@nauta.cu")
+                setSuffix("@nauta.cu")
                 setOnTouchListener { _, _ ->
                     textViewError.visibility = View.GONE
                     false
@@ -32,6 +34,13 @@ class EmailFragment : IntroFragment() {
                 setOnTouchListener { _, _ ->
                     textViewError.visibility = View.GONE
                     false
+                }
+
+                setOnFocusChangeListener { _, hasFocus ->
+                    val color: Int = ContextCompat.getColor(context, if (hasFocus)
+                        R.color.colorPrimary else R.color.secondaryTextColor)
+                    textInputLayoutPass.setPasswordVisibilityToggleTintList(
+                            ColorStateList.valueOf(color))
                 }
             }
         }
@@ -120,7 +129,7 @@ class EmailFragment : IntroFragment() {
             else -> -1
         }
 
-        return  errorMsgId == -1
+        return errorMsgId == -1
     }
 
     @SuppressLint("StaticFieldLeak")
