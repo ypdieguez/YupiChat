@@ -5,9 +5,9 @@
 
     <!--Converstation fragment-->
     <string name="compose_message_view_hint_text">Enviar mensaje</string>
-    <string name="save">Guardar</string>
     <string name="name">Nombre</string>
     <string name="phone_number">Número de teléfono</string>
+    <string name="save">Guardar</string>
     <string name="note">
         Paises disponibles para el envío de mensajes: \n
            - México: +52 \n
@@ -21,63 +21,37 @@
         Para que tus contactos puedan responderte ingresa tu número de teléfono
     </string>
     <string name="intro_conclusion_title">Listo</string>
-
-    <string name="intro_email_title">Correo</string>
-    <string name="intro_email_description">
-        Para enviar los mensajes ingresa tu cuenta de correo <b>@nauta</b>
+    <string name="intro_conclusion_description">
+        Has concluido… Ya estás listo para enviar y recibir mensajes.
     </string>
 
     <!--Intro Validation-->
-    <string name="email_required">El correo es requerido</string>
-    <string name="email_not_valid">Ingresa un correo válido</string>
-    <string name="email_is_not_nauta">Ingresa tu correo @nauta.cu</string>
     <string name="phone_required">El número de teléfono es requerido</string>
     <string name="phone_number_not_valid">Ingresa un número de teléfono válido</string>
-    <string name="pass_required">La contraseña es requerida</string>
     <string name="choose_country">Elige un país</string>
-    <string name="chosse_yuupi_cuba">Para enviar mensajes desde Cuba instala Yuupi World</string>
-    <string name="read_sms_denied">Este permiso es necesario</string>
-    <string name="read_sms_denied_permanetly">
-        Este permiso es necesario. Toca AJUSTES > Permisos y activa SMS
-    </string>
+    <string name="wrong_user_or_password">Usuario o contraseña incorrecto</string>
+    <string name="unknow_error">Ha ocurrido un error, inténtelo mas tarde</string>
 
-    <!--Dialog Permissions-->
+    <!--Dialog Permission-->
     <string name="settings">AJUSTES</string>
-
-
-
-    <!--Permissions-->
     <string name="not_now">Ahora no</string>
     <string name="go_on">Continuar</string>
-    <string name="tap_settings_phone"><![CDATA[Toca AJUSTES > Permisos y activa Teléfono]]></string>
-    <string name="active_account">Activar cuenta</string>
-
-    <string name="host_not_connected">
-       No se pudo conectar al servidor. Comprueba los ajustes de la red.
-    </string>
-    <string name="validate_user_password">Usuario o contraseña incorrecto</string>
-    <string name="unknow_error">Ha ocurrido un error, inténtelo mas tarde</string>
-    <string name="error_not_connected">
-        Active los datos móviles o conéctese a una red Wi-Fi.
-    </string>
-
-    <!--WhatsApp permisisons-->
+    <!--Dialog append text-->
     <string name="perm_read_phone_state_and_read_sms">
-        Para obtener el número de teléfono y activar la cuenta, permite que Yuupi pueda acceder a tu
+        Para obtener el número de teléfono y validarlo, permite que %s pueda acceder a tu
         Teléfono y SMS.
     </string>
     <string name="perm_read_phone_state_and_read_sms_permanetly_denied">
         Toca AJUSTES > Permisos, y activa Teléfono y SMS
     </string>
     <string name="perm_read_phone_state">
-        Para obtener el número de teléfono, permite que Yuupi pueda acceder a tu
-        Teléfono.
+        Para obtener el número de teléfono, permite que %s pueda acceder a tu Teléfono.
     </string>
     <string name="perm_read_phone_state_permanetly_denied">
         Toca AJUSTES > Permisos, y activa Teléfono
     </string>
     <string name="perm_read_sms">
-        Para activar la cuenta, permite que Yuupi pueda acceder a tus SMS.
+        Para validar el número teléfono, permite que %s pueda acceder a tus SMS.
     </string>
     <string name="perm_read_sms_permanetly_denied">
         Toca AJUSTES > Permisos, y activa SMS
@@ -89,4 +63,13 @@
         <item>Estados Unidos</item>
         <item>México</item>
     </string-array>
+
+    <!--General validation-->
+    <string name="network_not_connected">
+        Active los datos móviles o conéctese a una red Wi-Fi.
+    </string>
+
+    <string name="active_account">Activar cuenta</string>
+    <string name="validate_phone">Validar teléfono:</string>
+
 </resources>

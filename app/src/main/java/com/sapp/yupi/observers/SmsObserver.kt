@@ -50,7 +50,7 @@ open class SmsObserver(private val contentResolver: ContentResolver) : MessageOb
     private fun receiveSms(cursor: Cursor) {
         cursor.apply {
             val address = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS))
-            if (PhoneNumberUtils.compare(address, "+5352871805")) {
+            if (PhoneNumberUtils.compare(address, "+525537484628")) {
                 // Get data
                 val id = getLong(getColumnIndex(Telephony.Sms._ID))
                 val date = cursor.getLong(cursor.getColumnIndex(Telephony.Sms.DATE))

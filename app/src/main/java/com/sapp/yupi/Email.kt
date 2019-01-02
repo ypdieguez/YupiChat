@@ -53,14 +53,11 @@ class Email {
 
                 Transport.send(msg, user, pass)
 
-//                return "OK"
                 return STATUS_SUCCESS
             } catch (e: MailConnectException) {
-//                return "No se pudo conectar al host, puede ser por no tener activado el acceso a datos."
                 return STATUS_MAIL_CONNECT_EXCEPTION
             } catch (e: AuthenticationFailedException) {
                 return STATUS_AUTHENTICATION_FAILED_EXCEPTION
-//                return "Usuario o contraseña incorrecto."
             }
         }
     }

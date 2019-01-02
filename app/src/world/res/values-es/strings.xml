@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Yuupi World</string>
+
     <!--Intro-->
     <string name="intro_app_description">
         Contacta con tus familiares y amistades de Canadá, Estados Unidos o México.
@@ -7,26 +9,22 @@
         Tus mensajes serán enviados usando tu cuenta de correo <b>@nauta</b> a través de los datos
         móviles y tus contactos los recibirán como <b>sms</b>.
     </string>
-    <string name="intro_config_anounce_description">
-        Llena los datos que se piden a continuación para que <b>Yuupi World</b> pueda enviar y recibir
-        mensajes.
+    <string name="intro_email_title">Correo</string>
+    <string name="intro_email_description">
+        Para enviar los mensajes ingresa tu cuenta de correo <b>@nauta</b>
     </string>
-    <string name="intro_permission_description">
-        Para leer los mensajes enviados por tus contactos permite que <b>Yuupi World</b> pueda
-        acceder a tus SMS.
-    </string>
-    <string name="intro_permission_description_granted">
-        <b>Yuupi World</b> ya puede acceder a tus SMS y mostrarte los mensajes enviados por tus
-        contactos.
-    </string>
-    <string name="intro_conclusion_description">
-        Has concluido… Activa los datos móviles y continúa… Si la información introducida es
-        correcta te llegará un mensaje confirmando la activación de tu cuenta.
-    </string>
-    <string name="install_yuupi_cuba">Para enviar mensajes fuera de Cuba instala Yuupi Cuba</string>
+    <string name="intro_pass_title">Contraseña</string>
 
-    <string name="permission_read_phone_state">
-        <b>Yuupi World</b> quiere obtener el número de teléfono y ponerlo por ti, permite que pueda
-        leer el estado del teléfono para realizar esta acción.
+    <!--Intro Validation-->
+    <string name="email_required">El correo es requerido</string>
+    <string name="email_not_valid">Ingresa un correo válido</string>
+    <string name="email_is_not_nauta">Ingresa tu correo @nauta.cu</string>
+    <string name="pass_required">La contraseña es requerida</string>
+    <string name="install_yuupi_cuba">Para enviar mensajes fuera de Cuba instala Yuupi Cuba</string>
+    <string name="host_not_connected">
+        No se pudo conectar a tu cuenta de correo. Comprueba los ajustes de red.
     </string>
+    <string name="validate_email_account">
+        Tu cuenta de correo ha sido validada para el envío de mensajes.
+     </string>
 </resources>

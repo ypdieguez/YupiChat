@@ -1,13 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Yuupi</string>
+    <!--MainFragment-->
+    <string name="empty_contacts">No tienes contactos.</string>
 
-    <string name="compose_message_view_hint_text">Send message</string>
-    <string name="mms_text" translatable="false">MMS</string>
+    <!--Converstation fragment-->
+    <string name="compose_message_view_hint_text">Enviar mensaje</string>
     <string name="name">Nombre</string>
     <string name="phone_number">Número de teléfono</string>
-    <string name="empty_contacts">No tienes contactos.</string>
     <string name="save">Guardar</string>
-
     <string name="note">
         Paises disponibles para el envío de mensajes: \n
            - México: +52 \n
@@ -18,52 +18,25 @@
     <!--Intro-->
     <string name="country">País</string>
     <string name="intro_phone_description">
-        Con tu número de teléfono tus contactos podrán responderte.
+        Para que tus contactos puedan responderte ingresa tu número de teléfono
     </string>
-    <string name="read_sms_denied_permanetly">No has concedido el permiso de lectura de sms.
-        Este permiso es necesario para el funcionamiento de la app.</string>
     <string name="intro_conclusion_title">Listo</string>
-    <string name="intro_email_title">Correo</string>
-    <string name="intro_email_description">
-        Con tu cuenta de correo <b>@nauta</b> se enviará los mensajes.
+    <string name="intro_conclusion_description">
+        Has concluido… Ya estás listo para enviar y recibir mensajes.
     </string>
-    <string name="intro_pass_title">Contraseña</string>
-    <string name="intro_pass_description">
-        Con tu contraseña la app accederá a tu cuenta de correo <b>@nauta</b>.
-    </string>
-    <string name="read_sms_denied">Este permiso es necesario</string>
 
     <!--Validation-->
-    <string name="name_required">Name is required.</string>
-    <string name="email_required">Email is required.</string>
-    <string name="email_not_valid">Enter a valid email.</string>
-    <string name="email_is_not_nauta">Ingresa tu correo @nauta.cu.</string>
     <string name="phone_required">Phone is required</string>
     <string name="phone_number_not_valid">Enter a valid phone.</string>
-    <string name="pass_required">Password is required.</string>
+    <string name="choose_country">Elige un país</string>
+    <string name="wrong_user_or_password">Usuario o contraseña incorrecto</string>
+    <string name="unknow_error">Ha ocurrido un error, inténtelo mas tarde</string>
 
-    <!--Intro-->
+    <!--Dialog Permission-->
     <string name="settings">SETTINGS</string>
-
-    <!--Permissions-->
     <string name="not_now">Not Now</string>
     <string name="go_on">Continuar</string>
-    <string name="choose_country">Elige un país</string>
-    <string name="chosse_yuupi_cuba">Para Cuba se encuentra la app Yuupi World</string>
-    <string name="tap_settings_phone"><![CDATA[Toca AJUSTES > Permisos y activa Teléfono]]></string>
-    <string name="active_account">Activar cuenta</string>
-
-    <string name="host_not_connected">
-        Couldn\'t connect to the network. Check your network settings.
-    </string>
-    <string name="validate_user_password">Usuario o contraseña incorrecto</string>
-    <string name="unknow_error">Ha ocurrido algún error, inténtalo más tarde</string>
-
-    <string name="error_not_connected">
-        Turn on mobile data or connect to Wi-fi network.
-    </string>
-
-    <!--WhatsApp permisisons-->
+    <!--Dialog append text-->
     <string name="perm_read_phone_state_and_read_sms">
         Para obtener el número de teléfono y activar la cuenta, permite que Yuupi pueda acceder a tu
         Teléfono y SMS.
@@ -72,8 +45,7 @@
         Toca AJUSTES > Permisos, y activa Teléfono y SMS
     </string>
     <string name="perm_read_phone_state">
-        Para obtener el número de teléfono, permite que Yuupi pueda acceder a tu
-        Teléfono.
+        Para obtener el número de teléfono, permite que Yuupi pueda acceder a tu Teléfono.
     </string>
     <string name="perm_read_phone_state_permanetly_denied">
         Toca AJUSTES > Permisos, y activa Teléfono
@@ -98,8 +70,12 @@
         <item>MX</item>
     </string-array>
 
-    <array name="a">
-        <item value = "a"> A </item>
-    </array>
+    <!--General validation-->
+    <string name="network_not_connected">
+        Active los datos móviles o conéctese a una red Wi-Fi.
+    </string>
+
+    <string name="active_account">Activar cuenta</string>
+    <string name="validate_phone">Validar teléfono:</string>
 
 </resources>

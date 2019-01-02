@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="260dp"
     android:layout_height="wrap_content"
@@ -13,17 +12,17 @@
         android:id="@+id/icons_container"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:background="@drawable/dialog_top_bg"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:background="@drawable/dialog_top_bg">
-    </LinearLayout>
+        android:orientation="horizontal"/>
 
     <LinearLayout
         android:id="@+id/secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/dialog_bottom_bg"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/permission_text"
@@ -32,19 +31,16 @@
             android:layout_weight="1"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
-            android:padding="16dp"
             android:textColor="@color/secondaryTextColor"
             android:textSize="16sp"
-            tools:text="@string/perm_read_sms"/>
+            tools:text="@string/perm_read_sms" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="16dp">
+            android:paddingTop="8dp"
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/permission_no"
@@ -53,6 +49,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:fontFamily="@font/roboto"
                 android:text="@string/not_now"
+                android:padding="8dp"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
@@ -63,6 +60,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:fontFamily="@font/roboto"
                 android:text="@string/go_on"
+                android:padding="8dp"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 

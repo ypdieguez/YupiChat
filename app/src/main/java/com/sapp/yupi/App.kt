@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
+import com.sapp.yupi.util.MailSelector
 import com.sapp.yupi.util.NetworkUtil
 import com.sapp.yupi.util.UserPrefUtil
 
@@ -17,6 +18,7 @@ class App : Application() {
         NetworkUtil.init(this)
         UserPrefUtil.init(this)
         Email.init(this)
+//        MailSelector.init(this)
     }
 
     fun getInst() = this

@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Intro-->
+    <string name="app_name">Yuupi Cuba</string>
     <string name="intro_app_description">
         Contacta con tus familiares y amistades de Cuba.
         \n\n
         Tus mensajes serán enviados usando tu conexión de internet y le llegarán a tus contactos
         como <b>SMS</b>.
     </string>
-    <string name="intro_conclusion_description">
-        Has concluido… Ya estás listo para enviar y recibir mensajes a Cuba.
-    </string>
 
     <!--Intro validation-->
     <string name="country_not_supported">País no soportado.</string>
     <string name="host_not_connected">
-        No se ha podido conectar a la cuenta @nauta. Comprueba los ajustes de la red.
+       No se pudo conectar al servidor. Comprueba los ajustes de la red.
     </string>
 </resources>

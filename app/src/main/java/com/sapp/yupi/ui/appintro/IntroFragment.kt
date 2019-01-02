@@ -1,6 +1,5 @@
 package com.sapp.yupi.ui.appintro
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.ISlidePolicy
+import com.sapp.yupi.R
+import com.sapp.yupi.util.NetworkUtil
 
 private const val ARG_LAYOUT_RES = "layout_res"
 private const val ARG_FRAGMENT_TAG = "fragment_tag"
@@ -19,18 +20,7 @@ private const val ARG_TITLE = "title"
 private const val ARG_IMAGE_RES = "image_res"
 private const val ARG_DESCRIPTION = "description"
 
-open class IntroFragment : Fragment(), ISlidePolicy {
-
-    interface PolicyListener {
-        /**
-         * Validate the view
-         *
-         * @return Pair<Boolean, String?> First parameter: Return true if view has error or false if
-         *                                not.
-         *                                Second parameter: The message of error or null.
-         */
-        fun validate(binding: ViewDataBinding, tag: String): Pair<Boolean, Int?>
-    }
+abstract class IntroFragment : Fragment(), ISlidePolicy {
 
     protected var mTitle: Int = -1
     protected var mImageRes: Int = -1
@@ -41,8 +31,10 @@ open class IntroFragment : Fragment(), ISlidePolicy {
 
     protected var mBinding: ViewDataBinding? = null
 
-    private var mListener: PolicyListener? = null
-    protected lateinit var mError: Pair<Boolean, Int?>
+    protected var errorMsgId = -1
+
+    var isValidating = false
+    var isValid = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,22 +51,36 @@ open class IntroFragment : Fragment(), ISlidePolicy {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, mLayoutRes, container, false)
-
         return mBinding!!.root
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is PolicyListener) {
-            mListener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+    override fun isPolicyRespected() = true
+
+    override fun onUserIllegallyRequestedNextPage() {
+        if (!isValidating) {
+            showError(true)
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        mListener = null
+    protected open fun showError(show: Boolean) {
+        // Do nothing
+    }
+
+    protected open fun setViewStateInActivationMode(enable: Boolean) {
+        (activity as IntroBaseActivity).setButtonState(enable)
+    }
+
+    protected fun goToNextSlide() {
+        (activity as IntroBaseActivity).pager.goToNextSlide()
+    }
+
+    protected fun validateNetworkConnected(): Boolean {
+        errorMsgId = when {
+            !NetworkUtil.isConnected() -> R.string.network_not_connected
+            else -> -1
+        }
+
+        return errorMsgId == -1
     }
 
     fun getBundle(@LayoutRes layoutRes: Int, fragmentTag: String, @StringRes title: Int = -1,
@@ -88,18 +94,4 @@ open class IntroFragment : Fragment(), ISlidePolicy {
                 putInt(ARG_DESCRIPTION, description)
             }
 
-    override fun isPolicyRespected(): Boolean {
-        mListener?.apply {
-            mBinding?.let {
-                mError = validate(it, mTag)
-                return !mError.first
-            }
-        }
-
-        return true
-    }
-
-    override fun onUserIllegallyRequestedNextPage() {
-        // Do nothing
-    }
 }

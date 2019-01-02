@@ -8,6 +8,7 @@ import android.telephony.PhoneNumberUtils
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.sapp.yupi.util.UserPrefUtil
 import com.sapp.yupi.workers.IncomingMsgWorker
 import com.sapp.yupi.workers.KEY_BODY
 import com.sapp.yupi.workers.KEY_DATE
@@ -24,8 +25,8 @@ class ActivationObserver(
 
     override fun handleMsg(id: Long, date: Long, body: String) {
         // Do the work
-        if (body.contentEquals("Cuenta activada.")) {
+//        if (body.contentEquals("Validando teléfono")) {
             listener.success()
-        }
+//        }
     }
 }

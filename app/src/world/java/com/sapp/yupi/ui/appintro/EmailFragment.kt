@@ -8,17 +8,11 @@ import android.util.Patterns
 import android.view.View
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
-import com.github.paolorotolo.appintro.AppIntroBase
 import com.sapp.yupi.*
 import com.sapp.yupi.databinding.ViewIntroEmailBinding
-import com.sapp.yupi.util.NetworkUtil
 import com.sapp.yupi.util.UserPrefUtil
 
 class EmailFragment : IntroFragment() {
-
-    var isValidating = false
-    var isValid = false
-    private var errorMsgId = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (mBinding as ViewIntroEmailBinding).apply {
@@ -48,8 +42,8 @@ class EmailFragment : IntroFragment() {
 
     override fun isPolicyRespected(): Boolean {
         if (!isValidating) {
-            setShowError(false)
-            if (validateEmail() && validatePass() && validateNetworkConnected() && !isValid) {
+            showError(false)
+            if (validateEmail() && validatePass() && !isValid && validateNetworkConnected()) {
                 ValidateEmailAsyncTask().execute()
                 isValidating = true
             }
@@ -58,13 +52,20 @@ class EmailFragment : IntroFragment() {
         return isValid
     }
 
-    override fun onUserIllegallyRequestedNextPage() {
-        if (!isValidating) {
-            setShowError(true)
+    override fun setViewStateInActivationMode(enable: Boolean) {
+        super.setViewStateInActivationMode(enable)
+
+        (mBinding as ViewIntroEmailBinding).apply {
+            spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
+            textInputEmail.isEnabled = enable
+            textInputLayoutEmail.isEnabled = enable
+            textInputPass.isEnabled = enable
+            textInputLayoutPass.isEnabled = enable
+            textInputLayoutPass.isPasswordVisibilityToggleEnabled = enable
         }
     }
 
-    private fun setShowError(show: Boolean) {
+    override fun showError(show: Boolean) {
         (mBinding as ViewIntroEmailBinding).apply {
             if (show) {
                 textViewError.setText(errorMsgId)
@@ -112,9 +113,9 @@ class EmailFragment : IntroFragment() {
             return if (errorMsgId != -1) {
                 false
             } else {
-                if (UserPrefUtil.getPass() != pass) {
+                if (UserPrefUtil.getEmailPass() != pass) {
                     // Save to Preferences
-                    UserPrefUtil.setPass(pass)
+                    UserPrefUtil.setEmailPass(pass)
                     isValid = false
                 }
 
@@ -123,60 +124,39 @@ class EmailFragment : IntroFragment() {
         }
     }
 
-    private fun validateNetworkConnected(): Boolean {
-        errorMsgId = when {
-            !NetworkUtil.isConnected() -> R.string.error_not_conected
-            else -> -1
-        }
-
-        return errorMsgId == -1
-    }
-
     @SuppressLint("StaticFieldLeak")
     private inner class ValidateEmailAsyncTask : AsyncTask<String, Void, Byte>() {
         override fun onPreExecute() {
-            setVisibility(false)
+            setViewStateInActivationMode(false)
         }
 
         override fun doInBackground(vararg strings: String): Byte {
-            return Email.send("2Dzf4fCdJqMiAfZr@gmail.com", "Yuuupi Telegram",
-                    "Suscripcion")
+            return Email.send(UserPrefUtil.getEmail(), getString(R.string.app_name),
+                    getString(R.string.validate_email_account))
         }
 
         override fun onPostExecute(result: Byte) {
             (mBinding as ViewIntroEmailBinding).apply {
 
-                setVisibility(true)
+                setViewStateInActivationMode(true)
 
-                val msgId: Int = when (result) {
-                    STATUS_MAIL_CONNECT_EXCEPTION -> R.string.validate_network_conection
-                    STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.validate_user_password
+                errorMsgId = when (result) {
+                    STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected
+                    STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.wrong_user_or_password
                     STATUS_OHTER_EXCEPTION -> R.string.unknow_error
                     else -> -1
                 }
 
-                isValid = if (msgId != -1) {
-                    textViewError.setText(msgId)
-                    textViewError.visibility = View.VISIBLE
+                isValid = if (errorMsgId != -1) {
+                    showError(true)
                     false
                 } else {
-                    textViewError.visibility = View.GONE
-                    (activity as AppIntroBase).pager.goToNextSlide()
+                    showError(false)
+                    goToNextSlide()
                     true
                 }
 
                 isValidating = false
-            }
-        }
-
-        private fun setVisibility(visible: Boolean) {
-            (mBinding as ViewIntroEmailBinding).apply {
-                spinKit.visibility = if (visible) ProgressBar.GONE else ProgressBar.VISIBLE
-                textInputEmail.isEnabled = visible
-                textInputLayoutEmail.isEnabled = visible
-                textInputPass.isEnabled = visible
-                textInputLayoutPass.isEnabled = visible
-                textInputLayoutPass.isPasswordVisibilityToggleEnabled = visible
             }
         }
     }
