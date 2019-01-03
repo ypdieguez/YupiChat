@@ -19,7 +19,14 @@ class EmailFragment : IntroFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (mBinding as ViewIntroEmailBinding).apply {
             textInputEmail.apply {
+
+                val mail = UserPrefUtil.getEmail()
+                if(mail.isNotEmpty()) {
+                    setText(UserPrefUtil.getEmail())
+                }
+
                 setSuffix("@nauta.cu")
+
                 setOnTouchListener { _, _ ->
                     extraFields.textViewError.visibility = View.GONE
                     false
@@ -27,6 +34,11 @@ class EmailFragment : IntroFragment() {
             }
 
             textInputPass.apply {
+                val pass = UserPrefUtil.getEmailPass()
+                if (pass.isNotEmpty()) {
+                    setText(pass)
+                }
+
                 setOnTouchListener { _, _ ->
                     extraFields.textViewError.visibility = View.GONE
                     false

@@ -24,12 +24,18 @@ class PhoneFragment : PhoneBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         (mBinding as ViewIntroPhoneBinding).apply {
             textInputPhone.apply {
+
                 setOnTouchListener { _, _ ->
                     extraFields.textViewError.visibility = View.GONE
                     false
                 }
 
                 setPrefix(PREFIX_CUBA)
+
+                val phone = UserPrefUtil.getPhone()
+                if (phone.isNotEmpty()) {
+                    setText(phone)
+                }
             }
         }
     }
@@ -43,30 +49,27 @@ class PhoneFragment : PhoneBaseFragment() {
         }
     }
 
-    @SuppressLint("HardwareIds")
+    @SuppressLint("MissingPermission", "HardwareIds")
     override fun tryGetPhoneNumber() {
         context?.let {
-            if (ContextCompat.checkSelfPermission(it, Manifest.permission.READ_PHONE_STATE) ==
-                    PackageManager.PERMISSION_GRANTED) {
-                (mBinding as ViewIntroPhoneBinding).apply {
-                    textInputPhone.apply {
-                        val text = text.toString()
-                        if (text.isEmpty() || text == getPrefix()) {
-                            val tMgr = context?.getSystemService(Context.TELEPHONY_SERVICE)
-                                    as TelephonyManager
-                            val number = tMgr.line1Number
+            (mBinding as ViewIntroPhoneBinding).apply {
+                textInputPhone.apply {
+                    val text = text.toString()
+                    if (text.isEmpty() || text == getPrefix()) {
+                        val tMgr = context?.getSystemService(Context.TELEPHONY_SERVICE)
+                                as TelephonyManager
+                        val number = tMgr.line1Number
 
-                            if (number.isNotEmpty() && Patterns.PHONE.matcher(number).matches()) {
-                                val phoneUtil = PhoneNumberUtil.getInstance()
-                                try {
-                                    val phoneNumber = phoneUtil.parse(number, "CU")
-                                    val countryCode = phoneNumber.countryCode
+                        if (number.isNotEmpty() && Patterns.PHONE.matcher(number).matches()) {
+                            val phoneUtil = PhoneNumberUtil.getInstance()
+                            try {
+                                val phoneNumber = phoneUtil.parse(number, "CU")
+                                val countryCode = phoneNumber.countryCode
 
-                                    setPrefix("+$countryCode ")
-                                    append(phoneNumber.nationalNumber.toString())
-                                } catch (e: NumberParseException) {
-                                    setPrefix(PREFIX_CUBA)
-                                }
+                                setPrefix("+$countryCode ")
+                                append(phoneNumber.nationalNumber.toString())
+                            } catch (e: NumberParseException) {
+                                setPrefix(PREFIX_CUBA)
                             }
                         }
                     }

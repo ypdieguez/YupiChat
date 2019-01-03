@@ -6,14 +6,16 @@
     <string name="intro_app_description">
         Contacta con tus familiares y amistades de Canadá, Estados Unidos o México.
         \n\n
-        Tus mensajes serán enviados usando tu cuenta de correo <b>@nauta</b> a través de los datos
-        móviles y tus contactos los recibirán como <b>sms</b>.
+        Tus mensajes serán enviados a través de tu cuenta de correo <b>@nauta</b> y tus contactos los
+        recibirán como <b>sms</b>.
     </string>
     <string name="intro_email_title">Correo</string>
     <string name="intro_email_description">
         Para enviar los mensajes ingresa tu cuenta de correo <b>@nauta</b>
     </string>
-    <string name="intro_pass_title">Contraseña</string>
+    <string name="user">Usuario</string>
+    <string name="pass">Contraseña</string>
+
 
     <!--Intro Validation-->
     <string name="email_required">El correo es requerido</string>

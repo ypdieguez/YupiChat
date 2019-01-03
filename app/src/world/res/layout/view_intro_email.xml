@@ -39,7 +39,7 @@
                     <com.sapp.yupi.ui.appintro.ExtendedEditText
                         android:id="@+id/text_input_email"
                         style="@style/IntroTextInputEditText"
-                        android:hint="@string/intro_email_title"
+                        android:hint="@string/user"
                         android:inputType="text" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -56,7 +56,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/text_input_pass"
                         style="@style/IntroTextInputEditText"
-                        android:hint="@string/intro_pass_title"
+                        android:hint="@string/pass"
                         android:inputType="textPassword" />
 
                 </com.google.android.material.textfield.TextInputLayout>

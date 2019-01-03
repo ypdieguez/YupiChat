@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.AppIntro
 import com.sapp.yupi.R
 import com.sapp.yupi.ui.MainActivity
+import com.sapp.yupi.util.UserPrefUtil
 
 abstract class IntroBaseActivity : AppIntro() {
 
@@ -38,6 +39,7 @@ abstract class IntroBaseActivity : AppIntro() {
     }
 
     override fun onDonePressed(currentFragment: Fragment?) {
+        UserPrefUtil.setFirstLaunch()
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }

@@ -10,6 +10,8 @@ const val PREF_PHONE = "phone"
 const val PREF_EMAIL = "email"
 const val PREF_EMAIL_PASS = "email_pass"
 
+const val PREF_FIRST_LAUNCH = "first_launch"
+
 class UserPrefUtil {
     companion object {
         private lateinit var pref: SharedPreferences
@@ -19,9 +21,14 @@ class UserPrefUtil {
             pref = context.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE)
         }
 
-        fun check(): Boolean {
-            return getEmail().isNotEmpty() && getEmailPass().isNotEmpty() && getPhone().isNotEmpty()
+        fun check(): Boolean = !isFirstLaunch() && getEmail().isNotEmpty() &&
+                getEmailPass().isNotEmpty() && getPhone().isNotEmpty()
+
+        fun setFirstLaunch() {
+            pref.edit { putBoolean(PREF_FIRST_LAUNCH, false) }
         }
+
+        private fun isFirstLaunch() = pref.getBoolean(PREF_FIRST_LAUNCH, true)
 
         fun setEmail(email: String) {
             pref.edit { putString(PREF_EMAIL, email) }
