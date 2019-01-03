@@ -37,19 +37,6 @@
     <string name="not_now">Ahora no</string>
     <string name="go_on">Continuar</string>
     <!--Dialog append text-->
-    <string name="perm_read_phone_state_and_read_sms">
-        Para obtener el número de teléfono y validarlo, permite que %s pueda acceder a tu
-        Teléfono y SMS.
-    </string>
-    <string name="perm_read_phone_state_and_read_sms_permanetly_denied">
-        Toca AJUSTES > Permisos, y activa Teléfono y SMS
-    </string>
-    <string name="perm_read_phone_state">
-        Para obtener el número de teléfono, permite que %s pueda acceder a tu Teléfono.
-    </string>
-    <string name="perm_read_phone_state_permanetly_denied">
-        Toca AJUSTES > Permisos, y activa Teléfono
-    </string>
     <string name="perm_read_sms">
         Para validar el número teléfono, permite que %s pueda acceder a tus SMS.
     </string>

@@ -12,6 +12,8 @@ import com.sapp.yupi.*
 import com.sapp.yupi.databinding.ViewIntroEmailBinding
 import com.sapp.yupi.util.UserPrefUtil
 
+const val TAG_FRAGMENT_EMAIL = "fragment_mail"
+
 class EmailFragment : IntroFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -19,14 +21,14 @@ class EmailFragment : IntroFragment() {
             textInputEmail.apply {
                 setSuffix("@nauta.cu")
                 setOnTouchListener { _, _ ->
-                    textViewError.visibility = View.GONE
+                    extraFields.textViewError.visibility = View.GONE
                     false
                 }
             }
 
             textInputPass.apply {
                 setOnTouchListener { _, _ ->
-                    textViewError.visibility = View.GONE
+                    extraFields.textViewError.visibility = View.GONE
                     false
                 }
 
@@ -56,7 +58,7 @@ class EmailFragment : IntroFragment() {
         super.setViewStateInActivationMode(enable)
 
         (mBinding as ViewIntroEmailBinding).apply {
-            spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
+            extraFields.spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
             textInputEmail.isEnabled = enable
             textInputLayoutEmail.isEnabled = enable
             textInputPass.isEnabled = enable
@@ -66,7 +68,7 @@ class EmailFragment : IntroFragment() {
     }
 
     override fun showError(show: Boolean) {
-        (mBinding as ViewIntroEmailBinding).apply {
+        (mBinding as ViewIntroEmailBinding).extraFields.apply {
             if (show) {
                 textViewError.setText(errorMsgId)
                 textViewError.visibility = View.VISIBLE

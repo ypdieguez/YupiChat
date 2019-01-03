@@ -14,9 +14,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
     <style name="AppIntroTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowFullscreen">true</item>
@@ -36,7 +36,9 @@
         <item name="android:background">@null</item>
         <item name="android:scrollHorizontally">false</item>
         <item name="android:textCursorDrawable">@null</item>
-        <item name="android:inputType">textShortMessage|textAutoCorrect|textCapSentences|textMultiLine</item>
+        <item name="android:inputType">
+            textShortMessage|textAutoCorrect|textCapSentences|textMultiLine
+        </item>
     </style>
 
     <style name="ComposeMessageViewTextCounterStyle">
@@ -108,6 +110,8 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/background</item>
         <item name="android:orientation">vertical</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
         <item name="android:paddingBottom">@dimen/appIntroBottomBarHeight</item>
     </style>
 
@@ -144,7 +148,7 @@
     <style name="IntroDescLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">7</item>
+        <item name="android:layout_weight">8</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:weightSum">1</item>
@@ -161,8 +165,40 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="ass">
-        <item name="android:color">#F44336</item>
+    <style name="IntroFieldsLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">5</item>"
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="IntroTextFieldsLayout">
+        <item name="android:layout_width">match_parent</item>"
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:baselineAligned">false</item>
+        <item name="android:gravity">center</item>
+        <item name="android:weightSum">1</item>
+    </style>
+
+    <style name="IntroTextInputLayout">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_weight">0.9</item>
+    </style>
+
+    <style name="IntroTextInputEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="IntroDescLayoutWithFields" parent="IntroDescLayout">
+        <item name="android:layout_weight">3</item>
     </style>
 
 </resources>

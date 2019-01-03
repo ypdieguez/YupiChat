@@ -9,15 +9,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sapp.yupi.R
-import kotlinx.android.synthetic.main.intro_country_list_dialog.*
-import kotlinx.android.synthetic.main.intro_country_list_dialog_item.view.*
+import kotlinx.android.synthetic.cuba.country_list_dialog.*
+import kotlinx.android.synthetic.cuba.country_list_dialog_item.view.*
 
 class CountryListDialogFragment : BottomSheetDialogFragment() {
     private var mListener: Listener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.intro_country_list_dialog, container, false)
+        return inflater.inflate(R.layout.country_list_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class CountryListDialogFragment : BottomSheetDialogFragment() {
     }
 
     private inner class ViewHolder internal constructor(inflater: LayoutInflater, parent: ViewGroup)
-        : RecyclerView.ViewHolder(inflater.inflate(R.layout.intro_country_list_dialog_item,
+        : RecyclerView.ViewHolder(inflater.inflate(R.layout.country_list_dialog_item,
             parent, false)) {
 
         internal val text: TextView = itemView.text
@@ -55,7 +55,7 @@ class CountryListDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private inner class CountryAdapter: RecyclerView.Adapter<ViewHolder>() {
+    private inner class CountryAdapter : RecyclerView.Adapter<ViewHolder>() {
         val mCountries: Array<String> = resources.getStringArray(R.array.countries_name)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

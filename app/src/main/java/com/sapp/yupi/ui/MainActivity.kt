@@ -12,24 +12,16 @@ import androidx.navigation.ui.NavigationUI
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ActivityMainBinding
 import com.sapp.yupi.ui.appintro.IntroActivity
-import com.sapp.yupi.ui.appintro.USER_PREFERENCES
-import com.sapp.yupi.util.UIUtils
-
-
-const val FIRST_LAUNCH = "first_launch"
+import com.sapp.yupi.util.UserPrefUtil
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val pref = getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE)
-
-        if(/*!pref.getBoolean(FIRST_LAUNCH, true)*/true) {
+        if (!UserPrefUtil.check()) {
             startActivity(Intent(this, IntroActivity::class.java))
             finish()
-        } else if (!UIUtils.checkReadSmsPermission(this)) {
-            
         } else {
 
             val binding: ActivityMainBinding =

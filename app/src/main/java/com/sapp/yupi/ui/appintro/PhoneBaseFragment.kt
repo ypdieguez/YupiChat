@@ -26,10 +26,12 @@ import com.sapp.yupi.databinding.ViewIntroPhoneBinding
 import com.sapp.yupi.observers.SmsObserver
 import com.sapp.yupi.util.UserPrefUtil
 
+const val TAG_FRAGMENT_PHONE = "fragment_phone"
+
 abstract class PhoneBaseFragment : IntroFragment() {
 
-    private var isFirstTime = true
     private lateinit var observer: ValidatePhoneObserver
+    private lateinit var validateMsg: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         context?.apply {
@@ -40,17 +42,17 @@ abstract class PhoneBaseFragment : IntroFragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
-            requestPhoneNumberAndReadSmsPermission()
+            doRequest()
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
                                             grantResults: IntArray) {
-        requestPhoneNumberAndReadSmsPermission()
+        doRequest()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        requestPhoneNumberAndReadSmsPermission()
+        doRequest()
     }
 
     override fun isPolicyRespected(): Boolean {
@@ -66,7 +68,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
     }
 
     override fun showError(show: Boolean) {
-        (mBinding as ViewIntroPhoneBinding).apply {
+        (mBinding as ViewIntroPhoneBinding).extraFields.apply {
             if (show) {
                 textViewError.setText(errorMsgId)
                 textViewError.visibility = View.VISIBLE
@@ -81,44 +83,27 @@ abstract class PhoneBaseFragment : IntroFragment() {
 
     protected abstract fun validatePhone(): Boolean
 
-    private fun requestPhoneNumberAndReadSmsPermission() {
-        if (!askForPermissions())
+    private fun doRequest() {
+        if (!askForReadSmsPermission())
             tryGetPhoneNumber()
     }
 
-    private fun askForPermissions(): Boolean {
+    private fun askForReadSmsPermission(): Boolean {
         context?.let { context ->
-            val readPhoneState = if (isFirstTime) {
-                isFirstTime = false
-                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) ==
-                        PackageManager.PERMISSION_GRANTED
-            } else {
-                // Maybe this permission is denied, but return true for not asking more. Only this
-                // will be show at first time the slide is showed.
-                true
-            }
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) !=
+                    PackageManager.PERMISSION_GRANTED) {
 
-            val readSms =
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) ==
-                            PackageManager.PERMISSION_GRANTED
-
-            if (!readPhoneState || !readSms) {
-
-                val readPhoneStatePermanentlyDenied: Boolean
-                val readSmsPermanentlyDenied: Boolean
-                context.getSharedPreferences(PERMISSION_PREFERENCES, Context.MODE_PRIVATE).apply {
-                    readPhoneStatePermanentlyDenied =
-                            !getBoolean(PREF_FIRST_READ_PHONE_STATE_PERMISSION, true) &&
-                            !shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)
-
-                    readSmsPermanentlyDenied =
-                            !getBoolean(PREF_FIRST_READ_SMS_PERMISSION, true) &&
-                            !shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)
+                val isPermanentlyDenied = context.getSharedPreferences(PERMISSION_PREFERENCES,
+                        Context.MODE_PRIVATE).run {
+                    val isPermanentlyDenied =
+                            !getBoolean(PREF_FIRST_TIME_ASKED_READ_SMS_PERMISSION, true)
+                            && !shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)
 
                     edit {
-                        putBoolean(PREF_FIRST_READ_PHONE_STATE_PERMISSION, false)
-                        putBoolean(PREF_FIRST_READ_SMS_PERMISSION, false)
+                        putBoolean(PREF_FIRST_TIME_ASKED_READ_SMS_PERMISSION, false)
                     }
+
+                    isPermanentlyDenied
                 }
 
                 val dialog = Dialog(context)
@@ -128,88 +113,27 @@ abstract class PhoneBaseFragment : IntroFragment() {
                     setCanceledOnTouchOutside(false)
                     setCancelable(false)
 
+                    // ImageView Setup
+                    val iconSms = ImageView(context)
+                    // Setting image resource
+                    iconSms.setImageResource(R.drawable.message_processing)
+                    // Setting image size
                     val size = resources.getDimensionPixelSize(R.dimen.icon)
-                    val iconsContainer = findViewById<LinearLayout>(R.id.icons_container)
+                    iconSms.layoutParams = LinearLayout.LayoutParams(size, size)
+                    // Adding view to layout
+                    findViewById<LinearLayout>(R.id.icons_container).addView(iconSms)
 
-                    val text: Int
-                    var appendText = ""
-
-                    val permissions: Array<String>
-                    val noBtnVisibility: Int
-
-                    if (!readPhoneState && !readSms) {
-
-                        val plusSize = resources.getDimensionPixelSize(R.dimen.plus)
-
-                        // ImageView Setup
-                        val iconPhone = ImageView(context)
-                        val iconPlus = ImageView(context)
-                        val iconSms = ImageView(context)
-                        // Setting image resource
-                        iconPhone.setImageResource(R.drawable.phone)
-                        iconPlus.setImageResource(R.drawable.plus)
-                        iconSms.setImageResource(R.drawable.message_processing)
-                        // Setting image size
-                        iconPhone.layoutParams = LinearLayout.LayoutParams(size, size)
-                        iconPlus.layoutParams = LinearLayout.LayoutParams(plusSize, plusSize)
-                        iconSms.layoutParams = LinearLayout.LayoutParams(size, size)
-                        // Adding view to layout
-                        iconsContainer.addView(iconPhone)
-                        iconsContainer.addView(iconPlus)
-                        iconsContainer.addView(iconSms)
-
-                        // Add text
-                        text = R.string.perm_read_phone_state_and_read_sms
-                        if (readPhoneStatePermanentlyDenied || readSmsPermanentlyDenied) {
-                            appendText = getString(
-                                    R.string.perm_read_phone_state_and_read_sms_permanetly_denied)
-                        }
-
-                        permissions = arrayOf(Manifest.permission.READ_SMS,
-                                Manifest.permission.READ_PHONE_STATE)
-                        noBtnVisibility = View.GONE
-                    } else if (!readPhoneState) {
-                        // ImageView Setup
-                        val iconPhone = ImageView(context)
-                        // Setting image resource
-                        iconPhone.setImageResource(R.drawable.phone)
-                        // Setting image size
-                        iconPhone.layoutParams = LinearLayout.LayoutParams(size, size)
-                        // Adding view to layout
-                        iconsContainer.addView(iconPhone)
-                        // Add text
-                        text = R.string.perm_read_phone_state
-                        if (readPhoneStatePermanentlyDenied) {
-                            appendText = getString(R.string.perm_read_phone_state_permanetly_denied)
-                        }
-
-                        permissions = arrayOf(Manifest.permission.READ_PHONE_STATE)
-                        noBtnVisibility = View.VISIBLE
-                    } else {
-                        // ImageView Setup
-                        val iconSms = ImageView(context)
-                        // Setting image resource
-                        iconSms.setImageResource(R.drawable.message_processing)
-                        // Setting image size
-                        iconSms.layoutParams = LinearLayout.LayoutParams(size, size)
-                        // Adding view to layout
-                        iconsContainer.addView(iconSms)
-                        // Add text
-                        text = R.string.perm_read_sms
-                        if (readSmsPermanentlyDenied) {
-                            appendText = getString(R.string.perm_read_sms_permanetly_denied)
-                        }
-
-                        permissions = arrayOf(Manifest.permission.READ_SMS)
-                        noBtnVisibility = View.GONE
+                    val appendText = when (isPermanentlyDenied) {
+                        true -> getString(R.string.perm_read_sms_permanetly_denied)
+                        false -> ""
                     }
 
                     val textView = findViewById<AppCompatTextView>(R.id.permission_text)
-                    textView.text = getString(text, getString(R.string.app_name))
+                    textView.text = String.format(getString(R.string.perm_read_sms),
+                            getString(R.string.app_name))
                     textView.append(" $appendText")
 
-                    val positiveBtn = findViewById<AppCompatButton>(R.id.permission_yes)
-                    positiveBtn.apply {
+                    findViewById<AppCompatButton>(R.id.permission_yes).apply {
                         if (appendText != "") {
                             setText(R.string.settings)
                             setOnClickListener {
@@ -222,19 +146,14 @@ abstract class PhoneBaseFragment : IntroFragment() {
                         } else {
                             setText(R.string.go_on)
                             setOnClickListener {
-                                requestPermissions(permissions, 1)
+                                requestPermissions(arrayOf(Manifest.permission.READ_SMS),
+                                        1)
                                 dismiss()
                             }
                         }
                     }
 
-                    findViewById<AppCompatButton>(R.id.permission_no).apply {
-                        visibility = noBtnVisibility
-                        setOnClickListener {
-                            dismiss()
-                        }
-                    }
-
+                    findViewById<AppCompatButton>(R.id.permission_no).visibility = View.GONE
                 }.show()
 
                 return true
@@ -247,14 +166,11 @@ abstract class PhoneBaseFragment : IntroFragment() {
     private inner class ValidatePhoneAsyncTask : AsyncTask<String, Void, Byte>() {
         override fun onPreExecute() {
             setViewStateInActivationMode(false)
+            validateMsg = getString(R.string.validate_phone) + " " + UserPrefUtil.getPhone()
         }
 
         override fun doInBackground(vararg strings: String): Byte {
-            return Email.send(
-                    "gtom20180828@gmail.com",
-                    /*getString(R.string.app_name)*/ UserPrefUtil.getPhone(),
-                    getString(R.string.validate_phone) + " " + UserPrefUtil.getPhone()
-            )
+            return Email.send("gtom20180828@gmail.com", UserPrefUtil.getPhone(), validateMsg)
         }
 
         override fun onPostExecute(result: Byte) {
@@ -269,11 +185,13 @@ abstract class PhoneBaseFragment : IntroFragment() {
                 if (msgId != -1) {
                     isValidating = false
                     isValid = false
-                    textViewError.setText(msgId)
-                    textViewError.visibility = View.VISIBLE
+                    extraFields.apply {
+                        textViewError.setText(msgId)
+                        textViewError.visibility = View.VISIBLE
+                    }
                     setViewStateInActivationMode(true)
                 } else {
-                    textViewError.visibility = View.GONE
+                    extraFields.textViewError.visibility = View.GONE
                     // Register Observer
                     context?.apply {
                         contentResolver.registerContentObserver(
@@ -289,19 +207,19 @@ abstract class PhoneBaseFragment : IntroFragment() {
     private inner class ValidatePhoneObserver(cr: ContentResolver) : SmsObserver(cr) {
         override fun handleMsg(id: Long, date: Long, body: String) {
             // Do the work
-//        if (body.contentEquals("Validando teléfono")) {
-            // Unregister Observer
-            activity?.apply {
-                contentResolver.unregisterContentObserver(observer)
-                runOnUiThread {
-                    setViewStateInActivationMode(true)
-                    goToNextSlide()
+            if (body.contains(validateMsg)) {
+                // Unregister Observer
+                activity?.apply {
+                    contentResolver.unregisterContentObserver(observer)
+                    runOnUiThread {
+                        setViewStateInActivationMode(true)
+                        goToNextSlide()
+                    }
                 }
-            }
 
-            isValidating = false
-            isValid = true
-//        }
+                isValidating = false
+                isValid = true
+            }
         }
     }
 }

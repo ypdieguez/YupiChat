@@ -7,9 +7,9 @@ import androidx.annotation.StringRes
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroBinding
 
-private const val TAG_FRAGMENT_PRESENTATION = "fragment_presentation"
+private const val TAG_FRAGMENT_BASIC = "fragment_presentation"
 
-class PresentationFragment : IntroFragment() {
+class BasicFragment : IntroFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (mBinding as ViewIntroBinding).apply {
@@ -23,10 +23,10 @@ class PresentationFragment : IntroFragment() {
         @JvmStatic
         fun newInstance(@StringRes title: Int, @DrawableRes imageRes: Int,
                         @StringRes description: Int) =
-                PresentationFragment().apply {
+                BasicFragment().apply {
                     arguments = getBundle(
                             R.layout.view_intro,
-                            TAG_FRAGMENT_PRESENTATION,
+                            TAG_FRAGMENT_BASIC,
                             title,
                             imageRes,
                             description

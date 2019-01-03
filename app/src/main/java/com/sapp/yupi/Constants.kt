@@ -31,5 +31,4 @@ const val STATUS_SUCCESS: Byte = 2
  * Preferences permissions
  */
 const val PERMISSION_PREFERENCES = "permissions_preferences"
-const val PREF_FIRST_READ_PHONE_STATE_PERMISSION = "first_read_phone_state_permission"
-const val PREF_FIRST_READ_SMS_PERMISSION = "first_read_sms_permission"
+const val PREF_FIRST_TIME_ASKED_READ_SMS_PERMISSION = "first_time_asked_read_sms_permission"

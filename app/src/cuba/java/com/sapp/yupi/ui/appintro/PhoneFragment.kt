@@ -12,7 +12,6 @@ import android.view.WindowManager
 import android.widget.ProgressBar
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroPhoneBinding
 import com.sapp.yupi.util.UserPrefUtil
@@ -20,7 +19,6 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
 import java.util.*
-
 
 class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
 
@@ -34,7 +32,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
 
                 setOnTouchListener { _, event ->
                     if (event.action == KeyEvent.ACTION_UP) {
-                        textViewError.visibility = View.GONE
+                        extraFields.textViewError.visibility = View.GONE
 
                         if (KeyboardVisibilityEvent.isKeyboardVisible(activity)) {
                             // This code do next:
@@ -56,35 +54,34 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
             textInputPhone.apply {
                 setOnTouchListener { _, event ->
                     if (event.action == KeyEvent.ACTION_DOWN) {
-                        textInputCountry.text.apply {
-                            if (toString() == "Cuba" || getPrefix() == "+53") {
-                                textViewError.text = getString(R.string.chosse_yuupi_cuba)
-                                textViewError.visibility = View.VISIBLE
-                                return@setOnTouchListener true
+                        textInputCountry.text.toString().let { country ->
+                            errorMsgId = if (country.isEmpty()) {
+                                R.string.choose_country
+                            } else if (country == "Cuba" || getPrefix() == "+53") {
+                                R.string.install_yuupi_world
                             } else if (!resources.getStringArray(R.array.countries_name)
-                                            .contains(toString())) {
-                                textViewError.text = getString(R.string.choose_country)
-                                textViewError.visibility = View.VISIBLE
-                                return@setOnTouchListener true
+                                            .contains(country)) {
+                                R.string.country_not_supported
                             } else {
-                                textViewError.visibility = View.GONE
+                                -1
                             }
+
+                            val flag = errorMsgId != -1
+                            showError(flag)
+                            return@setOnTouchListener flag
                         }
                     }
                     return@setOnTouchListener false
                 }
             }
         }
+
+        fillFields(UserPrefUtil.getPhone())
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
-            if (isFirstTime) {
-                checkPermissions()
-                isFirstTime = false
-            }
-
             // Code added to avoid exception:
             // Parameter:activity window SoftInputMethod is not ADJUST_RESIZE
             activity!!.window.attributes.softInputMode =
@@ -110,46 +107,36 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
         (mBinding as ViewIntroPhoneBinding).apply {
             var country = textInputCountry.text?.toString() ?: ""
             var number = textInputPhone.text?.toString() ?: ""
-            if (country.isEmpty() || country == getString(R.string.choose_country) && number.isEmpty()) {
+            if (country.isEmpty() && number.isEmpty()) {
                 val tMgr = context?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
                 number = tMgr.line1Number
                 val networkCountryIso = tMgr.networkCountryIso
                 val simCountryIso = tMgr.simCountryIso
 
-                if (number.isNotEmpty() && Patterns.PHONE.matcher(number).matches()) {
-                    val phoneUtil = PhoneNumberUtil.getInstance()
-                    val geocoder = PhoneNumberOfflineGeocoder.getInstance()
-                    val phoneNumber = phoneUtil.parse(number, null)
+                if (!fillFields(number)) {
+                    if (networkCountryIso.isNotEmpty() || simCountryIso.isNotEmpty()) {
+                        val iso = (networkCountryIso ?: simCountryIso).toUpperCase()
+                        val phoneUtil = PhoneNumberUtil.getInstance()
 
-                    country = geocoder.getDescriptionForNumber(phoneNumber, Locale.getDefault())
-                    val countryCode = phoneNumber.countryCode
-
-                    textInputCountry.setText(country)
-                    textInputPhone.setPrefix("+$countryCode ")
-                    textInputPhone.append(phoneNumber.nationalNumber.toString())
-
-                } else if (networkCountryIso.isNotEmpty() || simCountryIso.isNotEmpty()) {
-                    val iso = (networkCountryIso ?: simCountryIso).toUpperCase()
-                    val phoneUtil = PhoneNumberUtil.getInstance()
-
-                    country = Locale(Locale.getDefault().language, iso).displayCountry
-                    val countryCode = phoneUtil.getCountryCodeForRegion(iso)
-
-                    textInputCountry.setText(country)
-                    textInputPhone.setPrefix("+$countryCode ")
-                    textInputPhone.setText("")
-                } else {
-                    val phoneUtil = PhoneNumberUtil.getInstance()
-                    val locale = Locale.getDefault()
-
-                    country = locale.displayCountry
-                    textInputCountry.setText(country)
-
-                    val iso = locale.country.toUpperCase()
-                    if (iso.isNotEmpty()) {
+                        country = Locale(Locale.getDefault().language, iso).displayCountry
                         val countryCode = phoneUtil.getCountryCodeForRegion(iso)
+
+                        textInputCountry.setText(country)
                         textInputPhone.setPrefix("+$countryCode ")
                         textInputPhone.setText("")
+                    } else {
+                        val phoneUtil = PhoneNumberUtil.getInstance()
+                        val locale = Locale.getDefault()
+
+                        country = locale.displayCountry
+                        textInputCountry.setText(country)
+
+                        val iso = locale.country.toUpperCase()
+                        if (iso.isNotEmpty()) {
+                            val countryCode = phoneUtil.getCountryCodeForRegion(iso)
+                            textInputPhone.setPrefix("+$countryCode ")
+                            textInputPhone.setText("")
+                        }
                     }
                 }
             }
@@ -169,8 +156,9 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
     }
 
     override fun setViewStateInActivationMode(enable: Boolean) {
+        super.setViewStateInActivationMode(enable)
         (mBinding as ViewIntroPhoneBinding).apply {
-            spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
+            extraFields.spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
             textInputCountry.isEnabled = enable
             textInputLayoutCountry.isEnabled = enable
             textInputPhone.isEnabled = enable
@@ -190,7 +178,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
             errorMsgId = when {
                 country.isEmpty() -> R.string.choose_country
                 country == getString(R.string.choose_country) -> R.string.choose_country
-                country == "Cuba" -> R.string.chosse_yuupi_cuba
+                country == "Cuba" -> R.string.install_yuupi_world
                 index == -1 -> R.string.country_not_supported
                 phone.isEmpty() -> R.string.phone_required
                 !Patterns.PHONE.matcher(phone).matches() -> R.string.phone_number_not_valid
@@ -215,6 +203,29 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
         }
 
         return errorMsgId == -1
+    }
+
+    private fun fillFields(number: String): Boolean {
+        if (number.isNotEmpty() && Patterns.PHONE.matcher(number).matches()) {
+            (mBinding as ViewIntroPhoneBinding).apply {
+                return try {
+                    val phoneUtil = PhoneNumberUtil.getInstance()
+                    val phoneNumber = phoneUtil.parse(number, null)
+                    val regionCode = phoneUtil.getRegionCodeForNumber(phoneNumber)
+
+                    val country = Locale(Locale.getDefault().language, regionCode).displayCountry
+                    val countryCode = phoneNumber.countryCode
+
+                    textInputCountry.setText(country)
+                    textInputPhone.setPrefix("+$countryCode ")
+                    textInputPhone.append(phoneNumber.nationalNumber.toString())
+                    true
+                } catch (e: NumberParseException) {
+                    false
+                }
+            }
+        }
+        return false
     }
 
     companion object {

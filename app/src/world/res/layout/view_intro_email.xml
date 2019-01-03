@@ -19,9 +19,7 @@
                 tools:ignore="ContentDescription" />
         </LinearLayout>
 
-        <LinearLayout
-            style="@style/IntroDescLayout"
-            android:layout_weight="2">
+        <LinearLayout style="@style/IntroDescLayoutWithFields">
 
             <TextView
                 android:id="@+id/description"
@@ -30,101 +28,43 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
-            android:focusableInTouchMode="true"
-            android:gravity="center"
-            android:orientation="vertical">
+        <LinearLayout style="@style/IntroFieldsLayout">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:baselineAligned="false"
-                android:gravity="center"
-                android:weightSum="1">
+            <LinearLayout style="@style/IntroTextFieldsLayout">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_layout_email"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.9">
+                    style="@style/IntroTextInputLayout">
 
                     <com.sapp.yupi.ui.appintro.ExtendedEditText
                         android:id="@+id/text_input_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto"
+                        style="@style/IntroTextInputEditText"
                         android:hint="@string/intro_email_title"
-                        android:inputType="text"
-                        android:textColor="@color/secondaryTextColor"
-                        android:textSize="18sp" />
+                        android:inputType="text" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:baselineAligned="false"
-                android:gravity="center"
-                android:weightSum="1">
+            <LinearLayout style="@style/IntroTextFieldsLayout">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_layout_pass"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.9"
+                    style="@style/IntroTextInputLayout"
                     app:passwordToggleEnabled="true"
                     app:passwordToggleTint="@color/secondaryTextColor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/text_input_pass"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto"
+                        style="@style/IntroTextInputEditText"
                         android:hint="@string/intro_pass_title"
-                        android:inputType="textPassword"
-                        android:textColor="@color/secondaryTextColor"
-                        android:textSize="18sp" />
+                        android:inputType="textPassword" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:baselineAligned="false"
-                android:gravity="center"
-                android:weightSum="1">
-
-                <TextView
-                    android:id="@+id/text_view_error"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.9"
-                    android:gravity="center"
-                    android:textColor="@color/introError"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
-
-                <com.github.ybq.android.spinkit.SpinKitView
-                    android:id="@+id/spin_kit"
-                    style="@style/SpinKitView.ThreeBounce"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
-                    app:SpinKit_Color="@color/colorAccent" />
-            </LinearLayout>
+            <include
+                android:id="@+id/extraFields"
+                layout="@layout/view_intro_extra_fields" />
         </LinearLayout>
-
     </LinearLayout>
 </layout>

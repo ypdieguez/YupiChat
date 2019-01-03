@@ -2,10 +2,7 @@ package com.sapp.yupi
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.sapp.yupi.data.AppDatabase
-import com.sapp.yupi.ui.appintro.PREF_EMAIL
-import com.sapp.yupi.ui.appintro.PREF_EMAIL_PASS
-import com.sapp.yupi.ui.appintro.USER_PREFERENCES
+import com.sapp.yupi.util.UserPrefUtil
 import com.sun.mail.util.MailConnectException
 import javax.mail.AuthenticationFailedException
 import javax.mail.Message
@@ -21,26 +18,17 @@ const val STATUS_MAIL_CONNECT_EXCEPTION: Byte = 3
 const val STATUS_AUTHENTICATION_FAILED_EXCEPTION: Byte = 4
 const val STATUS_OHTER_EXCEPTION: Byte = 5
 
-/**
- * Must be init in App.
- */
 class Email {
     companion object {
-
-        private lateinit var pref: SharedPreferences
-
-        fun init(context: Context) {
-            pref = context.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE)
-        }
-
         fun send(address: String, subject: String, content: String): Byte {
             try {
-                val user = pref.getString(PREF_EMAIL, "")
-                val pass = pref.getString(PREF_EMAIL_PASS, "")
+                val user = UserPrefUtil.getEmail()
+                val pass = UserPrefUtil.getEmailPass()
 
                 val props = System.getProperties()
-                props["mail.smtp.host"] = "smtp.nauta.cu"
-                props["mail.smtp.port"] = "25"
+                props["mail.smtp.host"] = BuildConfig.HOST
+                props["mail.smtp.port"] = BuildConfig.PORT
+                props["mail.smtp.ssl.enable"] = BuildConfig.SSL_ENABLED
 
                 val session = Session.getInstance(props)
 

@@ -21,6 +21,6 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     tools:context="com.sapp.yupi.ui.appintro.CountryListDialogFragment"
-    tools:listitem="@layout/intro_country_list_dialog_item" />
+    tools:listitem="@layout/country_list_dialog_item" />
 
 </LinearLayout>

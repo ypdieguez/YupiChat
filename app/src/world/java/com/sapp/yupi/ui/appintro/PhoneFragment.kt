@@ -25,7 +25,7 @@ class PhoneFragment : PhoneBaseFragment() {
         (mBinding as ViewIntroPhoneBinding).apply {
             textInputPhone.apply {
                 setOnTouchListener { _, _ ->
-                    textViewError.visibility = View.GONE
+                    extraFields.textViewError.visibility = View.GONE
                     false
                 }
 
@@ -36,9 +36,8 @@ class PhoneFragment : PhoneBaseFragment() {
 
     override fun setViewStateInActivationMode(enable: Boolean) {
         super.setViewStateInActivationMode(enable)
-
         (mBinding as ViewIntroPhoneBinding).apply {
-            spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
+            extraFields.spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
             textInputPhone.isEnabled = enable
             textInputLayoutPhone.isEnabled = enable
         }
