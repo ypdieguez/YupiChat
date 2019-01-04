@@ -17,7 +17,7 @@ class IntroActivity : IntroBaseActivity() {
         addSlide(PhoneFragment.newInstance())
         addSlide(BasicFragment.newInstance(
                 title = R.string.intro_conclusion_title,
-                imageRes = R.drawable.icons8_confetti_512,
+                imageRes = R.drawable.icons8_chat_bubble_512,
                 description = R.string.intro_conclusion_description
         ))
     }

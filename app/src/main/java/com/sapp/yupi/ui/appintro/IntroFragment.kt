@@ -20,7 +20,7 @@ private const val ARG_TITLE = "title"
 private const val ARG_IMAGE_RES = "image_res"
 private const val ARG_DESCRIPTION = "description"
 
-abstract class IntroFragment : Fragment(), ISlidePolicy {
+abstract class IntroFragment : Fragment() {
 
     protected var mTitle: Int = -1
     protected var mImageRes: Int = -1
@@ -54,9 +54,9 @@ abstract class IntroFragment : Fragment(), ISlidePolicy {
         return mBinding!!.root
     }
 
-    override fun isPolicyRespected() = true
+    open fun isPolicyRespected() = true
 
-    override fun onUserIllegallyRequestedNextPage() {
+    open fun onUserIllegallyRequestedNextPage() {
         if (!isValidating) {
             showError(true)
         }
