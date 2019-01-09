@@ -18,7 +18,7 @@ import com.sapp.yupi.Injector
 import com.sapp.yupi.MESSAGE
 import com.sapp.yupi.adapters.MessageAdapter
 import com.sapp.yupi.databinding.FragmentConversationBinding
-import com.sapp.yupi.viewmodel.MessageViewModel
+import com.sapp.yupi.viewmodels.MessageViewModel
 import com.sapp.yupi.workers.OutgoingMsgWorker
 
 

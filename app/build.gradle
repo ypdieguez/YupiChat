@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'androidx.navigation.safeargs'
 
 android {
     compileSdkVersion 28
@@ -123,6 +123,8 @@ dependencies {
 
     // Android-SpinKit
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
+
+//    implementation project(':contacts')
 
     // CircleImageView
 //    implementation 'de.hdodenhof:circleimageview:2.2.0'

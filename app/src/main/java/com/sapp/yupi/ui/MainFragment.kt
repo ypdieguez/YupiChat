@@ -14,7 +14,7 @@ import com.sapp.yupi.R
 import com.sapp.yupi.adapters.ContactAdapter
 import com.sapp.yupi.data.Contact
 import com.sapp.yupi.databinding.FragmentMainBinding
-import com.sapp.yupi.viewmodel.ContactViewModel
+import com.sapp.yupi.viewmodels.ContactViewModel
 
 
 class MainFragment : Fragment(), ContactAdapter.Listener {
@@ -25,7 +25,7 @@ class MainFragment : Fragment(), ContactAdapter.Listener {
         val binding = FragmentMainBinding.inflate(inflater, container, false)
         val context = context ?: return binding.root
 
-        val factory = Injector.provideContactViewModelFactory(context)
+        val factory = Injector.provideContactViewModelFactory(requireContext())
         model = ViewModelProviders.of(this, factory).get(ContactViewModel::class.java)
 
         val adapter = ContactAdapter(this)

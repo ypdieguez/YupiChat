@@ -4,8 +4,8 @@ import android.content.Context
 import com.sapp.yupi.data.AppDatabase
 import com.sapp.yupi.data.ContactRepository
 import com.sapp.yupi.data.MessageRepository
-import com.sapp.yupi.viewmodel.ContactViewModelFactory
-import com.sapp.yupi.viewmodel.MessageViewModelFactory
+import com.sapp.yupi.viewmodels.ContactViewModelFactory
+import com.sapp.yupi.viewmodels.MessageViewModelFactory
 
 /**
  * Static methods used to inject classes needed for various Activities and Fragments.

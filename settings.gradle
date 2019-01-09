@@ -1,2 +1,3 @@
-include ':app'/*, ':smsradar'*/
+include ':app'/*':contacts'*//*, ':smsradar'*/
+//project ("contacts").projectDir = new File("~/Projects/Contacts/contacts")
 //project ("smsradar").projectDir = new File("../SmsRadar/library")

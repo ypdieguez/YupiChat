@@ -1,8 +1,6 @@
-package com.sapp.yupi.viewmodel
+package com.sapp.yupi.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.sapp.yupi.data.Contact
-import com.sapp.yupi.data.ContactRepository
 import com.sapp.yupi.data.Message
 import com.sapp.yupi.data.MessageRepository
 

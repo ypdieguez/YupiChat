@@ -9,7 +9,7 @@ import com.sapp.yupi.Injector
 import com.sapp.yupi.R
 import com.sapp.yupi.data.Contact
 import com.sapp.yupi.databinding.FragmentContactBinding
-import com.sapp.yupi.viewmodel.ContactViewModel
+import com.sapp.yupi.viewmodels.ContactViewModel
 
 
 class ContactFragment : Fragment() {
