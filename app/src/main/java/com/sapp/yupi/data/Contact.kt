@@ -1,23 +1,49 @@
 package com.sapp.yupi.data
 
-import androidx.annotation.NonNull
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import android.net.Uri
+import android.os.Parcel
+import android.os.Parcelable
 
-@Entity(
-        tableName = "contacts",
-        indices = [Index("name"), Index(value = ["phone"], unique = true)]
-)
+/**
+ * Contact representation
+ */
 data class Contact(
-        @NonNull
+        /**
+         *  Dispaly name
+         */
         var name: String,
-        @NonNull
-        var phone: String,
-        @ColumnInfo(name = "photo_url")
-        var photoUrl: String = ""
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
+        /**
+         * Dispaly phone
+         */
+        var number: String,
+        /**
+         * Thumbnail photo uri
+         */
+        var thumbnailUri: Uri? = null
+) : Parcelable {
+
+    constructor(parcel: Parcel) : this(
+            parcel.readString()!!,
+            parcel.readString()!!,
+            parcel.readParcelable(Uri::class.java.classLoader))
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(name)
+        parcel.writeString(number)
+        parcel.writeParcelable(thumbnailUri, flags)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Contact> {
+        override fun createFromParcel(parcel: Parcel): Contact {
+            return Contact(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Contact?> {
+            return arrayOfNulls(size)
+        }
+    }
 }

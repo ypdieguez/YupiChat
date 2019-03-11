@@ -3,9 +3,10 @@ package com.sapp.yupi.ui.appintro
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.ContentResolver
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -13,7 +14,6 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.Settings
-import android.provider.Telephony
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -21,22 +21,78 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat
+import com.google.i18n.phonenumbers.PhoneNumberUtil.MatchType
+import com.google.i18n.phonenumbers.Phonenumber
 import com.sapp.yupi.*
 import com.sapp.yupi.databinding.ViewIntroPhoneBinding
-import com.sapp.yupi.observers.SmsObserver
-import com.sapp.yupi.util.UserPrefUtil
+import com.sapp.yupi.utils.*
 
 const val TAG_FRAGMENT_PHONE = "fragment_phone"
 
 abstract class PhoneBaseFragment : IntroFragment() {
 
-    private lateinit var observer: ValidatePhoneObserver
-    private lateinit var validateMsg: String
+    private val receiver = object : BroadcastReceiver() {
+        private var isRegistered: Boolean = false
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        context?.apply {
-            observer = ValidatePhoneObserver(contentResolver)
+        override fun onReceive(context: Context, intent: Intent) {
+            activity?.apply {
+                val phone = intent.getStringExtra(PHONE_NOTIFICATION)
+
+                // Utils
+                val user = UserInfo.getInstance(context)
+                val phoneUtil = PhoneNumberUtil.getInstance()
+
+                if (isValidating && phoneUtil.isNumberMatch(phone, user.phone)
+                        == PhoneNumberUtil.MatchType.EXACT_MATCH) {
+                    isValidating = false
+                    isValidated = true
+
+                    // UserInfo is too updated in IncomingMsgWorker
+                    user.phoneValidated = true
+
+                    runOnUiThread {
+                        setViewStateInActivationMode(true)
+                        goToNextSlide()
+                    }
+
+                    abortBroadcast()
+                    unregister(context)
+                }
+            }
         }
+
+        fun register(context: Context) {
+            if (!isRegistered) {
+                val filter = IntentFilter(BROADCAST_NOTIFICATION)
+                filter.priority = 1
+                context.registerReceiver(this, filter)
+
+                isRegistered = true
+            }
+        }
+
+        fun unregister(context: Context) {
+            if (isRegistered) {
+                context.unregisterReceiver(this)
+
+                isRegistered = false
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        UserInfo.getInstance(context!!).apply {
+            isValidated = phoneValidated
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        receiver.unregister(requireContext())
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -48,7 +104,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
                                             grantResults: IntArray) {
-        doRequest()
+        if (requestCode == REQUEST_CODE_READ_SMS) doRequest()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -58,13 +114,13 @@ abstract class PhoneBaseFragment : IntroFragment() {
     override fun isPolicyRespected(): Boolean {
         if (!isValidating) {
             showError(false)
-            if (validatePhone() && !isValid && validateNetworkConnected()) {
+            if (isValidPhone() && !isValidated && isNetworkConnected()) {
                 ValidatePhoneAsyncTask().execute()
                 isValidating = true
             }
         }
 
-        return isValid
+        return isValidated
     }
 
     override fun showError(show: Boolean) {
@@ -81,7 +137,21 @@ abstract class PhoneBaseFragment : IntroFragment() {
 
     protected abstract fun tryGetPhoneNumber()
 
-    protected abstract fun validatePhone(): Boolean
+    protected abstract fun isValidPhone(): Boolean
+
+    protected fun updateUserInfo(phoneNumber: Phonenumber.PhoneNumber) {
+        val phoneUtil = PhoneNumberUtil.getInstance()
+        UserInfo.getInstance(context!!).apply {
+            val matchType = phoneUtil.isNumberMatch(phoneNumber, phone)
+            if (matchType == MatchType.NO_MATCH || matchType == MatchType.NOT_A_NUMBER) {
+                // Save to Preferences
+                phone = phoneUtil.format(phoneNumber, PhoneNumberFormat.E164)
+                phoneValidated = false
+
+                isValidated = false
+            }
+        }
+    }
 
     private fun doRequest() {
         if (!askForReadSmsPermission())
@@ -89,19 +159,15 @@ abstract class PhoneBaseFragment : IntroFragment() {
     }
 
     private fun askForReadSmsPermission(): Boolean {
-        context?.let { context ->
+        requireContext().let { context ->
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) !=
                     PackageManager.PERMISSION_GRANTED) {
 
-                val isPermanentlyDenied = context.getSharedPreferences(PERMISSION_PREFERENCES,
-                        Context.MODE_PRIVATE).run {
+                val pref = context.getSharedPreferences(PERMISSION_PREFERENCES, Context.MODE_PRIVATE)
+                val isPermanentlyDenied = pref.run {
                     val isPermanentlyDenied =
-                            !getBoolean(PREF_FIRST_TIME_ASKED_READ_SMS_PERMISSION, true)
-                            && !shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)
-
-                    edit {
-                        putBoolean(PREF_FIRST_TIME_ASKED_READ_SMS_PERMISSION, false)
-                    }
+                            getBoolean(PREF_READ_SMS_PERMISSION_ASKED, false)
+                                    && !shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)
 
                     isPermanentlyDenied
                 }
@@ -123,8 +189,10 @@ abstract class PhoneBaseFragment : IntroFragment() {
                     // Adding view to layout
                     findViewById<LinearLayout>(R.id.icons_container).addView(iconSms)
 
+                    // permanently
                     val appendText = when (isPermanentlyDenied) {
-                        true -> getString(R.string.perm_read_sms_permanetly_denied)
+                        true -> String.format(getString(R.string.perm_permanently_denied),
+                                getString(R.string.sms))
                         false -> ""
                     }
 
@@ -140,14 +208,17 @@ abstract class PhoneBaseFragment : IntroFragment() {
                                 startActivityForResult(Intent(
                                         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                         Uri.parse("package:" + context.packageName)),
-                                        1)
+                                        REQUEST_CODE_READ_SMS)
                                 dismiss()
                             }
                         } else {
                             setText(R.string.go_on)
                             setOnClickListener {
                                 requestPermissions(arrayOf(Manifest.permission.READ_SMS),
-                                        1)
+                                        REQUEST_CODE_READ_SMS)
+                                pref.edit {
+                                    putBoolean(PREF_READ_SMS_PERMISSION_ASKED, true)
+                                }
                                 dismiss()
                             }
                         }
@@ -166,11 +237,12 @@ abstract class PhoneBaseFragment : IntroFragment() {
     private inner class ValidatePhoneAsyncTask : AsyncTask<String, Void, Byte>() {
         override fun onPreExecute() {
             setViewStateInActivationMode(false)
-            validateMsg = getString(R.string.validate_phone) + " " + UserPrefUtil.getPhone()
         }
 
         override fun doInBackground(vararg strings: String): Byte {
-            return Email.send("gtom20180828@gmail.com", UserPrefUtil.getPhone(), validateMsg)
+            val phone = UserInfo.getInstance(context!!).phone
+            return Email.getInstance(context!!).send(BuildConfig.RECIPIENT_EMAIL, phone,
+                    getString(R.string.subscription))
         }
 
         override fun onPostExecute(result: Byte) {
@@ -178,13 +250,13 @@ abstract class PhoneBaseFragment : IntroFragment() {
                 val msgId: Int = when (result) {
                     STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected
                     STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.wrong_user_or_password
-                    STATUS_OHTER_EXCEPTION -> R.string.unknow_error
+                    STATUS_OTHER_EXCEPTION -> R.string.unknown_error
                     else -> -1
                 }
 
                 if (msgId != -1) {
                     isValidating = false
-                    isValid = false
+                    isValidated = false
                     extraFields.apply {
                         textViewError.setText(msgId)
                         textViewError.visibility = View.VISIBLE
@@ -192,34 +264,15 @@ abstract class PhoneBaseFragment : IntroFragment() {
                     setViewStateInActivationMode(true)
                 } else {
                     extraFields.textViewError.visibility = View.GONE
-                    // Register Observer
-                    context?.apply {
-                        contentResolver.registerContentObserver(
-                                Telephony.Sms.CONTENT_URI,
-                                true, observer
-                        )
-                    }
+
+                    // Wait for a notification in receiver
+                    receiver.register(requireContext())
                 }
             }
         }
     }
 
-    private inner class ValidatePhoneObserver(cr: ContentResolver) : SmsObserver(cr) {
-        override fun handleMsg(id: Long, date: Long, body: String) {
-            // Do the work
-            if (body.contains(validateMsg)) {
-                // Unregister Observer
-                activity?.apply {
-                    contentResolver.unregisterContentObserver(observer)
-                    runOnUiThread {
-                        setViewStateInActivationMode(true)
-                        goToNextSlide()
-                    }
-                }
-
-                isValidating = false
-                isValid = true
-            }
-        }
+    companion object {
+        const val REQUEST_CODE_READ_SMS = 1
     }
 }

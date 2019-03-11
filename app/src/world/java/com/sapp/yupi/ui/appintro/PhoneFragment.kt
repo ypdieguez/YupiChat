@@ -1,22 +1,23 @@
 package com.sapp.yupi.ui.appintro
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.telephony.TelephonyManager
+import android.text.SpannableStringBuilder
 import android.util.Patterns
 import android.view.View
 import android.widget.ProgressBar
-import androidx.core.content.ContextCompat
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.PhoneNumberUtil.MatchType
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroPhoneBinding
-import com.sapp.yupi.util.UserPrefUtil
+import com.sapp.yupi.utils.UserInfo
 
-const val PREFIX_CUBA = "+53 "
+const val PREFIX_CUBA = "+53"
 
 class PhoneFragment : PhoneBaseFragment() {
 
@@ -30,11 +31,13 @@ class PhoneFragment : PhoneBaseFragment() {
                     false
                 }
 
-                setPrefix(PREFIX_CUBA)
+                addTextChangedListener(PhoneNumberFormattingTextWatcher("CU"))
 
-                val phone = UserPrefUtil.getPhone()
-                if (phone.isNotEmpty()) {
-                    setText(phone)
+                UserInfo.getInstance(context).apply {
+                    if (phone.isNotEmpty()) {
+                        prefix = PREFIX_CUBA
+                        text = SpannableStringBuilder(phone)
+                    }
                 }
             }
         }
@@ -55,21 +58,21 @@ class PhoneFragment : PhoneBaseFragment() {
             (mBinding as ViewIntroPhoneBinding).apply {
                 textInputPhone.apply {
                     val text = text.toString()
-                    if (text.isEmpty() || text == getPrefix()) {
+                    if (text.isEmpty() || text == prefix) {
                         val tMgr = context?.getSystemService(Context.TELEPHONY_SERVICE)
                                 as TelephonyManager
                         val number = tMgr.line1Number
 
-                        if (number.isNotEmpty() && Patterns.PHONE.matcher(number).matches()) {
+                        if (number.isNotEmpty()) {
                             val phoneUtil = PhoneNumberUtil.getInstance()
                             try {
                                 val phoneNumber = phoneUtil.parse(number, "CU")
                                 val countryCode = phoneNumber.countryCode
 
-                                setPrefix("+$countryCode ")
+                                prefix = "+$countryCode"
                                 append(phoneNumber.nationalNumber.toString())
                             } catch (e: NumberParseException) {
-                                setPrefix(PREFIX_CUBA)
+                                prefix = PREFIX_CUBA
                             }
                         }
                     }
@@ -78,45 +81,36 @@ class PhoneFragment : PhoneBaseFragment() {
         }
     }
 
-    override fun validatePhone(): Boolean {
+    override fun isValidPhone(): Boolean {
         (mBinding as ViewIntroPhoneBinding).apply {
-            val phone = textInputPhone.text.toString().trim()
-            val prefix = textInputPhone.getPrefix()
+            val number = textInputPhone.text.toString().trim()
+            val prefix = textInputPhone.prefix
 
             errorMsgId = when {
-                phone.isEmpty() -> R.string.phone_required
+                number.isEmpty() -> R.string.phone_required
                 prefix != PREFIX_CUBA -> R.string.install_yuupi_cuba
-                !Patterns.PHONE.matcher(phone).matches() -> R.string.phone_number_not_valid
+                !Patterns.PHONE.matcher(number).matches() -> R.string.phone_number_not_valid
                 else -> {
-                    var msgIdTemp = -1
                     try {
                         val phoneUtil = PhoneNumberUtil.getInstance()
-                        val phoneNumber = phoneUtil.parse(phone, "CU")
+                        val phoneNumber = phoneUtil.parse(number, "CU")
                         val countryCode = phoneNumber.countryCode
 
                         if (countryCode != 53) {
-                            msgIdTemp = R.string.install_yuupi_cuba
+                            R.string.install_yuupi_cuba
                         } else if (!phoneUtil.isValidNumber(phoneNumber)) {
-                            msgIdTemp = R.string.phone_number_not_valid
+                            R.string.phone_number_not_valid
+                        } else {
+                            updateUserInfo(phoneNumber)
+                            -1
                         }
                     } catch (e: NumberParseException) {
-                        msgIdTemp = R.string.phone_number_not_valid
+                        R.string.phone_number_not_valid
                     }
-                    msgIdTemp
                 }
             }
 
-            return if (errorMsgId != -1) {
-                false
-            } else {
-                if (UserPrefUtil.getPhone() != phone) {
-                    // Save to Preferences
-                    UserPrefUtil.setPhone(phone)
-                    isValid = false
-                }
-
-                true
-            }
+            return errorMsgId == -1
         }
     }
 

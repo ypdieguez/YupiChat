@@ -7,17 +7,11 @@ import java.util.*
 
 @Entity(
         tableName = "messages",
-        foreignKeys = [ForeignKey(entity = Contact::class, parentColumns = ["id"],
-                childColumns = ["contact_id"], onDelete = CASCADE, onUpdate = CASCADE)],
-        indices = [Index(value = ["contact_id"], unique = true)]
+        foreignKeys = [ForeignKey(entity = Conversation::class, parentColumns = ["phone"],
+                childColumns = ["phone"], onDelete = CASCADE, onUpdate = CASCADE)],
+        indices = [Index(value = ["phone"])]
 )
 data class Message(
-        @NonNull
-        @ColumnInfo(name = "contact_id")
-        var contactId: Long,
-        @NonNull
-        @ColumnInfo(name = "msg_id")
-        var msgId: Long,
         @NonNull
         var type: Boolean,
         @NonNull
@@ -25,8 +19,11 @@ data class Message(
         @NonNull
         var date : Long = Calendar.getInstance().timeInMillis,
         @NonNull
-        var text: String
+        var text: String,
+        @NonNull
+        var phone: String
 ) {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     var id: Long = 0
 }

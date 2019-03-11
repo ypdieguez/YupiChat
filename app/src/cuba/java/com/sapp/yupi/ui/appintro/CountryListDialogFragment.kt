@@ -1,5 +1,7 @@
 package com.sapp.yupi.ui.appintro
 
+import android.annotation.SuppressLint
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,21 +10,38 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.sapp.yupi.R
-import kotlinx.android.synthetic.cuba.country_list_dialog.*
-import kotlinx.android.synthetic.cuba.country_list_dialog_item.view.*
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.sapp.yupi.databinding.CountryListDialogBinding
+import com.sapp.yupi.databinding.CountryListDialogItemBinding
+import com.sapp.yupi.ui.appintro.data.Country
+import java.util.*
+
 
 class CountryListDialogFragment : BottomSheetDialogFragment() {
+
+    interface Listener {
+        fun onCountryClicked(country: Country)
+    }
+
     private var mListener: Listener? = null
+
+    private var mAdapter = CountryAdapter()
+    private lateinit var mBinding: CountryListDialogBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.country_list_dialog, container, false)
+        mBinding = CountryListDialogBinding.inflate(inflater, container, false)
+        mBinding.apply {
+            list.layoutManager = LinearLayoutManager(context)
+            list.adapter = mAdapter
+            divider.animate().alpha(1f).duration = 1000
+
+            return root
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        list.layoutManager = LinearLayoutManager(context)
-        list.adapter = CountryAdapter()
+        LoadCountriesAsyncTask().execute()
     }
 
     fun addListener(listener: Listener): CountryListDialogFragment {
@@ -35,39 +54,76 @@ class CountryListDialogFragment : BottomSheetDialogFragment() {
         super.onDetach()
     }
 
-    interface Listener {
-        fun onCountryClicked(position: Int)
-    }
+    @SuppressLint("StaticFieldLeak")
+    private inner class LoadCountriesAsyncTask : AsyncTask<Void, Void, MutableList<Country>>() {
 
-    private inner class ViewHolder internal constructor(inflater: LayoutInflater, parent: ViewGroup)
-        : RecyclerView.ViewHolder(inflater.inflate(R.layout.country_list_dialog_item,
-            parent, false)) {
+        override fun onPreExecute() {
+            mBinding.apply {
+                list.visibility = View.GONE
+                spinKit.visibility = View.VISIBLE
+            }
+        }
 
-        internal val text: TextView = itemView.text
+        override fun doInBackground(vararg param: Void): MutableList<Country> {
+            val mPhoneUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance()
+            val countries: MutableList<Country> = mutableListOf()
 
-        init {
-            text.setOnClickListener {
-                mListener?.apply {
-                    onCountryClicked(adapterPosition)
-                    dismiss()
-                }
+            for (region in mPhoneUtil.supportedRegions) {
+                val name = Locale(Locale.getDefault().language, region).displayCountry
+                val code = mPhoneUtil.getCountryCodeForRegion(region)
+                countries.add(Country(code, region, name))
+            }
+            countries.sortBy { it.name }
+
+            return countries
+        }
+
+        override fun onPostExecute(result: MutableList<Country>) {
+            mAdapter.setData(result)
+
+            mBinding.apply {
+                spinKit.visibility = View.GONE
+                list.visibility = View.VISIBLE
             }
         }
     }
 
+    private inner class ViewHolder internal constructor(binding: CountryListDialogItemBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+        internal val countryView: TextView = binding.country
+        internal val codeView: TextView = binding.code
+    }
+
     private inner class CountryAdapter : RecyclerView.Adapter<ViewHolder>() {
-        val mCountries: Array<String> = resources.getStringArray(R.array.countries_name)
+        internal val mCountries: MutableList<Country> = mutableListOf()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(LayoutInflater.from(parent.context), parent)
+            val binding = CountryListDialogItemBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false)
+            return ViewHolder(binding)
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.text.text = mCountries[position]
+            val country = mCountries[position]
+
+            holder.countryView.text = country.name
+            holder.codeView.text = "+${country.code}"
+            holder.itemView.setOnClickListener {
+                mListener?.apply {
+                    onCountryClicked(country)
+                    dismiss()
+                }
+            }
         }
 
         override fun getItemCount(): Int {
             return mCountries.size
+        }
+
+        fun setData(countries: MutableList<Country>) {
+            mCountries.addAll(countries)
+            notifyDataSetChanged()
         }
     }
 

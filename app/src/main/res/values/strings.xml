@@ -1,68 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--MainFragment-->
-    <string name="empty_contacts">No tienes contactos.</string>
+    <string name="empty_contacts">You have no contacts.</string>
 
     <!--Converstation fragment-->
-    <string name="compose_message_view_hint_text">Enviar mensaje</string>
-    <string name="name">Nombre</string>
-    <string name="phone_number">Número de teléfono</string>
-    <string name="save">Guardar</string>
-    <string name="note">
-        Paises disponibles para el envío de mensajes: \n
-           - México: +52 \n
-           - USA: +1 \n
-           - Canadá: +1 \n
-    </string>
+    <string name="compose_message_view_hint_text">Send message</string>
+
+    <!--Contact fragment-->
+    <string name="new_contact">New contact</string>
 
     <!--Intro-->
-    <string name="country">País</string>
-    <string name="intro_phone_description">
-        Para que tus contactos puedan responderte ingresa tu número de teléfono
-    </string>
-    <string name="intro_conclusion_title">Listo</string>
-    <string name="intro_conclusion_description">
-        Has concluido… Ya estás listo para enviar y recibir mensajes.
-    </string>
+    <string name="phone_number">Phone number</string>
+    <string name="intro_phone_description">"Enter your phone number   "</string>
+    <string name="intro_conclusion_title">Ready</string>
+    <string name="intro_conclusion_description">Yuupi… The app are ready to send and receive messages.</string>
 
     <!--Validation-->
     <string name="phone_required">Phone is required</string>
     <string name="phone_number_not_valid">Enter a valid phone.</string>
-    <string name="choose_country">Elige un país</string>
-    <string name="wrong_user_or_password">Usuario o contraseña incorrecto</string>
-    <string name="unknow_error">Ha ocurrido un error, inténtelo mas tarde</string>
+    <string name="wrong_user_or_password">Username or password wrong</string>
+    <string name="unknown_error">An error has occurred, try later</string>
+    <string name="subscription">You can now send and receive messages.</string>
 
     <!--Dialog Permission-->
     <string name="settings">SETTINGS</string>
-    <string name="not_now">Not Now</string>
-    <string name="go_on">Continuar</string>
+    <string name="not_now">NOT NOW</string>
+    <string name="go_on">CONTINUE</string>
+
     <!--Dialog append text-->
-    <string name="perm_read_sms">
-        Para activar la cuenta, permite que Yuupi pueda acceder a tus SMS.
-    </string>
-    <string name="perm_read_sms_permanetly_denied">
-        Toca AJUSTES > Permisos, y activa SMS
-    </string>
-
-    <!--Avaiable Countries-->
-    <string-array name="countries_name">
-        <item>Canada</item>
-        <item>United States</item>
-        <item>Mexico</item>
-    </string-array>
-
-    <string-array name="countries_iso">
-        <item>CA</item>
-        <item>US</item>
-        <item>MX</item>
-    </string-array>
+    <string name="perm_read_sms">To verify your phone number, allow %s to access your SMS.</string>
+    <string name="perm_read_contact">To help you connect with friends and family, allow %s access to yours contacts.</string>
+    <string name="perm_permanently_denied">Tap Settings > Permissions, and turn %s on</string>
 
     <!--General validation-->
-    <string name="network_not_connected">
-        Active los datos móviles o conéctese a una red Wi-Fi.
-    </string>
+    <string name="network_not_connected">Turn on mobile data or connect to a Wi-Fi network.</string>
 
-    <string name="active_account">Activar cuenta</string>
-    <string name="validate_phone">Validar teléfono:</string>
+    <string name="contacts">Contacts</string>
+    <string name="empty_messages">You do not have messages.</string>
+    <string name="sms">SMS</string>
 
 </resources>

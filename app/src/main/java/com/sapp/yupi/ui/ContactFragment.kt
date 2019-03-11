@@ -1,86 +1,75 @@
 package com.sapp.yupi.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.sapp.yupi.Injector
 import com.sapp.yupi.R
-import com.sapp.yupi.data.Contact
+import com.sapp.yupi.adapters.ContactAdapter
 import com.sapp.yupi.databinding.FragmentContactBinding
+import com.sapp.yupi.utils.Injector
+import com.sapp.yupi.utils.PermissionUtil
 import com.sapp.yupi.viewmodels.ContactViewModel
 
 
 class ContactFragment : Fragment() {
 
-    private lateinit var binding: FragmentContactBinding
-    private lateinit var model: ContactViewModel
-    private var mContact: Contact? = null
+    private lateinit var mBinding: FragmentContactBinding
+    private lateinit var mViewModel: ContactViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentContactBinding.inflate(inflater, container, false)
-        val context = context ?: return binding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        if (!PermissionUtil.hasReadContactPermission(requireContext())) {
+            startActivity(Intent(requireContext(), MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_NEW_TASK or
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            })
+            return null
+        }
 
-        val factory = Injector.provideContactViewModelFactory(context)
-        model = ViewModelProviders.of(this, factory).get(ContactViewModel::class.java)
+        mBinding = FragmentContactBinding.inflate(inflater, container, false)
+        mBinding.apply {
+            val adapter = ContactAdapter()
+            contactList.adapter = adapter
 
-        val id = ContactFragmentArgs.fromBundle(arguments!!).id.toLong()
+            val factory = Injector.provideContactViewModelFactory(requireContext())
+            mViewModel = ViewModelProviders.of(requireActivity(), factory)
+                    .get(ContactViewModel::class.java)
+            mViewModel.contacts.observe(viewLifecycleOwner, Observer {
+                hasContacts = if (it != null && it.isNotEmpty()) {
+                    adapter.submitList(it)
+                    true
+                } else {
+                    false
+                }
+            })
 
-        model.getContact(id).observe(this, Observer { contact ->
-            mContact = contact
-            binding.contact = contact
+            setHasOptionsMenu(true)
 
-            if (mContact == null) {
-                binding.nameView.requestFocus()
-                requestInputMethod()
-            }
-        })
-
-        setHasOptionsMenu(true)
-        return binding.root
+            return root
+        }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_contact, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_contact, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.save -> {
-                val name = binding.nameView.text.toString()
-                val phone = binding.phoneView.text.toString()
-
-                if (name.isEmpty()) {
-                    binding.nameView.error = "Campo obligatorio"
-                }
-                if (phone.isEmpty()) {
-                    binding.phoneView.error = "Campo obligatorio"
-                }
-
-                if(name.isNotEmpty() and phone.isNotEmpty()){
-                    if (mContact == null) {
-                        mContact = Contact(name, phone)
-                        model.insert(mContact!!)
-                    } else {
-                        mContact!!.name = name
-                        mContact!!.phone = phone
-                        model.update(mContact!!)
-                    }
-                    activity!!.onBackPressed()
-//                    findNavController().popBackStack()
-                }
-
+            R.id.new_contact -> {
+                val i = Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI)
+                startActivityForResult(i, 1)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    /**
-     * Sets the required flags on the dialog window to enable input method window to show up.
-     */
-    private fun requestInputMethod() {
-        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        mViewModel.refreshContacts()
     }
 }

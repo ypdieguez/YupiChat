@@ -3,19 +3,11 @@
     <string name="app_name">Yuupi World</string>
 
     <!--Intro-->
-    <string name="intro_app_description">
-        Contacta con tus familiares y amistades de Canadá, Estados Unidos o México.
-        \n\n
-        Tus mensajes serán enviados a través de tu cuenta de correo <b>@nauta</b> y tus contactos los
-        recibirán como <b>sms</b>.
-    </string>
+    <string name="intro_app_description">Contacta con tus amigos y familiares fuera de Cuba.\n\nTus mensajes serán enviados a través de tu cuenta de correo <b>@nauta</b> y tus contactos los recibirán como <b>sms</b>.</string>
     <string name="intro_email_title">Correo</string>
-    <string name="intro_email_description">
-        Para enviar los mensajes ingresa tu cuenta de correo <b>@nauta</b>
-    </string>
+    <string name="intro_email_description">Para enviar los mensajes ingresa tu cuenta de correo <b>@nauta</b></string>
     <string name="user">Usuario</string>
     <string name="pass">Contraseña</string>
-
 
     <!--Intro Validation-->
     <string name="email_required">El correo es requerido</string>
@@ -23,10 +15,5 @@
     <string name="email_is_not_nauta">Ingresa tu correo @nauta.cu</string>
     <string name="pass_required">La contraseña es requerida</string>
     <string name="install_yuupi_cuba">Para enviar mensajes fuera de Cuba instala Yuupi Cuba</string>
-    <string name="host_not_connected">
-        No se pudo conectar a tu cuenta de correo. Comprueba los ajustes de red.
-    </string>
-    <string name="validate_email_account">
-        Tu cuenta de correo ha sido validada para el envío de mensajes.
-     </string>
+    <string name="host_not_connected">No se pudo conectar a tu cuenta de correo. Comprueba los ajustes de red.</string>
 </resources>

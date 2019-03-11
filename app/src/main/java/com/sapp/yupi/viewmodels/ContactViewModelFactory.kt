@@ -7,10 +7,9 @@ import com.sapp.yupi.data.ContactRepository
 /**
  * Factory for creating a [ContactViewModel] with a constructor that takes a [ContactRepository].
  */
-class ContactViewModelFactory(
-        private val repo: ContactRepository
-) : ViewModelProvider.NewInstanceFactory() {
-
+class ContactViewModelFactory(private val contactRepo: ContactRepository)
+    : ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>) = ContactViewModel(repo) as T
+    override fun <T : ViewModel?> create(modelClass: Class<T>) =
+            ContactViewModel(contactRepo) as T
 }

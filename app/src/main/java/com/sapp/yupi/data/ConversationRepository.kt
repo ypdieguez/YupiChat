@@ -1,6 +1,5 @@
 package com.sapp.yupi.data
 
-import com.sapp.yupi.runOnIoThread
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 
@@ -19,6 +18,12 @@ class ConversationRepository private constructor(private val conversationDao: Co
     }
 
     fun getConversations() = conversationDao.getConversations()
+
+    fun getConversationByPhone(phone: String) = conversationDao.getConversationByPhone(phone)
+
+    suspend fun markConversationAsRead(phone: String) {
+        withContext(IO) { conversationDao.markConversationAsRead(phone) }
+    }
 
     companion object {
 

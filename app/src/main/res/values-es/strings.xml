@@ -5,58 +5,39 @@
 
     <!--Converstation fragment-->
     <string name="compose_message_view_hint_text">Enviar mensaje</string>
-    <string name="name">Nombre</string>
-    <string name="phone_number">Número de teléfono</string>
-    <string name="save">Guardar</string>
-    <string name="note">
-        Paises disponibles para el envío de mensajes: \n
-           - México: +52 \n
-           - USA: +1 \n
-           - Canadá: +1 \n
-    </string>
+
+    <!--Contact fragment-->
+    <string name="new_contact">Nuevo contacto</string>
 
     <!--Intro-->
-    <string name="country">País</string>
-    <string name="intro_phone_description">
-        Para que tus contactos puedan responderte ingresa tu número de teléfono
-    </string>
+    <string name="phone_number">Número de teléfono</string>
+    <string name="intro_phone_description">Para que tus contactos puedan responderte, ingresa tu número de teléfono.</string>
     <string name="intro_conclusion_title">Listo</string>
-    <string name="intro_conclusion_description">
-        Yuupi… Ya puedes enviar y recibir mensajes.
-    </string>
+    <string name="intro_conclusion_description">Yuupi… La app está lista para enviar y recibir mensajes.</string>
 
     <!--Intro Validation-->
     <string name="phone_required">El número de teléfono es requerido</string>
     <string name="phone_number_not_valid">Ingresa un número de teléfono válido</string>
-    <string name="choose_country">Elige un país</string>
-    <string name="wrong_user_or_password">Usuario o contraseña incorrecto</string>
-    <string name="unknow_error">Ha ocurrido un error, inténtelo mas tarde</string>
+    <string name="wrong_user_or_password">Usuario o contraseña incorrectos</string>
+    <string name="unknown_error">Ha ocurrido un error, inténtelo más tarde</string>
+    <string name="subscription">Ya puedes enviar y recibir mensajes.</string>
 
     <!--Dialog Permission-->
     <string name="settings">AJUSTES</string>
-    <string name="not_now">Ahora no</string>
-    <string name="go_on">Continuar</string>
-    <!--Dialog append text-->
-    <string name="perm_read_sms">
-        Para validar el número teléfono, permite que %s pueda acceder a tus SMS.
-    </string>
-    <string name="perm_read_sms_permanetly_denied">
-        Toca AJUSTES > Permisos, y activa SMS
-    </string>
+    <string name="not_now">AHORA NO</string>
+    <string name="go_on">CONTINUAR</string>
 
-    <!--Avaiable Countries-->
-    <string-array name="countries_name">
-        <item>Canadá</item>
-        <item>Estados Unidos</item>
-        <item>México</item>
-    </string-array>
+    <!--Dialog append text-->
+    <string name="perm_read_sms">Para verificar tu número de teléfono, permite que %s pueda acceder a tus SMS.</string>
+    <!--Para ayudarte a enviar mensajes a amigos y familiares, ...-->
+    <string name="perm_read_contact">Para ayudarte a conectar con tus amigos y familiares, permite que %s pueda acceder a tus contactos.</string>
+    <string name="perm_permanently_denied">Toca Ajustes > Permisos, y activa %s</string>
 
     <!--General validation-->
-    <string name="network_not_connected">
-        Active los datos móviles o conéctese a una red Wi-Fi.
-    </string>
+    <string name="network_not_connected">Active los datos móviles o conéctese a una red Wi-Fi.</string>
 
-    <string name="active_account">Activar cuenta</string>
-    <string name="validate_phone">Validar teléfono:</string>
+    <string name="contacts">Contactos</string>
+    <string name="empty_messages">No tienes mensajes.</string>
+    <string name="sms">SMS</string>
 
 </resources>

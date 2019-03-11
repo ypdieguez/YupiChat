@@ -12,7 +12,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.ISlidePolicy
 import com.sapp.yupi.R
-import com.sapp.yupi.util.NetworkUtil
+import com.sapp.yupi.utils.NetworkStatus
 
 private const val ARG_LAYOUT_RES = "layout_res"
 private const val ARG_FRAGMENT_TAG = "fragment_tag"
@@ -20,7 +20,7 @@ private const val ARG_TITLE = "title"
 private const val ARG_IMAGE_RES = "image_res"
 private const val ARG_DESCRIPTION = "description"
 
-abstract class IntroFragment : Fragment() {
+abstract class IntroFragment : Fragment(), ISlidePolicy {
 
     protected var mTitle: Int = -1
     protected var mImageRes: Int = -1
@@ -34,7 +34,7 @@ abstract class IntroFragment : Fragment() {
     protected var errorMsgId = -1
 
     var isValidating = false
-    var isValid = false
+    var isValidated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +54,9 @@ abstract class IntroFragment : Fragment() {
         return mBinding!!.root
     }
 
-    open fun isPolicyRespected() = true
+    override fun isPolicyRespected() = true
 
-    open fun onUserIllegallyRequestedNextPage() {
+    override fun onUserIllegallyRequestedNextPage() {
         if (!isValidating) {
             showError(true)
         }
@@ -74,9 +74,9 @@ abstract class IntroFragment : Fragment() {
         (activity as IntroBaseActivity).pager.goToNextSlide()
     }
 
-    protected fun validateNetworkConnected(): Boolean {
+    protected fun isNetworkConnected(): Boolean {
         errorMsgId = when {
-            !NetworkUtil.isConnected() -> R.string.network_not_connected
+            !NetworkStatus.isConnected() -> R.string.network_not_connected
             else -> -1
         }
 

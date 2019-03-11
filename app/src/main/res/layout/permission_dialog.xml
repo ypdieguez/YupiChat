@@ -31,7 +31,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
-            android:textColor="@color/secondaryTextColor"
+            android:textColor="@color/secondary_text_color"
             android:textSize="16sp"
             tools:text="@string/perm_read_sms" />
 
@@ -47,10 +47,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:fontFamily="@font/roboto"
+                android:fontFamily="@font/roboto_regular"
                 android:text="@string/not_now"
                 android:padding="8dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/primary_color"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -58,10 +58,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:fontFamily="@font/roboto"
+                android:fontFamily="@font/roboto_regular"
                 android:text="@string/go_on"
                 android:padding="8dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/primary_color"
                 android:textStyle="bold" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>

@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.telephony.TelephonyManager
 import android.text.InputType
-import android.util.Patterns
+import android.text.SpannableStringBuilder
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -14,7 +14,8 @@ import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroPhoneBinding
-import com.sapp.yupi.util.UserPrefUtil
+import com.sapp.yupi.ui.appintro.data.Country
+import com.sapp.yupi.utils.UserInfo
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
@@ -23,7 +24,9 @@ import java.util.*
 class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
 
     private var mCountryViewTouched = false
-    private var unregistrar: Unregistrar? = null
+    private var mUnregistrar: Unregistrar? = null
+
+    private var mWatcher = PhoneNumberFormattingTextWatcher()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (mBinding as ViewIntroPhoneBinding).apply {
@@ -44,7 +47,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                         } else {
                             CountryListDialogFragment.newInstance()
                                     .addListener(this@PhoneFragment)
-                                    .show(fragmentManager, "dialog")
+                                    .show(requireFragmentManager(), "dialog")
                         }
                     }
                     false
@@ -57,11 +60,8 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                         textInputCountry.text.toString().let { country ->
                             errorMsgId = if (country.isEmpty()) {
                                 R.string.choose_country
-                            } else if (country == "Cuba" || getPrefix() == "+53") {
+                            } else if (country == "Cuba" || prefix == "+53") {
                                 R.string.install_yuupi_world
-                            } else if (!resources.getStringArray(R.array.countries_name)
-                                            .contains(country)) {
-                                R.string.country_not_supported
                             } else {
                                 -1
                             }
@@ -73,10 +73,12 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                     }
                     return@setOnTouchListener false
                 }
+
+                addTextChangedListener(mWatcher)
             }
         }
 
-        fillFields(UserPrefUtil.getPhone())
+        fillFields(UserInfo.getInstance(requireContext()).phone)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -88,17 +90,17 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                     WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
 
             // This listener is for harmony when hiding the keyboard and showing the dialogue.
-            unregistrar = KeyboardVisibilityEvent
+            mUnregistrar = KeyboardVisibilityEvent
                     .registerEventListener(activity!!) { isOpen ->
                         if (!isOpen && mCountryViewTouched) {
                             CountryListDialogFragment.newInstance()
                                     .addListener(this@PhoneFragment)
-                                    .show(fragmentManager, "dialog")
+                                    .show(requireFragmentManager(), "dialog")
                             mCountryViewTouched = false
                         }
                     }
         } else {
-            unregistrar?.unregister()
+            mUnregistrar?.unregister()
         }
     }
 
@@ -121,8 +123,11 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                         country = Locale(Locale.getDefault().language, iso).displayCountry
                         val countryCode = phoneUtil.getCountryCodeForRegion(iso)
 
+                        // Update Text Watcher always first
+                        updateTextWatcher(iso)
+                        // Update EditText
                         textInputCountry.setText(country)
-                        textInputPhone.setPrefix("+$countryCode ")
+                        textInputPhone.prefix = "+$countryCode"
                         textInputPhone.setText("")
                     } else {
                         val phoneUtil = PhoneNumberUtil.getInstance()
@@ -134,7 +139,11 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                         val iso = locale.country.toUpperCase()
                         if (iso.isNotEmpty()) {
                             val countryCode = phoneUtil.getCountryCodeForRegion(iso)
-                            textInputPhone.setPrefix("+$countryCode ")
+
+                            // Update Text Watcher always first
+                            updateTextWatcher(iso)
+                            // Update EditText
+                            textInputPhone.prefix = "+$countryCode "
                             textInputPhone.setText("")
                         }
                     }
@@ -143,15 +152,12 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
         }
     }
 
-    override fun onCountryClicked(position: Int) {
+    override fun onCountryClicked(country: Country) {
         (mBinding as ViewIntroPhoneBinding).apply {
-            val country = resources.getStringArray(R.array.countries_name)[position]
-            textInputCountry.setText(country)
+            textInputCountry.text = SpannableStringBuilder(country.name)
+            textInputPhone.prefix = "+${country.code}"
 
-            val iso = resources.getStringArray(R.array.countries_iso)[position]
-            val phoneUtil = PhoneNumberUtil.getInstance()
-            val countryCode = phoneUtil.getCountryCodeForRegion(iso)
-            textInputPhone.setPrefix("+$countryCode ")
+            updateTextWatcher(country.region)
         }
     }
 
@@ -166,34 +172,25 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
         }
     }
 
-    override fun validatePhone(): Boolean {
+    override fun isValidPhone(): Boolean {
         (mBinding as ViewIntroPhoneBinding).apply {
-            val validCountries = resources.getStringArray(R.array.countries_name)
-            val countriesIso = resources.getStringArray(R.array.countries_iso)
-
             val country = textInputCountry.text.toString()
-            val index = validCountries.indexOf(country)
             val phone = textInputPhone.text.toString().trim()
 
             errorMsgId = when {
                 country.isEmpty() -> R.string.choose_country
                 country == getString(R.string.choose_country) -> R.string.choose_country
-                country == "Cuba" -> R.string.install_yuupi_world
-                index == -1 -> R.string.country_not_supported
                 phone.isEmpty() -> R.string.phone_required
-                !Patterns.PHONE.matcher(phone).matches() -> R.string.phone_number_not_valid
                 else -> try {
                     val phoneUtil = PhoneNumberUtil.getInstance()
-                    val phoneNumber = phoneUtil.parse(phone, countriesIso[index])
+                    val phoneNumber = phoneUtil.parse(phone, null)
 
-                    if (!phoneUtil.isValidNumber(phoneNumber)) {
+                    if (phoneNumber.countryCode == 53) {
+                        R.string.install_yuupi_world
+                    } else if (!phoneUtil.isValidNumber(phoneNumber)) {
                         R.string.phone_number_not_valid
                     } else {
-                        if (UserPrefUtil.getPhone() != phone) {
-                            // Save to Preferences
-                            UserPrefUtil.setPhone(phone)
-                            isValid = false
-                        }
+                        updateUserInfo(phoneNumber)
                         -1
                     }
                 } catch (e: NumberParseException) {
@@ -206,26 +203,39 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
     }
 
     private fun fillFields(number: String): Boolean {
-        if (number.isNotEmpty() && Patterns.PHONE.matcher(number).matches()) {
+        if (number.isNotEmpty()) {
             (mBinding as ViewIntroPhoneBinding).apply {
                 return try {
                     val phoneUtil = PhoneNumberUtil.getInstance()
                     val phoneNumber = phoneUtil.parse(number, null)
-                    val regionCode = phoneUtil.getRegionCodeForNumber(phoneNumber)
+
+                    val countryCode = phoneNumber.countryCode
+                    val regionCode = phoneUtil.getRegionCodeForNumber(phoneNumber) ?:
+                            phoneUtil.getRegionCodeForCountryCode(countryCode)
 
                     val country = Locale(Locale.getDefault().language, regionCode).displayCountry
-                    val countryCode = phoneNumber.countryCode
 
+                    // Update Text Watcher always first
+                    updateTextWatcher(regionCode)
+                    // Update EditText
                     textInputCountry.setText(country)
-                    textInputPhone.setPrefix("+$countryCode ")
-                    textInputPhone.append(phoneNumber.nationalNumber.toString())
+                    textInputPhone.apply {
+                        prefix = "+$countryCode"
+                        append(phoneNumber.nationalNumber.toString())
+                    }
                     true
                 } catch (e: NumberParseException) {
+                    false
+                } catch (e: Exception) {
                     false
                 }
             }
         }
         return false
+    }
+
+    private fun updateTextWatcher(iso: String) {
+        mWatcher.refresh(iso)
     }
 
     companion object {

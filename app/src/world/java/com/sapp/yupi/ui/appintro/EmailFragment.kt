@@ -10,7 +10,7 @@ import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.sapp.yupi.*
 import com.sapp.yupi.databinding.ViewIntroEmailBinding
-import com.sapp.yupi.util.UserPrefUtil
+import com.sapp.yupi.utils.*
 
 const val TAG_FRAGMENT_EMAIL = "fragment_mail"
 
@@ -19,13 +19,13 @@ class EmailFragment : IntroFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (mBinding as ViewIntroEmailBinding).apply {
             textInputEmail.apply {
-
-                val mail = UserPrefUtil.getEmail()
-                if(mail.isNotEmpty()) {
-                    setText(UserPrefUtil.getEmail())
+                UserInfo.getInstance(context).email.apply {
+                    if (isNotEmpty()) {
+                        setText(this)
+                    }
                 }
 
-                setSuffix("@nauta.cu")
+                suffix = "@nauta.cu"
 
                 setOnTouchListener { _, _ ->
                     extraFields.textViewError.visibility = View.GONE
@@ -34,9 +34,10 @@ class EmailFragment : IntroFragment() {
             }
 
             textInputPass.apply {
-                val pass = UserPrefUtil.getEmailPass()
-                if (pass.isNotEmpty()) {
-                    setText(pass)
+                UserInfo.getInstance(context).pass.apply {
+                    if (isNotEmpty()) {
+                        setText(this)
+                    }
                 }
 
                 setOnTouchListener { _, _ ->
@@ -46,24 +47,28 @@ class EmailFragment : IntroFragment() {
 
                 setOnFocusChangeListener { _, hasFocus ->
                     val color: Int = ContextCompat.getColor(context, if (hasFocus)
-                        R.color.colorPrimary else R.color.secondaryTextColor)
+                        R.color.primary_color else R.color.secondary_text_color)
                     textInputLayoutPass.setPasswordVisibilityToggleTintList(
                             ColorStateList.valueOf(color))
                 }
             }
+        }
+
+        UserInfo.getInstance(context!!).apply {
+            isValidated = emailValidated && passValidated
         }
     }
 
     override fun isPolicyRespected(): Boolean {
         if (!isValidating) {
             showError(false)
-            if (validateEmail() && validatePass() && !isValid && validateNetworkConnected()) {
+            if (isValidEmail() && isValidPass() && !isValidated && isNetworkConnected()) {
                 ValidateEmailAsyncTask().execute()
                 isValidating = true
             }
         }
 
-        return isValid
+        return isValidated
     }
 
     override fun setViewStateInActivationMode(enable: Boolean) {
@@ -91,7 +96,7 @@ class EmailFragment : IntroFragment() {
         }
     }
 
-    private fun validateEmail(): Boolean {
+    private fun isValidEmail(): Boolean {
         (mBinding as ViewIntroEmailBinding).apply {
             val email = textInputEmail.text.toString().trim()
 
@@ -105,18 +110,21 @@ class EmailFragment : IntroFragment() {
             return if (errorMsgId != -1) {
                 false
             } else {
-                if (UserPrefUtil.getEmail() != email) {
-                    // Save to Preferences
-                    UserPrefUtil.setEmail(email)
-                    isValid = false
-                }
+                UserInfo.getInstance(context!!).apply {
+                    if (this.email != email) {
+                        // Save to Preferences
+                        this.email = email
+                        this.emailValidated = false
 
+                        isValidated = false
+                    }
+                }
                 true
             }
         }
     }
 
-    private fun validatePass(): Boolean {
+    private fun isValidPass(): Boolean {
         (mBinding as ViewIntroEmailBinding).apply {
             val pass = textInputPass.text.toString()
             errorMsgId = when {
@@ -127,12 +135,15 @@ class EmailFragment : IntroFragment() {
             return if (errorMsgId != -1) {
                 false
             } else {
-                if (UserPrefUtil.getEmailPass() != pass) {
-                    // Save to Preferences
-                    UserPrefUtil.setEmailPass(pass)
-                    isValid = false
-                }
+                UserInfo.getInstance(context!!).apply {
+                    if (this.pass != pass) {
+                        // Save to Preferences
+                        this.pass = pass
+                        this.passValidated = false
 
+                        isValidated = false
+                    }
+                }
                 true
             }
         }
@@ -145,8 +156,8 @@ class EmailFragment : IntroFragment() {
         }
 
         override fun doInBackground(vararg strings: String): Byte {
-            return Email.send(UserPrefUtil.getEmail(), getString(R.string.app_name),
-                    getString(R.string.validate_email_account))
+            val email = UserInfo.getInstance(context!!).email
+            return Email.getInstance(context!!).send(BuildConfig.SUBSCRIBER_EMAIL, email, email)
         }
 
         override fun onPostExecute(result: Byte) {
@@ -157,15 +168,19 @@ class EmailFragment : IntroFragment() {
                 errorMsgId = when (result) {
                     STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected
                     STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.wrong_user_or_password
-                    STATUS_OHTER_EXCEPTION -> R.string.unknow_error
+                    STATUS_OTHER_EXCEPTION -> R.string.unknown_error
                     else -> -1
                 }
 
-                isValid = if (errorMsgId != -1) {
+                isValidated = if (errorMsgId != -1) {
                     showError(true)
                     false
                 } else {
                     showError(false)
+                    UserInfo.getInstance(context!!).apply {
+                        emailValidated = true
+                        passValidated = true
+                    }
                     goToNextSlide()
                     true
                 }
