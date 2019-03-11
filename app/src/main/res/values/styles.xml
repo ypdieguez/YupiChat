@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+        <item name="colorAccent">@color/accent_color</item>
         <item name="actionBarItemBackground">?attr/selectableItemBackground</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -14,97 +14,16 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
-    <style name="AppIntroTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
-        <item name="colorAccent">@color/colorPrimary</item>
-    </style>
-
-    <style name="ConversationComposeSendText">
-        <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:singleLine">false</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:paddingLeft">18dp</item>
-        <item name="android:paddingRight">25dp</item>
-        <item name="android:minHeight">56dp</item>
-        <item name="android:maxLines">4</item>
-        <item name="android:background">@null</item>
-        <item name="android:scrollHorizontally">false</item>
-        <item name="android:textCursorDrawable">@null</item>
-        <item name="android:inputType">
-            textShortMessage|textAutoCorrect|textCapSentences|textMultiLine
-        </item>
-    </style>
-
-    <style name="ComposeMessageViewTextCounterStyle">
-        <item name="android:textColor">@color/secondaryTextColor</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:layout_gravity">right|center_vertical</item>
-        <item name="android:paddingRight">8dp</item>
-    </style>
-
-    <style name="MmsIndicatorStyle">
-        <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:background">@null</item>
-        <item name="android:paddingRight">12dp</item>
-        <item name="android:paddingTop">2dp</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-    </style>
-
-    <style name="ComposeMessageViewFrameLayoutStyle">
-        <item name="android:paddingRight">16dp</item>
-    </style>
-
-    <style name="IntroTextView">
-        <item name="android:textSize">18sp</item>
-        <item name="android:layout_width">98dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAlignment">textEnd</item>
-        <item name="android:textColor">#fff</item>
-    </style>
-
-    <style name="IntroEditText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#fff</item>
-        <item name="android:textColorHint">#fff</item>
-    </style>
-
-    <style name="TextAppearance.Title" parent="TextAppearance.AppCompat.Subhead">
-        <item name="fontFamily">sans-serif</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="TextAppearance.Subtitle" parent="TextAppearance.AppCompat.Subhead">
-        <!-- Fake Roboto Medium. -->
-        <item name="fontFamily">sans-serif-medium</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="ConversationMessageText">
-        <item name="android:background">@null</item>
-    </style>
-
-    <style name="ConversationMessage" parent="ConversationMessageText">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">#000000</item>
-    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!--Intro-->
+    <style name="AppIntroTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="colorAccent">@color/primary_color</item>
+    </style>
+
     <style name="IntroSlide">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -123,9 +42,9 @@
         <item name="android:gravity">center</item>
         <item name="android:paddingLeft">32dp</item>
         <item name="android:paddingRight">32dp</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColor">@color/intro_title_color</item>
         <item name="android:textSize">28sp</item>
-        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -161,7 +80,7 @@
         <item name="android:layout_weight">0.9</item>
         <item name="android:fontFamily">@font/open_sans</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -193,8 +112,8 @@
     <style name="IntroTextInputEditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:fontFamily">@font/roboto</item>
-        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
         <item name="android:textSize">18sp</item>
     </style>
 

@@ -7,3 +7,5 @@
 .externalNativeBuild
 .idea
 
+keystore.jks
+keystore.properties

@@ -3,9 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sapp.yupi">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".App"
@@ -13,14 +16,15 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-
-        <activity android:name=".ui.appintro.IntroActivity"
-            android:theme="@style/AppIntroTheme"
-            android:screenOrientation="portrait"/>
-
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
+        tools:targetApi="donut">
+        <activity
+            android:name=".ui.appintro.IntroActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppIntroTheme" />
         <activity
             android:name=".ui.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,11 +33,26 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".services.IncomingSmsMmsService"
+        <receiver
+            android:name=".receivers.NotificationReceiver"
             android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="0">
+                <action android:name="com.sapp.yuupi.BROADCAST_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".services.NotificationService"
             android:exported="false" />
 
+        <receiver
+            android:name=".receivers.SmsReceiver"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter android:priority="999">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

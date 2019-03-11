@@ -1,33 +1,22 @@
 package com.sapp.yupi.adapters
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sapp.yupi.data.Contact
-import com.sapp.yupi.databinding.ListItemContactBinding
-import com.sapp.yupi.ui.MainFragmentDirections
+import com.sapp.yupi.databinding.ItemContactBinding
+import com.sapp.yupi.ui.ContactFragmentDirections
+import com.sapp.yupi.utils.PhoneUtil
 
-/**
- * Adapter for the [RecyclerView] in [com.sapp.yupi.MainActivity].
- */
-class ContactAdapter(listener: Listener)
-    : ListAdapter<Contact, ContactAdapter.ViewHolder>(ContactDiffCallback()) {
-
-    var mListener: Listener = listener
-
-    interface Listener {
-        fun delete(contact: Contact)
-    }
+class ContactAdapter : ListAdapter<Contact, ContactAdapter.ViewHolder>(ContactDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ListItemContactBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false), mListener)
+        return ViewHolder(ItemContactBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -38,36 +27,32 @@ class ContactAdapter(listener: Listener)
         }
     }
 
-    class ViewHolder(private val binding: ListItemContactBinding, private val listener: Listener)
+    class ViewHolder(private val binding: ItemContactBinding)
         : RecyclerView.ViewHolder(binding.root) {
-        fun bind(contact: Contact) {
+        fun bind(item: Contact) {
             binding.apply {
-                this.contact = contact
+                this.contact = item
 
                 clickListener = View.OnClickListener {
-                    val action = MainFragmentDirections.actionMainFragmentToConversationFragment()
-                    action.setContactId(contact.id.toString())
-                    it.findNavController().navigate(action)
-                }
 
-                editView.setOnClickListener {
-                    val action = MainFragmentDirections.actionMainFragmentToContactFragment()
-                    action.setId(contact.id.toString())
-                    it.findNavController().navigate(action)
-                }
-
-                deleteView.setOnClickListener {
-                    listener.delete(contact)
-                }
-
-                phoneActionView.setOnClickListener {
-                    startActivity(it.context,
-                            Intent(Intent.ACTION_DIAL)
-                                    .setData(Uri.parse("tel:${contact.phone}")), null)
+                    val phone = PhoneUtil.toE164(item.number, null)
+                    val direction = ContactFragmentDirections
+                            .actionContactFragmentToConversationFragment(phone, item.name)
+                    it.findNavController().navigate(direction)
                 }
 
                 executePendingBindings()
             }
         }
+    }
+}
+
+class ContactDiffCallback : DiffUtil.ItemCallback<Contact>() {
+    override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+        return oldItem.number == newItem.number
+    }
+
+    override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+        return oldItem == newItem
     }
 }

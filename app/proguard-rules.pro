@@ -14,8 +14,21 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-renamesourcefileattribute SourceFile
+
+#JavaMail
+-keep class javax.** {*;}
+-keep class com.sun.** {*;}
+-keep class myjava.** {*;}
+-keep class org.apache.harmony.** {*;}
+-keep class mailcap.** {*;}
+-keep class mimetypes.** {*;}
+
+-dontwarn java.awt.**
+-dontwarn java.beans.Beans
+-dontwarn javax.activation.**
+-dontwarn javax.security.**

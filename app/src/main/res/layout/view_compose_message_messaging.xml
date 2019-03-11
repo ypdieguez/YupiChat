@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingTop="@dimen/compose_msg_padding"
-        android:paddingEnd="@dimen/compose_msg_padding">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -23,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/msg_bubble_input"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/roboto_regular"
                 android:gravity="center_vertical"
                 android:hint="@string/compose_message_view_hint_text"
                 android:imeOptions="actionSend|flagNoEnterAction|flagNoExtractUi"
@@ -36,30 +35,18 @@
                 android:paddingBottom="16dp"
                 android:scrollbars="vertical"
                 android:scrollHorizontally="false"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="@color/primary_text_color"
+                android:textColorHint="@color/text_hint_color"
                 android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/char_counter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="9dp"
-                android:fontFamily="sans-serif"
-                android:maxLines="1"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="12sp"
-                android:visibility="invisible"
-                tools:text="160"
-                tools:visibility="visible" />
         </LinearLayout>
 
-        <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/send_message_btn"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
-            android:background="@drawable/send_arrow_background"
-            app:srcCompat="@drawable/send"
-            tools:ignore="ContentDescription" />
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:srcCompat="@drawable/send" />
     </LinearLayout>
 </layout>

@@ -2,17 +2,12 @@
 <resources>
     <!--Intro-->
     <string name="app_name">Yuupi Cuba</string>
-    <string name="intro_app_description">
-        Contacta con tus familiares y amistades de Cuba.
-        \n\n
-        Tus mensajes serán enviados a través de tu conexión a internet y le llegarán a tus contactos
-        como <b>sms</b>.
-    </string>
+    <string name="intro_app_description">Contacta con tus familiares y amistades de Cuba.\n\nTus mensajes serán enviados a través de tu conexión a internet y le llegarán a tus contactos como <b>sms</b>.</string>
+    <string name="country">País</string>
 
     <!--Intro validation-->
+    <string name="choose_country">Elige un país</string>
     <string name="country_not_supported">País no soportado.</string>
-    <string name="host_not_connected">
-       No se pudo conectar al servidor. Comprueba los ajustes de la red.
-    </string>
+    <string name="host_not_connected">No se pudo conectar al servidor. Comprueba los ajustes de la red.</string>
     <string name="install_yuupi_world">Para enviar mensajes desde Cuba instala Yuupi World</string>
 </resources>

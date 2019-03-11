@@ -1,27 +1,19 @@
-/*
- * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.sapp.yupi.adapters
 
 import android.view.View
 import android.widget.ImageView
-import androidx.annotation.DrawableRes
+import android.widget.TextView
+import androidx.annotation.FontRes
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
-import com.google.android.material.textfield.TextInputEditText
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions.bitmapTransform
+import com.sapp.yupi.data.Contact
 import com.sapp.yupi.ui.lettertiles.LetterTileDrawable
+import com.sapp.yupi.utils.DateFormatter
+import com.sapp.yupi.utils.PhoneUtil.Companion.isPhoneNumber
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation.CornerType
 
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean) {
@@ -32,18 +24,29 @@ fun bindIsGone(view: View, isGone: Boolean) {
     }
 }
 
-@BindingAdapter("src")
-fun bindSrc(view: ImageView, name: String) {
-    val drawable = LetterTileDrawable(view.resources).setLetter(name[0]).setIsCircular(true)
-    view.setImageDrawable(drawable)
+@BindingAdapter("imageFromContact")
+fun bindImageFromContact(view: ImageView, contact: Contact) {
+    val context = view.context
+    val name = contact.name
+
+    val model = contact.thumbnailUri ?: LetterTileDrawable(context).apply {
+        if (!isPhoneNumber(name)) {
+            setLetter(name[0])
+        }
+    }
+
+    Glide
+            .with(context).load(model)
+            .apply(bitmapTransform(RoundedCornersTransformation(128, 0, CornerType.ALL)))
+            .into(view)
 }
 
-@BindingAdapter("imageFromResource")
-fun imageFromResource(view: ImageView, @DrawableRes resId: Int) {
-    view.setImageResource(resId)
+@BindingAdapter("dateFromLong")
+fun dateFromLong(view: TextView, date: Long) {
+    view.text = DateFormatter.formatTimeStampString(view.context, date).toLowerCase()
 }
 
-@BindingAdapter("hint")
-fun bindHint(view: TextInputEditText, hint: String) {
-    view.hint = hint
+@BindingAdapter("fontFamily")
+fun fontFamily(view: TextView, @FontRes id: Int) {
+    view.typeface = ResourcesCompat.getFont(view.context, id)
 }

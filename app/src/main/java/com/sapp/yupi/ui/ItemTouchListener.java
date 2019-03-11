@@ -93,19 +93,17 @@ public class ItemTouchListener implements RecyclerView.OnItemTouchListener {
     }
 
     @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
 
-    }
-
-    public void up(final View view, float distanceX) {
+    private void up(final View view, float distanceX) {
         if (distanceX > 0) {
             View actionView = view.findViewById(R.id.view_background_left_actions);
             int actionWidth = actionView.getWidth();
-            distanceX = distanceX >= actionWidth / 2 ? actionWidth : 0;
+            distanceX = distanceX >= actionWidth / 2F ? actionWidth : 0;
         } else {
             View actionView = view.findViewById(R.id.view_background_right_actions);
             int actionWidth = actionView.getWidth();
-            distanceX = -distanceX >= actionWidth / 2 ? -actionWidth : 0;
+            distanceX = -distanceX >= actionWidth / 2F ? -actionWidth : 0;
         }
 
         spring(view.findViewById(R.id.view_foreground), distanceX);
@@ -171,7 +169,7 @@ public class ItemTouchListener implements RecyclerView.OnItemTouchListener {
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if (swipe && Math.abs(distanceX) > Math.abs(distanceY)) {
+            if (swipe && Math.abs(distanceX) > Math.abs(distanceY) && mFgView != null) {
                 // finger is moving horizontally
                 mFinalX -= distanceX;
                 setVisible(mBgLeftView, mBgRightView, mFinalX);
@@ -191,7 +189,7 @@ public class ItemTouchListener implements RecyclerView.OnItemTouchListener {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             if (swipe && Math.abs(velocityX) >= mMinFlingVelocity
-                    && Math.abs(velocityX) > Math.abs(velocityY)) {
+                    && Math.abs(velocityX) > Math.abs(velocityY) && mView != null) {
                 final View view = mView;
                 final View bgLeftView = view.findViewById(R.id.view_background_left);
                 final View bgRightView = view.findViewById(R.id.view_background_right);

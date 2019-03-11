@@ -18,9 +18,12 @@ interface MessageDao {
     @Query("DELETE FROM messages")
     fun deleteAll()
 
-    @Query("SELECT * FROM messages WHERE contact_id = :contactId")
-    fun getMessagesForContact(contactId: Long): LiveData<List<Message>>
+    @Query("SELECT * FROM messages WHERE phone = :phone ORDER BY date")
+    fun getMessagesForConversation(phone: String): LiveData<List<Message>>
 
-    @Query("SELECT * FROM messages WHERE msg_id = :msgId")
-    fun getMessageWithMsgId(msgId: Long): Message?
+    @Query("SELECT * FROM messages WHERE id = :id")
+    fun getMessage(id: Long): Message
+//
+//    @Query("SELECT * FROM messages WHERE sms_id = :smsId")
+//    fun getMessageWithSmsId(smsId: Long): Message?
 }

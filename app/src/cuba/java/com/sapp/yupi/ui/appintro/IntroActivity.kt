@@ -2,15 +2,19 @@ package com.sapp.yupi.ui.appintro
 
 import android.os.Bundle
 import com.sapp.yupi.R
-import com.sapp.yupi.util.UserPrefUtil
+import com.sapp.yupi.utils.UserInfo
 
 class IntroActivity : IntroBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        UserPrefUtil.setEmail("2Dzf4fCdJqMiAfZr@gmail.com")
-        UserPrefUtil.setEmailPass("9kQqzSLS")
+        UserInfo.getInstance(this).apply {
+            email = "2Dzf4fCdJqMiAfZr@gmail.com"
+            pass = "9kQqzSLS"
+            emailValidated = true
+            passValidated = true
+        }
 
         // Add slides
         addSlide(BasicFragment.newInstance(
@@ -20,7 +24,7 @@ class IntroActivity : IntroBaseActivity() {
         addSlide(PhoneFragment.newInstance())
         addSlide(BasicFragment.newInstance(
                 title = R.string.intro_conclusion_title,
-                imageRes = R.drawable.icons8_confetti_512,
+                imageRes = R.drawable.icons8_chat_bubble_512,
                 description = R.string.intro_conclusion_description
         ))
     }

@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:padding="16dp"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/roboto"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/country" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/list"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    tools:context="com.sapp.yupi.ui.appintro.CountryListDialogFragment"
-    tools:listitem="@layout/country_list_dialog_item" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/country"
+            android:textColor="@color/primary_text_color"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
-</LinearLayout>
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_gravity="bottom"
+            android:alpha="0"
+            android:background="@drawable/conversation_compose_divider_gradient"
+            android:importantForAccessibility="no" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            tools:context="com.sapp.yupi.ui.appintro.CountryListDialogFragment"
+            tools:listitem="@layout/country_list_dialog_item" />
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.ThreeBounce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:SpinKit_Color="@color/secondary_text_color" />
+
+    </LinearLayout>
+</layout>

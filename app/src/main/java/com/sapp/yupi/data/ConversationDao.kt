@@ -9,7 +9,7 @@ import androidx.room.*
 @Dao
 interface ConversationDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insert(conversation: Conversation): Long
+    fun insert(conversation: Conversation)
 
     @Update
     fun update(conversation: Conversation)
@@ -23,9 +23,12 @@ interface ConversationDao {
     @Query("SELECT * FROM conversations ORDER BY last_message_date DESC")
     fun getConversations(): LiveData<List<Conversation>>
 
-    @Query("SELECT * FROM conversations WHERE id = :id")
-    fun getConversation(id: Long): LiveData<Conversation>
+    @Query("SELECT * FROM conversations WHERE phone = :phone")
+    fun getConversation(phone: String): LiveData<Conversation>
 
-    @Query("SELECT * FROM contacts WHERE phone = :phone")
-    fun getConversationByPhone(phone: String): Contact?
+    @Query("SELECT * FROM conversations WHERE phone = :phone")
+    fun getConversationByPhone(phone: String): Conversation?
+
+    @Query("UPDATE conversations SET read = 1 WHERE phone = :phone")
+    fun markConversationAsRead(phone: String)
 }

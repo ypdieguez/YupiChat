@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4CAF50</color>
-    <color name="colorPrimaryDark">#087F23</color>
-    <color name="colorAccent">#00C853</color>
-    <color name="primaryTextColor">#212121</color>
-    <color name="secondaryTextColor">#757575</color>
-    <color name="colorPrimaryInverse">#FFF</color>
-    <color name="primaryTextColorInverse">#FAFAFA</color>
-    <color name="secondaryTextColorInverse">#9E9E9E</color>
+    <!--Grey-->
+    <color name="grey_900">#212121</color>
+    <color name="grey_800">#424242</color>
+    <color name="grey_700">#616161</color>
+    <color name="grey_600">#757575</color>
+    <color name="grey_500">#9e9e9e</color>
+    <color name="grey_400">#bdbdbd</color>
+    <color name="grey_300">#e0e0e0</color>
+    <color name="grey_200">#eeeeee</color>
+    <color name="grey_100">#f5f5f5</color>
+    <color name="grey_050">#fafafa</color>
+    <color name="grey_000">#ffffff</color>
+
+    <!--Main colors-->
+    <color name="primary_color">#4CAF50</color>
+    <color name="primary_color_dark">#087F23</color>
+    <color name="accent_color">#00C853</color>
+    <color name="primary_text_color">@color/grey_700</color>
+    <color name="secondary_text_color">@color/grey_600</color>
+    <color name="primary_color_inverse">@color/grey_000</color>
+    <color name="primary_text_color_inverse">@color/grey_050</color>
+    <color name="secondary_text_color_inverse">@color/grey_100</color>
+
 
     <color name="compose_message_send_color_pressed">#999999</color>
     <color name="conversation_compose_divider_start">#44000000</color>
@@ -17,13 +32,20 @@
     <color name="background">#FFF</color>
     <color name="divider">#FFF</color>
 
-    <!--Message Bubble-->
-    <color name="bubble_incoming_color">@color/colorPrimary</color>
-    <color name="bubble_outgoing_color">@color/colorPrimaryInverse</color>
-    <color name="msg_incoming_color">@color/primaryTextColorInverse</color>
-    <color name="msg_outgoing_color">@color/primaryTextColor</color>
-    <color name="date_incoming_color">@color/secondaryTextColorInverse</color>
-    <color name="date_outgoing_color">@color/secondaryTextColor</color>
+    <!--Intro-->
+    <color name="intro_title_color">@color/grey_900</color>
+    <color name="intro_description_color">@color/grey_600</color>
 
-    <color name="introError">#F44336</color>
+    <!--Message Bubble-->
+    <color name="bubble_incoming_color">@color/primary_color</color>
+    <color name="bubble_outgoing_color">@color/primary_color_inverse</color>
+    <color name="msg_incoming_color">@color/primary_text_color_inverse</color>
+    <color name="msg_outgoing_color">@color/primary_text_color</color>
+    <color name="date_incoming_color">@color/secondary_text_color_inverse</color>
+    <color name="date_outgoing_color">@color/secondary_text_color</color>
+
+    <!--Compose-->
+    <color name="text_hint_color">@color/grey_400</color>
+
+    <color name="intro_error_color">#F44336</color>
 </resources>

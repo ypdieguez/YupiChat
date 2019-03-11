@@ -1,59 +1,116 @@
 package com.sapp.yupi.workers
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.sapp.yupi.STATUS_SUCCESS
-import com.sapp.yupi.TYPE_INCOMING
-import com.sapp.yupi.data.AppDatabase
-import com.sapp.yupi.data.Contact
-import com.sapp.yupi.data.Message
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.sapp.yupi.*
+import com.sapp.yupi.data.*
+import com.sapp.yupi.utils.PhoneUtil
+import com.sapp.yupi.utils.UserInfo
 import java.util.*
-import android.preference.PreferenceManager.getDefaultSharedPreferences
-import android.content.SharedPreferences
-import com.sapp.yupi.IncomingMsgNotification
 
+/**
+ *  Id of sms message
+ */
 const val KEY_MSG_ID = "msg_id"
+/**
+ *  Date of incoming sms message
+ */
 const val KEY_DATE = "date"
+/**
+ *  Body of sms message
+ */
 const val KEY_BODY = "body"
+/**
+ * Phone sender
+ */
+const val KEY_PHONE = "phone"
 
 class IncomingMsgWorker(context: Context, workerParams: WorkerParameters)
     : Worker(context, workerParams) {
 
     override fun doWork(): Result {
-        // Get DB
-        val db = AppDatabase.getInstance(applicationContext)
-        // Get Data
-        val msgId = inputData.getLong(KEY_MSG_ID, 0)
+        try {
+            val context = applicationContext
 
-        var msg = db.messageDao().getMessageWithMsgId(msgId)
+            // Get DB
+            val db = AppDatabase.getInstance(context)
 
-        if (msg == null) {
-            // Fetch more data
+            // Fetch data
             val date = inputData.getLong(KEY_DATE, Calendar.getInstance().timeInMillis)
-            val body = inputData.getString(KEY_BODY)
+            val phone = inputData.getString(KEY_PHONE)!!
+            val text = inputData.getString(KEY_BODY)!!
 
-            // Parse body
-            val text = body!!.substringBeforeLast("\n\nEnviado por:")
+            // Utils
+            val user = UserInfo.getInstance(context)
+            val phoneUtil = PhoneNumberUtil.getInstance()
 
-            val info = body.substringAfterLast("\n\nEnviado por:\n")
-                    .substringBefore("\nDesde:")
+            if (phoneUtil.isNumberMatch(user.phone, phone) != PhoneNumberUtil.MatchType.EXACT_MATCH) {
+                // Insert or update conversation
+                val conv = db.conversationDao().getConversationByPhone(phone)
+                if (conv == null) {
+                    db.conversationDao().insert(Conversation(
+                            read = false,
+                            lastMessageDate = date,
+                            phone = phone,
+                            snippet = text
+                    ))
+                } else {
+                    conv.read = false
+                    conv.lastMessageDate = date
+                    conv.snippet = text
+                    db.conversationDao().update(conv)
+                }
 
-            val nick = info.substringAfter("Nick: ").substringBefore("\n")
-            val phone = info.substringAfter("Cell: ").substringBefore("\n")
+                // Insert msg into db
+                val msg = Message(TYPE_INCOMING, STATUS_SUCCESS, date, text, phone)
+                db.messageDao().insert(msg)
 
-            // Get ContactDao
-            val contact = db.contactDao().getContactByPhone(phone)
-            // Check if contact exist, if not insert him.
-            val id = contact?.id ?: db.contactDao().insert(Contact(nick, phone))
-            // Insert msg into db
-            msg = Message(id, msgId, TYPE_INCOMING, STATUS_SUCCESS, date, text)
-            db.messageDao().insert(msg)
+                // Notify
+                val contact = if (ContextCompat.checkSelfPermission(context,
+                                Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                    ContactRepository.getInstance(context).getContactInfoForPhoneNumber(phone)
+                } else {
+                    val number = PhoneUtil.toInternational(phone, user.regionCode)
+                    Contact(number, number)
+                }
 
-            // Notify
-            IncomingMsgNotification.notify(applicationContext, "Tienes un mensaje nuevo.", 1)
+                sendNotification(Notification(contact, text), phone)
+            } else {
+                // This process will trigger once
+                if (!user.phoneValidated) {
+                    // This only will happen when phone is in validating process
+                    user.phoneValidated = true
+
+                    // Send to notify the phone validation
+                    sendNotification(Notification(
+                            Contact(context.getString(R.string.app_name), phone),
+                            context.getString(R.string.subscription)
+                    ), phone)
+                }
+            }
+
+            return Result.success()
+        } catch (e: Exception) {
+            return Result.failure()
         }
+    }
 
-        return Result.success()
+    private fun sendNotification(notification: Notification, phone: String) {
+        val extras = Bundle()
+        extras.putParcelable(NOTIFICATION, notification)
+        extras.putString(PHONE_NOTIFICATION, phone)
+
+        val broadcast = Intent()
+        broadcast.putExtras(extras)
+        broadcast.action = BROADCAST_NOTIFICATION
+
+        applicationContext.sendOrderedBroadcast(broadcast, null)
     }
 }

@@ -12,7 +12,7 @@ class MessageRepository private constructor(private val messageDao: MessageDao) 
         runOnIoThread { messageDao.delete(message) }
     }
 
-    fun getMessagesForContact(contactId: Long) = messageDao.getMessagesForContact(contactId)
+    fun getMessagesForConversation(phone: String) = messageDao.getMessagesForConversation(phone)
 
     companion object {
 

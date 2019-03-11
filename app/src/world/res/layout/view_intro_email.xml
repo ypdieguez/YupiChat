@@ -40,7 +40,7 @@
                         android:id="@+id/text_input_email"
                         style="@style/IntroTextInputEditText"
                         android:hint="@string/user"
-                        android:inputType="text" />
+                        android:inputType="textEmailAddress" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -51,7 +51,7 @@
                     android:id="@+id/text_input_layout_pass"
                     style="@style/IntroTextInputLayout"
                     app:passwordToggleEnabled="true"
-                    app:passwordToggleTint="@color/secondaryTextColor">
+                    app:passwordToggleTint="@color/secondary_text_color">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/text_input_pass"

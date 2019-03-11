@@ -1,33 +1,80 @@
 package com.sapp.yupi.viewmodels
 
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.sapp.yupi.data.Contact2Repository
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.sapp.yupi.data.Contact
+import com.sapp.yupi.data.ContactRepository
 import com.sapp.yupi.data.Conversation
 import com.sapp.yupi.data.ConversationRepository
+import com.sapp.yupi.utils.PhoneUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class ConversationViewModel internal constructor(
-        private val conversationRepository: ConversationRepository,
-        private val contactRepository: Contact2Repository
+        private val conversationRepo: ConversationRepository,
+        private val contactRepo: ContactRepository,
+        contactReadPermission: Boolean
 ) : ViewModel() {
-    private val conversationList = MediatorLiveData<List<Conversation>>()
+
+    lateinit var conversations: LiveData<List<Conversation>>
+
+    /**
+     * This is the job for all coroutines started by this ViewModel.
+     *
+     * Cancelling this job will cancel all coroutines started by this ViewModel.
+     */
+    private val viewModelJob = Job()
+
+    /**
+     * This is the scope for all coroutines launched by [ConversationViewModel].
+     *
+     * Since we pass [viewModelJob], you can cancel all coroutines launched by [viewModelScope] by calling
+     * viewModelJob.cancel().  This is called in [onCleared].
+     */
+    private val viewModelScope = CoroutineScope(Main + viewModelJob)
+
+    /**
+     * Cancel all coroutines when the ViewModel is cleared.
+     */
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
 
     init {
-        val liveConversationList = Transformations.switchMap(conversationRepository.getConversations()) { convList ->
-            val list = contactRepository.contacts.value
+        updateConversations(contactReadPermission)
+    }
 
-            convList.forEach { conv ->
-                list.forEach { contact ->
-                    if (contact.number == conv.phone) {
-                        conv.contact = contact
+    fun updateConversations(contactReadPermission: Boolean) {
+        conversations = Transformations.map(conversationRepo.getConversations()) { list ->
+            list.apply {
+                if (contactReadPermission) {
+                    forEach {
+                        it.contact = contactRepo.getContactInfoForPhoneNumber(it.phone)
+                    }
+                } else {
+                    forEach {
+                        val number = PhoneUtil.toInternational(it.phone, null)
+                        it.contact = Contact(number, number)
                     }
                 }
             }
-            conversationList
         }
-
     }
-    conversationList.addSource(liveConversationList, conversationList::setValue)
-}
+
+    fun delete(conversation: Conversation) {
+        viewModelScope.launch {
+            conversationRepo.delete(conversation)
+        }
+    }
+
+    fun markConversationAsRead(phone: String) {
+        viewModelScope.launch {
+            conversationRepo.markConversationAsRead(phone)
+        }
+    }
 }

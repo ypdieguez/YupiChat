@@ -4,7 +4,22 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 
+// Load keystore.properties for signing in release build type
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
     defaultConfig {
@@ -12,25 +27,30 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         flavorDimensions "default"
-
         // Add flavors to ask into code
         buildConfigField "String", "FLAVOR_WORLD", '"world"' // App for cubans
         buildConfigField "String", "FLAVOR_CUBA", '"cuba"'   // App for other countries
+        // Email to subscribe
+        buildConfigField "String", "SUBSCRIBER_EMAIL", '"2Dzf4fCdJqMiAfZr@gmail.com"'
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            // Email where msg are send
+            buildConfigField "String", "RECIPIENT_EMAIL", '"yuupiworld.cuba.sms@gmail.com"'
         }
-
         debug {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
+            // Email where msg are send
+            buildConfigField "String", "RECIPIENT_EMAIL", '"gtom20180828@gmail.com"'
         }
     }
 
@@ -41,14 +61,17 @@ android {
             buildConfigField "String", "HOST", '"smtp.gmail.com"'
             buildConfigField "String", "PORT", '"465"'
             buildConfigField "String", "SSL_ENABLED", '"true"'
-        }
 
+            archivesBaseName = "YuupiCuba_v$defaultConfig.versionName"
+        }
         world {
             applicationIdSuffix ".world"
             // Config
             buildConfigField "String", "HOST", '"smtp.nauta.cu"'
             buildConfigField "String", "PORT", '"25"'
             buildConfigField "String", "SSL_ENABLED", '"false"'
+
+            archivesBaseName = "YuupiWorld_v$defaultConfig.versionName"
         }
     }
 
@@ -67,13 +90,16 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
     // Android Kotlin
     implementation 'androidx.core:core-ktx:1.0.1'
 
+    // Legacy
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     // Material
@@ -84,28 +110,36 @@ dependencies {
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
 
     // Test
-//    testImplementation 'junit:junit:4.12'
-//    androidTestImplementation 'androidx.test:runner:1.1.1'
-//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    //    testImplementation 'junit:junit:4.12'
+
+    //    androidTestImplementation 'androidx.test:runner:1.1.1'
+
+    //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
     // Room
     implementation 'androidx.room:room-runtime:2.0.0'
     kapt 'androidx.room:room-compiler:2.0.0'
-//    androidTestImplementation 'androidx.room:room-testing:2.0.0'
+
+    //    androidTestImplementation 'androidx.room:room-testing:2.0.0'
 
     // Lifecycle
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-//    implementation "androidx.lifecycle:lifecycle-common-java8:2.0.0"
-//    testImplementation 'androidx.arch.core:core-testing:2.0.0'
+
+    //    implementation "androidx.lifecycle:lifecycle-common-java8:2.0.0"
+
+    //    testImplementation 'androidx.arch.core:core-testing:2.0.0'
 
     // Navigation
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
-//    androidTestImplementation "android.arch.navigation:navigation-testing:$nav_version"
+
+    //    androidTestImplementation "android.arch.navigation:navigation-testing:$nav_version"
 
     // WorkManager
     implementation "android.arch.work:work-runtime-ktx:$work_version"
-//    androidTestImplementation "android.arch.work:work-testing:$work_version"
+
+    //    androidTestImplementation "android.arch.work:work-testing:$work_version"
 
     //JavaMail
     implementation 'com.sun.mail:android-mail:1.6.3'
@@ -115,17 +149,22 @@ dependencies {
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
 
     // LibPhoneNumber
-    worldImplementation 'com.googlecode.libphonenumber:libphonenumber:8.10.2'
-    cubaImplementation 'com.googlecode.libphonenumber:geocoder:2.108'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.6'
 
     // KeyboardVisibilityEvent
-    cubaImplementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.2.0'
+    cubaImplementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.2.1'
 
     // Android-SpinKit
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
 
-//    implementation project(':contacts')
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
+
+    // Glide Transformations
+    implementation 'jp.wasabeef:glide-transformations:4.0.1'
 
     // CircleImageView
-//    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    //    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }

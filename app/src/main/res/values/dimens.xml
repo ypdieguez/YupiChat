@@ -1,6 +1,5 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="conversation_bubble_width_snap">20dp</dimen>
 
     <!--Icon-->
     <dimen name="icon_size">56dp</dimen>
@@ -12,10 +11,12 @@
     <!--App corners-->
     <dimen name="corner">3dp</dimen>
 
-    <dimen name="list_item_spacing">16dp</dimen>
-    <dimen name="list_item_spacing_half">8dp</dimen>
-
     <!--Dialog permissions-->
     <dimen name="icon">56dp</dimen>
-    <dimen name="plus">28dp</dimen>
+
+    <!-- The width of the big icons in notifications. -->
+    <dimen name="large_icon_width">100dp</dimen>
+
+    <!-- The width of the big icons in notifications. -->
+    <dimen name="large_icon_height">100dp</dimen>
 </resources>

@@ -12,33 +12,30 @@
         tools:layout="@layout/fragment_main" >
         <action
             android:id="@+id/action_mainFragment_to_contactFragment"
-            app:destination="@+id/contactFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:destination="@+id/contactFragment" />
         <action
             android:id="@+id/action_mainFragment_to_conversationFragment"
-            app:destination="@id/conversationFragment" />
+            app:destination="@+id/conversationFragment" />
     </fragment>
     <fragment
         android:id="@+id/contactFragment"
         android:name="com.sapp.yupi.ui.ContactFragment"
-        android:label="ContactFragment"
+        android:label="@string/contacts"
         tools:layout="@layout/fragment_contact">
-        <argument
-            android:name="id"
-            android:defaultValue="0"
-            app:argType="string" />
+        <action
+            android:id="@+id/action_contactFragment_to_conversationFragment"
+            app:destination="@+id/conversationFragment"
+            app:popUpTo="@+id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/conversationFragment"
         android:name="com.sapp.yupi.ui.ConversationFragment"
         android:label="ConversationFragment"
         tools:layout="@layout/fragment_conversation">
+        <argument android:name="phone"
+            app:argType="string" />
         <argument
-            android:name="contactId"
-            android:defaultValue="0"
+            android:name="name"
             app:argType="string" />
     </fragment>
 </navigation>

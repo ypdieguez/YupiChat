@@ -13,28 +13,28 @@
     <LinearLayout
         android:id="@+id/message_container_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:background="@color/secondaryTextColor">
+        android:layout_height="wrap_content">
 
         <com.sapp.yupi.ui.MessageView
             android:id="@+id/bubble_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/compose_msg_padding"
-            android:paddingStart="16dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="16dp"
-            android:background="@drawable/message_bubble"
-            android:paddingBottom="16dp">
+            android:background="@drawable/message_bubble">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bubble_view_foreground"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="false"
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/message_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
                     android:text="@{message.text}"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Hello world."
-                    tools:textColor="@color/primaryTextColor" />
+                    tools:textColor="@color/msg_incoming_color" />
 
                 <TextView
                     android:id="@+id/date_view"
@@ -50,31 +50,46 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginTop="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:text="9:30 am"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="bottom"
                     android:textSize="12sp"
+                    app:dateFromLong="@{message.date}"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/status_view"
+                    app:layout_constraintEnd_toStartOf="@+id/status_container"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/message_view"
                     app:layout_constraintVertical_bias="1.0"
                     tools:text="9:30 a.m"
-                    tools:textColor="@color/secondaryTextColor" />
+                    tools:textColor="@color/date_incoming_color" />
 
-                <ImageView
-                    android:id="@+id/status_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_gravity="bottom|end"
+                <LinearLayout
+                    android:id="@+id/status_container"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_marginTop="4dp"
-                    android:scaleType="centerCrop"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/message_view"
-                    app:layout_constraintVertical_bias="1.0"
-                    tools:ignore="ContentDescription"
-                    tools:src="@drawable/exclamation" />
+                    app:layout_constraintTop_toBottomOf="@+id/message_view">
+
+                    <ImageView
+                        android:id="@+id/status_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="ContentDescription"
+                        tools:src="@drawable/exclamation"
+                        tools:visibility="visible" />
+
+                    <com.github.ybq.android.spinkit.SpinKitView
+                        android:id="@+id/status_sending_view"
+                        style="@style/SpinKitView.Small.ThreeBounce"
+                        android:layout_width="16dp"
+                        android:layout_height="8dp"
+                        android:layout_gravity="bottom"
+                        app:SpinKit_Color="@color/secondary_text_color"
+                        tools:visibility="gone" />
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.sapp.yupi.ui.MessageView>
     </LinearLayout>

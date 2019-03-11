@@ -6,65 +6,32 @@
     <data>
 
         <variable
-            name="contact"
-            type="com.sapp.yupi.data.Contact" />
+            name="hasContacts"
+            type="boolean" />
+
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusableInTouchMode="true">
+        android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/name_view"
-            style="@style/Base.Widget.MaterialComponents.TextInputEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="@string/name"
-            android:inputType="textPersonName|textCapWords"
-            android:text="@{contact.name}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="Autofill" />
-
-        <EditText
-            android:id="@+id/phone_view"
-            style="@style/Base.Widget.MaterialComponents.TextInputEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="@string/phone_number"
-            android:inputType="phone"
-            android:text="@{contact.phone}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name_view"
-            tools:ignore="Autofill" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/contact_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            app:isGone="@{!hasContacts}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_contact" />
 
         <TextView
-            android:id="@+id/textView3"
-            android:layout_width="0dp"
+            android:id="@+id/empty_contacts"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="@string/note"
-            android:textAppearance="@style/TextAppearance.Title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phone_view"
-            app:layout_constraintVertical_bias="0.0" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+            android:layout_gravity="center"
+            android:text="@string/empty_contacts"
+            android:textSize="24sp"
+            app:isGone="@{hasContacts}"
+            tools:visibility="gone" />
+    </FrameLayout>
 </layout>
