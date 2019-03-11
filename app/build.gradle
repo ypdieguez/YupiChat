@@ -36,6 +36,8 @@ android {
         buildConfigField "String", "FLAVOR_CUBA", '"cuba"'   // App for other countries
         // Email to subscribe
         buildConfigField "String", "SUBSCRIBER_EMAIL", '"2Dzf4fCdJqMiAfZr@gmail.com"'
+
+        archivesBaseName = "yuupi-v$versionName"
     }
 
     buildTypes {
@@ -61,8 +63,6 @@ android {
             buildConfigField "String", "HOST", '"smtp.gmail.com"'
             buildConfigField "String", "PORT", '"465"'
             buildConfigField "String", "SSL_ENABLED", '"true"'
-
-            archivesBaseName = "YuupiCuba_v$defaultConfig.versionName"
         }
         world {
             applicationIdSuffix ".world"
@@ -70,8 +70,6 @@ android {
             buildConfigField "String", "HOST", '"smtp.nauta.cu"'
             buildConfigField "String", "PORT", '"25"'
             buildConfigField "String", "SSL_ENABLED", '"false"'
-
-            archivesBaseName = "YuupiWorld_v$defaultConfig.versionName"
         }
     }
 
