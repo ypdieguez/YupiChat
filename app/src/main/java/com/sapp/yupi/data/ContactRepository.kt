@@ -93,15 +93,15 @@ class ContactRepository constructor(context: Context) {
                     try {
                         val accountType =
                                 getString(getColumnIndex(ContactsContract.RawContacts.ACCOUNT_TYPE))
-                        if (accountType == "vnd.sec.contact.phone") {
+                        if (accountType != "com.whatsapp") {
                             val phoneNumber = phoneUtil.parse(getString(getColumnIndex(Phone.NUMBER)), regionCode)
 
-//                            val type1 = getInt(getColumnIndex(Phone.TYPE))
-                            val type = phoneUtil.getNumberType(phoneNumber)
-                            val isMobile = /*type2 != PhoneNumberUtil.PhoneNumberType.UNKNOWN &&
-                                    type1 == Phone.TYPE_MOBILE || type1 == Phone.TYPE_WORK_MOBILE ||*/
-                                    type == PhoneNumberUtil.PhoneNumberType.MOBILE ||
-                                    type == PhoneNumberUtil.PhoneNumberType.FIXED_LINE_OR_MOBILE
+                            val type1 = getInt(getColumnIndex(Phone.TYPE))
+                            val type2 = phoneUtil.getNumberType(phoneNumber)
+                            val isMobile =
+                                    type1 == Phone.TYPE_MOBILE || type1 == Phone.TYPE_WORK_MOBILE ||
+                                    type2 == PhoneNumberUtil.PhoneNumberType.MOBILE ||
+                                    type2 == PhoneNumberUtil.PhoneNumberType.FIXED_LINE_OR_MOBILE
 
                             if (isMobile &&  (regionCode == "CU" || (regionCode != "CU" &&
                                             phoneNumber.countryCode == 53))) {
@@ -115,8 +115,7 @@ class ContactRepository constructor(context: Context) {
                     }
                 }
 
-                contacts.postValue(list)
-
+                contacts.postValue(list.distinctBy { it.number })
                 close()
             }
         }
