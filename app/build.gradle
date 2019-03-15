@@ -52,7 +52,7 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
             // Email where msg are send
-            buildConfigField "String", "RECIPIENT_EMAIL", '"gtom20180828@gmail.com"'
+            buildConfigField "String", "RECIPIENT_EMAIL", '"yuupiworld.cuba.sms@gmail.com"'
         }
     }
 

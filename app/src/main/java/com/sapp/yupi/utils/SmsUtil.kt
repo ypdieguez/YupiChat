@@ -11,7 +11,8 @@ import com.sapp.yupi.workers.*
 class SmsUtil {
     companion object {
 
-        private const val DELIMITER = "\n\n"
+        private const val START_DELIMITER = "> From: "
+        private const val END_DELIMITER = " "
 
         fun handleOutgoingMsg(phone: String, txt: String, id: Long = -1) {
             val data = Data.Builder()
@@ -28,7 +29,7 @@ class SmsUtil {
             workManager.enqueue(sendMsgWorker)
         }
 
-        fun handleIncomingMsg(date:Long, body: String) {
+        fun handleIncomingMsg(body: String) {
 
             val phone = parsePhone(body)
             if (Patterns.PHONE.matcher(phone).matches()) {
@@ -36,7 +37,6 @@ class SmsUtil {
 
                 // Do the work
                 val data = Data.Builder()
-                        .putLong(KEY_DATE, date)
                         .putString(KEY_PHONE, phone)
                         .putString(KEY_BODY, msg)
                         .build()
@@ -49,10 +49,15 @@ class SmsUtil {
             }
         }
 
-        fun createMsg(content:String, phone: String) =  "$content$DELIMITER$phone"
+        fun createMsg(content:String, phone: String) =
+                "$content\n$START_DELIMITER$phone$END_DELIMITER"
 
-        private fun parsePhone(body: String) = body.substringAfterLast(DELIMITER)
+        private fun parsePhone(body: String) =
+                body.substringAfter(START_DELIMITER).substringBefore(END_DELIMITER)
+                        .trim(' ', '\n')
 
-        private fun parseMsg(body: String) = body.substringBeforeLast(DELIMITER)
+        private fun parseMsg(body: String) =
+                body.substringBefore("$START_DELIMITER${parsePhone(body)}$END_DELIMITER")
+                        .trim(' ', '\n')
     }
 }

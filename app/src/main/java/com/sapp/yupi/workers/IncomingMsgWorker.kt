@@ -16,14 +16,6 @@ import com.sapp.yupi.utils.UserInfo
 import java.util.*
 
 /**
- *  Id of sms message
- */
-const val KEY_MSG_ID = "msg_id"
-/**
- *  Date of incoming sms message
- */
-const val KEY_DATE = "date"
-/**
  *  Body of sms message
  */
 const val KEY_BODY = "body"
@@ -43,7 +35,6 @@ class IncomingMsgWorker(context: Context, workerParams: WorkerParameters)
             val db = AppDatabase.getInstance(context)
 
             // Fetch data
-            val date = inputData.getLong(KEY_DATE, Calendar.getInstance().timeInMillis)
             val phone = inputData.getString(KEY_PHONE)!!
             val text = inputData.getString(KEY_BODY)!!
 
@@ -52,6 +43,8 @@ class IncomingMsgWorker(context: Context, workerParams: WorkerParameters)
             val phoneUtil = PhoneNumberUtil.getInstance()
 
             if (phoneUtil.isNumberMatch(user.phone, phone) != PhoneNumberUtil.MatchType.EXACT_MATCH) {
+                // Get date
+                val date = Calendar.getInstance().timeInMillis
                 // Insert or update conversation
                 val conv = db.conversationDao().getConversationByPhone(phone)
                 if (conv == null) {

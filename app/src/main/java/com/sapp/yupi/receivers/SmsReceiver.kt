@@ -13,13 +13,12 @@ class SmsReceiver : BroadcastReceiver() {
         if(intent.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
             val smsMessages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
             if (smsMessages.isNotEmpty()) {
-                val date = smsMessages[0].timestampMillis
                 var message = ""
                 for (sms in smsMessages) {
                     message += sms.messageBody
                 }
 
-                SmsUtil.handleIncomingMsg(date, message)
+                SmsUtil.handleIncomingMsg(message)
             }
         }
     }
