@@ -7,38 +7,40 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-            <FrameLayout
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <!-- Message list -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/message_list"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/compose_msg_padding"
+                android:paddingEnd="@dimen/compose_msg_padding"
+                android:paddingBottom="@dimen/compose_msg_padding"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/view_message" />
 
-                <!-- Message list -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/message_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:paddingStart="@dimen/compose_msg_padding"
-                    android:paddingEnd="@dimen/compose_msg_padding"
-                    android:paddingBottom="@dimen/compose_msg_padding"
-                    tools:listitem="@layout/view_message" />
-
-                <View
-                    android:id="@+id/conversation_compose_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:layout_gravity="bottom"
-                    android:alpha="0"
-                    android:background="@drawable/conversation_compose_divider_gradient"
-                    android:importantForAccessibility="no" />
-            </FrameLayout>
-
-            <!-- Compose message view. -->
-            <include
-                android:id="@+id/compose_message"
-                layout="@layout/view_compose_message_messaging"
+            <View
+                android:id="@+id/conversation_compose_divider"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="4dp"
+                android:layout_gravity="bottom"
+                android:alpha="0"
+                android:background="@drawable/conversation_compose_divider_gradient"
+                android:importantForAccessibility="no" />
+        </FrameLayout>
+
+        <!-- Compose message view. -->
+        <include
+            android:id="@+id/compose_message"
+            layout="@layout/view_compose_message_messaging"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </layout>

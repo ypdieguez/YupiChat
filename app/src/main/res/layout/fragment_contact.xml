@@ -22,7 +22,8 @@
             android:clipToPadding="false"
             app:isGone="@{!hasContacts}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_contact" />
+            tools:listitem="@layout/item_contact"
+            android:scrollbars="vertical" />
 
         <TextView
             android:id="@+id/empty_contacts"
