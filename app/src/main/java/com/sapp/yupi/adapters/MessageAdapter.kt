@@ -71,6 +71,7 @@ class MessageAdapter : ListAdapter<Message, MessageAdapter.ViewHolder>(MessageDi
                     dateColor = R.color.date_outgoing_color
 
                     // Status is necessary in outgoing msg.
+                    statusContainer.visibility = View.VISIBLE
                     if (msg.status == STATUS_SENDING) {
                         statusView.visibility = View.GONE
                         statusSendingView.visibility = View.VISIBLE
