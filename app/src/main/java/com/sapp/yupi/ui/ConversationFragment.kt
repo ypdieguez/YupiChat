@@ -15,13 +15,14 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.sapp.yupi.*
+import com.sapp.yupi.BROADCAST_NOTIFICATION
+import com.sapp.yupi.PHONE_NOTIFICATION
+import com.sapp.yupi.R
 import com.sapp.yupi.adapters.MessageAdapter
 import com.sapp.yupi.databinding.FragmentConversationBinding
 import com.sapp.yupi.utils.Injector
-import com.sapp.yupi.utils.MessageNotification
-import com.sapp.yupi.utils.SmsUtil
 import com.sapp.yupi.utils.NetworkStatus
+import com.sapp.yupi.utils.SmsUtil
 import com.sapp.yupi.viewmodels.ConversationViewModel
 import com.sapp.yupi.viewmodels.MessageViewModel
 
@@ -100,18 +101,14 @@ class ConversationFragment : Fragment() {
             }
 
             composeMessage.apply {
-                textEditor.requestFocus()
-
-                sendMessageBtn.setOnClickListener {
-                    val msg = textEditor.text.toString()
+                sendBtn.setOnClickListener {
+                    val msg = editor.text.toString()
                     if (msg.trim().isNotEmpty()) {
                         if (NetworkStatus.isConnected()) {
                             // Send msg
                             SmsUtil.handleOutgoingMsg(mPhone, msg)
-                            // Focus to the text editor.
-                            textEditor.requestFocus()
-                            // Clear the text box.
-                            TextKeyListener.clear(textEditor.text)
+                            // Clear text box.
+                            TextKeyListener.clear(editor.text)
                         } else {
                             Snackbar.make(mBinding.root, getString(R.string.network_not_connected),
                                     Snackbar.LENGTH_LONG).show()

@@ -13,7 +13,6 @@ import com.sapp.yupi.R
 import com.sapp.yupi.data.Contact
 import com.sapp.yupi.databinding.ActivityMainBinding
 import com.sapp.yupi.ui.appintro.IntroActivity
-import com.sapp.yupi.utils.MessageNotification
 import com.sapp.yupi.utils.PhoneUtil
 import com.sapp.yupi.utils.UserInfo
 
@@ -53,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        hideKeyboard()
+        hideSoftKeyboard()
         return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp()
     }
 
@@ -61,12 +60,11 @@ class MainActivity : AppCompatActivity() {
         mBinding.toolbar.title = title
     }
 
-    private fun hideKeyboard() {
+    private fun hideSoftKeyboard() {
         val view = currentFocus
         if (view != null) {
-            val inputMethodManager =
-                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         }
     }
 }
