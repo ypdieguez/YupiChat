@@ -4,7 +4,7 @@
     <string name="empty_contacts">No tienes contactos.</string>
 
     <!--Converstation fragment-->
-    <string name="compose_message_view_hint_text">Enviar mensaje</string>
+    <string name="compose_message_view_hint_text">Escribe un mensaje</string>
 
     <!--Contact fragment-->
     <string name="new_contact">Nuevo contacto</string>
