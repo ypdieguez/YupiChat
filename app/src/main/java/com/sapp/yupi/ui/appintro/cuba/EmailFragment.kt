@@ -1,4 +1,4 @@
-package com.sapp.yupi.ui.appintro
+package com.sapp.yupi.ui.appintro.cuba
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
@@ -8,8 +8,11 @@ import android.util.Patterns
 import android.view.View
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
-import com.sapp.yupi.*
-import com.sapp.yupi.databinding.ViewIntroEmailBinding
+import com.sapp.yupi.BuildConfig
+import com.sapp.yupi.Config
+import com.sapp.yupi.R
+import com.sapp.yupi.databinding.ViewIntroEmailCubaBinding
+import com.sapp.yupi.ui.appintro.IntroFragment
 import com.sapp.yupi.utils.*
 
 const val TAG_FRAGMENT_EMAIL = "fragment_mail"
@@ -17,9 +20,9 @@ const val TAG_FRAGMENT_EMAIL = "fragment_mail"
 class EmailFragment : IntroFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        (mBinding as ViewIntroEmailBinding).apply {
+        (mBinding as ViewIntroEmailCubaBinding).apply {
             textInputEmail.apply {
-                UserInfo.getInstance(context).email.apply {
+                Config.getInstance(context).email.apply {
                     if (isNotEmpty()) {
                         setText(this)
                     }
@@ -34,7 +37,7 @@ class EmailFragment : IntroFragment() {
             }
 
             textInputPass.apply {
-                UserInfo.getInstance(context).pass.apply {
+                Config.getInstance(context).pass.apply {
                     if (isNotEmpty()) {
                         setText(this)
                     }
@@ -54,7 +57,7 @@ class EmailFragment : IntroFragment() {
             }
         }
 
-        UserInfo.getInstance(context!!).apply {
+        Config.getInstance(context!!).apply {
             isValidated = emailValidated && passValidated
         }
     }
@@ -74,7 +77,7 @@ class EmailFragment : IntroFragment() {
     override fun setViewStateInActivationMode(enable: Boolean) {
         super.setViewStateInActivationMode(enable)
 
-        (mBinding as ViewIntroEmailBinding).apply {
+        (mBinding as ViewIntroEmailCubaBinding).apply {
             extraFields.spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
             textInputEmail.isEnabled = enable
             textInputLayoutEmail.isEnabled = enable
@@ -85,7 +88,7 @@ class EmailFragment : IntroFragment() {
     }
 
     override fun showError(show: Boolean) {
-        (mBinding as ViewIntroEmailBinding).extraFields.apply {
+        (mBinding as ViewIntroEmailCubaBinding).extraFields.apply {
             if (show) {
                 textViewError.setText(errorMsgId)
                 textViewError.visibility = View.VISIBLE
@@ -97,7 +100,7 @@ class EmailFragment : IntroFragment() {
     }
 
     private fun isValidEmail(): Boolean {
-        (mBinding as ViewIntroEmailBinding).apply {
+        (mBinding as ViewIntroEmailCubaBinding).apply {
             val email = textInputEmail.text.toString().trim()
 
             errorMsgId = when {
@@ -110,7 +113,7 @@ class EmailFragment : IntroFragment() {
             return if (errorMsgId != -1) {
                 false
             } else {
-                UserInfo.getInstance(context!!).apply {
+                Config.getInstance(context!!).apply {
                     if (this.email != email) {
                         // Save to Preferences
                         this.email = email
@@ -125,7 +128,7 @@ class EmailFragment : IntroFragment() {
     }
 
     private fun isValidPass(): Boolean {
-        (mBinding as ViewIntroEmailBinding).apply {
+        (mBinding as ViewIntroEmailCubaBinding).apply {
             val pass = textInputPass.text.toString()
             errorMsgId = when {
                 pass.isEmpty() -> R.string.pass_required
@@ -135,7 +138,7 @@ class EmailFragment : IntroFragment() {
             return if (errorMsgId != -1) {
                 false
             } else {
-                UserInfo.getInstance(context!!).apply {
+                Config.getInstance(context!!).apply {
                     if (this.pass != pass) {
                         // Save to Preferences
                         this.pass = pass
@@ -156,17 +159,17 @@ class EmailFragment : IntroFragment() {
         }
 
         override fun doInBackground(vararg strings: String): Byte {
-            val email = UserInfo.getInstance(context!!).email
+            val email = Config.getInstance(context!!).email
             return Email.getInstance(context!!).send(BuildConfig.SUBSCRIBER_EMAIL, email, email)
         }
 
         override fun onPostExecute(result: Byte) {
-            (mBinding as ViewIntroEmailBinding).apply {
+            (mBinding as ViewIntroEmailCubaBinding).apply {
 
                 setViewStateInActivationMode(true)
 
                 errorMsgId = when (result) {
-                    STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected
+                    STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected_cuba
                     STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.wrong_user_or_password
                     STATUS_OTHER_EXCEPTION -> R.string.unknown_error
                     else -> -1
@@ -177,7 +180,7 @@ class EmailFragment : IntroFragment() {
                     false
                 } else {
                     showError(false)
-                    UserInfo.getInstance(context!!).apply {
+                    Config.getInstance(context!!).apply {
                         emailValidated = true
                         passValidated = true
                     }
@@ -195,7 +198,7 @@ class EmailFragment : IntroFragment() {
         fun newInstance() =
                 EmailFragment().apply {
                     arguments = getBundle(
-                            layoutRes = R.layout.view_intro_email,
+                            layoutRes = R.layout.view_intro_email_cuba,
                             fragmentTag = TAG_FRAGMENT_EMAIL
                     )
                 }

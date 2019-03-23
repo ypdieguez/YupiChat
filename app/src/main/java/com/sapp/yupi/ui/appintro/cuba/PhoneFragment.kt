@@ -1,4 +1,4 @@
-package com.sapp.yupi.ui.appintro
+package com.sapp.yupi.ui.appintro.cuba
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,12 +10,16 @@ import android.view.View
 import android.widget.ProgressBar
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.google.i18n.phonenumbers.PhoneNumberUtil.MatchType
-import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat
-import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
 import com.sapp.yupi.R
-import com.sapp.yupi.databinding.ViewIntroPhoneBinding
-import com.sapp.yupi.utils.UserInfo
+import com.sapp.yupi.databinding.ViewIntroPhoneCubaBinding
+import com.sapp.yupi.databinding.ViewIntroPhoneWorldBinding
+import com.sapp.yupi.ui.appintro.PhoneBaseFragment
+import com.sapp.yupi.ui.appintro.PhoneNumberFormattingTextWatcher
+import com.sapp.yupi.ui.appintro.TAG_FRAGMENT_PHONE
+import com.sapp.yupi.utils.STATUS_AUTHENTICATION_FAILED_EXCEPTION
+import com.sapp.yupi.utils.STATUS_MAIL_CONNECT_EXCEPTION
+import com.sapp.yupi.utils.STATUS_OTHER_EXCEPTION
+import com.sapp.yupi.Config
 
 const val PREFIX_CUBA = "+53"
 
@@ -23,7 +27,7 @@ class PhoneFragment : PhoneBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (mBinding as ViewIntroPhoneBinding).apply {
+        (mBinding as ViewIntroPhoneCubaBinding).apply {
             textInputPhone.apply {
 
                 setOnTouchListener { _, _ ->
@@ -33,7 +37,7 @@ class PhoneFragment : PhoneBaseFragment() {
 
                 addTextChangedListener(PhoneNumberFormattingTextWatcher("CU"))
 
-                UserInfo.getInstance(context).apply {
+                Config.getInstance(context).apply {
                     if (phone.isNotEmpty()) {
                         prefix = PREFIX_CUBA
                         text = SpannableStringBuilder(phone)
@@ -45,7 +49,7 @@ class PhoneFragment : PhoneBaseFragment() {
 
     override fun setViewStateInActivationMode(enable: Boolean) {
         super.setViewStateInActivationMode(enable)
-        (mBinding as ViewIntroPhoneBinding).apply {
+        (mBinding as ViewIntroPhoneCubaBinding).apply {
             extraFields.spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
             textInputPhone.isEnabled = enable
             textInputLayoutPhone.isEnabled = enable
@@ -55,7 +59,7 @@ class PhoneFragment : PhoneBaseFragment() {
     @SuppressLint("MissingPermission", "HardwareIds")
     override fun tryGetPhoneNumber() {
         context?.let {
-            (mBinding as ViewIntroPhoneBinding).apply {
+            (mBinding as ViewIntroPhoneCubaBinding).apply {
                 textInputPhone.apply {
                     val text = text.toString()
                     if (text.isEmpty() || text == prefix) {
@@ -82,7 +86,7 @@ class PhoneFragment : PhoneBaseFragment() {
     }
 
     override fun isValidPhone(): Boolean {
-        (mBinding as ViewIntroPhoneBinding).apply {
+        (mBinding as ViewIntroPhoneCubaBinding).apply {
             val number = textInputPhone.text.toString().trim()
             val prefix = textInputPhone.prefix
 
@@ -114,12 +118,51 @@ class PhoneFragment : PhoneBaseFragment() {
         }
     }
 
+    override fun ass(result: Byte): Boolean {
+        (mBinding as ViewIntroPhoneWorldBinding).apply {
+            val msgId: Int = when (result) {
+                STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected_world
+                STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.wrong_user_or_password
+                STATUS_OTHER_EXCEPTION -> R.string.unknown_error
+                else -> -1
+            }
+
+            return if (msgId != -1) {
+                isValidating = false
+                isValidated = false
+                extraFields.apply {
+                    textViewError.setText(msgId)
+                    textViewError.visibility = View.VISIBLE
+                }
+                setViewStateInActivationMode(true)
+
+                true
+            } else {
+                extraFields.textViewError.visibility = View.GONE
+
+                false
+            }
+        }
+    }
+
+    override fun showError(show: Boolean) {
+        (mBinding as ViewIntroPhoneWorldBinding).extraFields.apply {
+            if (show) {
+                textViewError.setText(errorMsgId)
+                textViewError.visibility = View.VISIBLE
+            } else {
+                textViewError.text = ""
+                textViewError.visibility = View.GONE
+            }
+        }
+    }
+
     companion object {
         @JvmStatic
         fun newInstance() =
                 PhoneFragment().apply {
                     arguments = getBundle(
-                            layoutRes = R.layout.view_intro_phone,
+                            layoutRes = R.layout.view_intro_phone_cuba,
                             fragmentTag = TAG_FRAGMENT_PHONE
                     )
                 }

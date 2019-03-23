@@ -26,12 +26,13 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat
 import com.google.i18n.phonenumbers.PhoneNumberUtil.MatchType
 import com.google.i18n.phonenumbers.Phonenumber
 import com.sapp.yupi.*
-import com.sapp.yupi.databinding.ViewIntroPhoneBinding
 import com.sapp.yupi.utils.*
 
 const val TAG_FRAGMENT_PHONE = "fragment_phone"
 
 abstract class PhoneBaseFragment : IntroFragment() {
+
+
 
     private val receiver = object : BroadcastReceiver() {
         private var isRegistered: Boolean = false
@@ -41,7 +42,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
                 val phone = intent.getStringExtra(PHONE_NOTIFICATION)
 
                 // Utils
-                val user = UserInfo.getInstance(context)
+                val user = Config.getInstance(context)
                 val phoneUtil = PhoneNumberUtil.getInstance()
 
                 if (isValidating && phoneUtil.isNumberMatch(phone, user.phone)
@@ -49,7 +50,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
                     isValidating = false
                     isValidated = true
 
-                    // UserInfo is too updated in IncomingMsgWorker
+                    // Config is too updated in IncomingMsgWorker
                     user.phoneValidated = true
 
                     runOnUiThread {
@@ -85,7 +86,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        UserInfo.getInstance(context!!).apply {
+        Config.getInstance(context!!).apply {
             isValidated = phoneValidated
         }
     }
@@ -123,25 +124,13 @@ abstract class PhoneBaseFragment : IntroFragment() {
         return isValidated
     }
 
-    override fun showError(show: Boolean) {
-        (mBinding as ViewIntroPhoneBinding).extraFields.apply {
-            if (show) {
-                textViewError.setText(errorMsgId)
-                textViewError.visibility = View.VISIBLE
-            } else {
-                textViewError.text = ""
-                textViewError.visibility = View.GONE
-            }
-        }
-    }
-
     protected abstract fun tryGetPhoneNumber()
 
     protected abstract fun isValidPhone(): Boolean
 
     protected fun updateUserInfo(phoneNumber: Phonenumber.PhoneNumber) {
         val phoneUtil = PhoneNumberUtil.getInstance()
-        UserInfo.getInstance(context!!).apply {
+        Config.getInstance(context!!).apply {
             val matchType = phoneUtil.isNumberMatch(phoneNumber, phone)
             if (matchType == MatchType.NO_MATCH || matchType == MatchType.NOT_A_NUMBER) {
                 // Save to Preferences
@@ -152,6 +141,8 @@ abstract class PhoneBaseFragment : IntroFragment() {
             }
         }
     }
+
+    protected abstract fun ass(result: Byte): Boolean
 
     private fun doRequest() {
         if (!askForReadSmsPermission())
@@ -240,34 +231,15 @@ abstract class PhoneBaseFragment : IntroFragment() {
         }
 
         override fun doInBackground(vararg strings: String): Byte {
-            val phone = UserInfo.getInstance(context!!).phone
+            val phone = Config.getInstance(context!!).phone
             return Email.getInstance(context!!).send(BuildConfig.RECIPIENT_EMAIL, phone,
                     getString(R.string.subscription))
         }
 
         override fun onPostExecute(result: Byte) {
-            (mBinding as ViewIntroPhoneBinding).apply {
-                val msgId: Int = when (result) {
-                    STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected
-                    STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.wrong_user_or_password
-                    STATUS_OTHER_EXCEPTION -> R.string.unknown_error
-                    else -> -1
-                }
-
-                if (msgId != -1) {
-                    isValidating = false
-                    isValidated = false
-                    extraFields.apply {
-                        textViewError.setText(msgId)
-                        textViewError.visibility = View.VISIBLE
-                    }
-                    setViewStateInActivationMode(true)
-                } else {
-                    extraFields.textViewError.visibility = View.GONE
-
-                    // Wait for a notification in receiver
-                    receiver.register(requireContext())
-                }
+            if(ass(result)) {
+                // Wait for a notification in receiver
+                receiver.register(requireContext())
             }
         }
     }

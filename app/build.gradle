@@ -26,16 +26,32 @@ android {
         applicationId "com.sapp.yupi"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 1
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         flavorDimensions "default"
+
         // Add flavors to ask into code
         buildConfigField "String", "FLAVOR_WORLD", '"world"' // App for cubans
         buildConfigField "String", "FLAVOR_CUBA", '"cuba"'   // App for other countries
+
         // Email to subscribe
         buildConfigField "String", "SUBSCRIBER_EMAIL", '"2Dzf4fCdJqMiAfZr@gmail.com"'
+
+        // World email sender
+        buildConfigField "String", "WORLD_SENDER_EMAIL", '"deibys.chirino@profiles.com.mx"'
+        buildConfigField "String", "WORLD_SENDER_EMAIL_PASS", '"Pro2065$67*"'
+
+        // World email config
+        buildConfigField "String", "WORLD_HOST", '"mail.profiles.com.mx"'
+        buildConfigField "String", "WORLD_PORT", '"465"'
+        buildConfigField "String", "WORLD_SSL_ENABLED", '"true"'
+
+        // Cuba email config
+        buildConfigField "String", "CUBA_HOST", '"smtp.nauta.cu"'
+        buildConfigField "String", "CUBA_PORT", '"25"'
+        buildConfigField "String", "CUBA_SSL_ENABLED", '"false"'
 
         archivesBaseName = "yuupi-v$versionName"
     }
@@ -53,26 +69,6 @@ android {
             versionNameSuffix "-debug"
             // Email where msg are send
             buildConfigField "String", "RECIPIENT_EMAIL", '"yuupiworld.cuba.sms@gmail.com"'
-        }
-    }
-
-    productFlavors {
-        cuba {
-            applicationIdSuffix ".cuba"
-            // Email sender
-            buildConfigField "String", "SENDER_EMAIL", '"deibys.chirino@profiles.com.mx"'
-            buildConfigField "String", "SENDER_EMAIL_PASS", '"Pro2065$67*"'
-            // Config
-            buildConfigField "String", "HOST", '"mail.profiles.com.mx"'
-            buildConfigField "String", "PORT", '"465"'
-            buildConfigField "String", "SSL_ENABLED", '"true"'
-        }
-        world {
-            applicationIdSuffix ".world"
-            // Config
-            buildConfigField "String", "HOST", '"smtp.nauta.cu"'
-            buildConfigField "String", "PORT", '"25"'
-            buildConfigField "String", "SSL_ENABLED", '"false"'
         }
     }
 
@@ -153,7 +149,7 @@ dependencies {
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.6'
 
     // KeyboardVisibilityEvent
-    cubaImplementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.2.1'
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.2.1'
 
     // Android-SpinKit
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'

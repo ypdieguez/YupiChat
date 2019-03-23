@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout style="@style/IntroSlide">
@@ -7,23 +8,65 @@
         <TextView
             android:id="@+id/title"
             style="@style/IntroTitle"
-            tools:text="@string/app_name" />
+            android:text="@string/app_name" />
 
         <LinearLayout style="@style/IntroImageLayout">
 
             <ImageView
                 android:id="@+id/image"
                 style="@style/IntroImage"
-                tools:ignore="ContentDescription"
-                tools:src="@drawable/icons8_sms_384" />
+                android:src="@drawable/icons8_sms_384"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
 
-        <LinearLayout style="@style/IntroDescLayout">
+        <LinearLayout style="@style/IntroDescLayoutWithFields">
 
             <TextView
                 android:id="@+id/description"
                 style="@style/IntroDesc"
-                tools:text="@string/intro_app_description" />
+                android:text="@string/where_are_you" />
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/IntroFieldsLayout">
+
+            <LinearLayout style="@style/IntroTextFieldsLayout">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/from_cuba"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.9"
+                    android:fontFamily="@font/roboto_regular"
+                    android:padding="16dp"
+                    android:text="@string/in_cuba"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="18sp"
+                    app:cornerRadius="30dp"
+                    app:strokeColor="@color/primary_color_dark"
+                    app:strokeWidth="4dp" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/IntroTextFieldsLayout">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/outside_cuba"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.9"
+                    android:fontFamily="@font/roboto_regular"
+                    android:padding="16dp"
+                    android:text="@string/outside_cuba"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="18sp"
+                    app:cornerRadius="30dp"
+                    app:strokeColor="@color/primary_color_dark"
+                    app:strokeWidth="4dp" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

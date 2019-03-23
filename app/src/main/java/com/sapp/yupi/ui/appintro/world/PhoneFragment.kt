@@ -1,4 +1,4 @@
-package com.sapp.yupi.ui.appintro
+package com.sapp.yupi.ui.appintro.world
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,9 +13,15 @@ import android.widget.ProgressBar
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.sapp.yupi.R
-import com.sapp.yupi.databinding.ViewIntroPhoneBinding
-import com.sapp.yupi.ui.appintro.data.Country
-import com.sapp.yupi.utils.UserInfo
+import com.sapp.yupi.databinding.ViewIntroPhoneWorldBinding
+import com.sapp.yupi.ui.appintro.PhoneBaseFragment
+import com.sapp.yupi.ui.appintro.PhoneNumberFormattingTextWatcher
+import com.sapp.yupi.ui.appintro.TAG_FRAGMENT_PHONE
+import com.sapp.yupi.ui.appintro.world.data.Country
+import com.sapp.yupi.utils.STATUS_AUTHENTICATION_FAILED_EXCEPTION
+import com.sapp.yupi.utils.STATUS_MAIL_CONNECT_EXCEPTION
+import com.sapp.yupi.utils.STATUS_OTHER_EXCEPTION
+import com.sapp.yupi.Config
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
@@ -29,7 +35,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
     private var mWatcher = PhoneNumberFormattingTextWatcher()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        (mBinding as ViewIntroPhoneBinding).apply {
+        (mBinding as ViewIntroPhoneWorldBinding).apply {
             textInputCountry.apply {
                 inputType = InputType.TYPE_NULL
 
@@ -78,7 +84,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
             }
         }
 
-        fillFields(UserInfo.getInstance(requireContext()).phone)
+        fillFields(Config.getInstance(requireContext()).phone)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -106,7 +112,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
 
     @SuppressLint("MissingPermission", "HardwareIds")
     override fun tryGetPhoneNumber() {
-        (mBinding as ViewIntroPhoneBinding).apply {
+        (mBinding as ViewIntroPhoneWorldBinding).apply {
             var country = textInputCountry.text?.toString() ?: ""
             var number = textInputPhone.text?.toString() ?: ""
             if (country.isEmpty() && number.isEmpty()) {
@@ -153,7 +159,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
     }
 
     override fun onCountryClicked(country: Country) {
-        (mBinding as ViewIntroPhoneBinding).apply {
+        (mBinding as ViewIntroPhoneWorldBinding).apply {
             textInputCountry.text = SpannableStringBuilder(country.name)
             textInputPhone.prefix = "+${country.code}"
 
@@ -163,7 +169,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
 
     override fun setViewStateInActivationMode(enable: Boolean) {
         super.setViewStateInActivationMode(enable)
-        (mBinding as ViewIntroPhoneBinding).apply {
+        (mBinding as ViewIntroPhoneWorldBinding).apply {
             extraFields.spinKit.visibility = if (enable) ProgressBar.GONE else ProgressBar.VISIBLE
             textInputCountry.isEnabled = enable
             textInputLayoutCountry.isEnabled = enable
@@ -173,7 +179,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
     }
 
     override fun isValidPhone(): Boolean {
-        (mBinding as ViewIntroPhoneBinding).apply {
+        (mBinding as ViewIntroPhoneWorldBinding).apply {
             val country = textInputCountry.text.toString()
             val phone = textInputPhone.text.toString().trim()
 
@@ -202,9 +208,49 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
         return errorMsgId == -1
     }
 
+    override fun ass(result: Byte): Boolean {
+        (mBinding as ViewIntroPhoneWorldBinding).apply {
+            val msgId: Int = when (result) {
+                STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected_world
+                STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.wrong_user_or_password
+                STATUS_OTHER_EXCEPTION -> R.string.unknown_error
+                else -> -1
+            }
+
+            return if (msgId != -1) {
+                isValidating = false
+                isValidated = false
+                extraFields.apply {
+                    textViewError.setText(msgId)
+                    textViewError.visibility = View.VISIBLE
+                }
+                setViewStateInActivationMode(true)
+
+                true
+            } else {
+                extraFields.textViewError.visibility = View.GONE
+
+                false
+            }
+        }
+    }
+
+
+    override fun showError(show: Boolean) {
+        (mBinding as ViewIntroPhoneWorldBinding).extraFields.apply {
+            if (show) {
+                textViewError.setText(errorMsgId)
+                textViewError.visibility = View.VISIBLE
+            } else {
+                textViewError.text = ""
+                textViewError.visibility = View.GONE
+            }
+        }
+    }
+
     private fun fillFields(number: String): Boolean {
         if (number.isNotEmpty()) {
-            (mBinding as ViewIntroPhoneBinding).apply {
+            (mBinding as ViewIntroPhoneWorldBinding).apply {
                 return try {
                     val phoneUtil = PhoneNumberUtil.getInstance()
                     val phoneNumber = phoneUtil.parse(number, null)
@@ -243,7 +289,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
         fun newInstance() =
                 PhoneFragment().apply {
                     arguments = getBundle(
-                            layoutRes = R.layout.view_intro_phone,
+                            layoutRes = R.layout.view_intro_phone_world,
                             fragmentTag = TAG_FRAGMENT_PHONE
                     )
                 }

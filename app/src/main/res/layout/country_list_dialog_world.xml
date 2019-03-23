@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            tools:context="com.sapp.yupi.ui.appintro.CountryListDialogFragment"
+            tools:context="com.sapp.yupi.ui.appintro.world.CountryListDialogFragment"
             tools:listitem="@layout/country_list_dialog_item" />
 
         <com.github.ybq.android.spinkit.SpinKitView

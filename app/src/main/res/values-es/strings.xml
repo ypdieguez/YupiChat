@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--MainFragment-->
-    <string name="empty_contacts">No tienes contactos.</string>
+    <!--Cuba-->
+    <!--Intro-->
+    <string name="intro_app_description_cuba">Contacta con tus amigos y familiares dentro y fuera de Cuba.\n\nTus mensajes serán enviados a través de tu cuenta de correo <b>@nauta</b> y tus contactos los recibirán como <b>sms</b>.</string>
+    <string name="intro_email_title">Correo</string>
+    <string name="intro_email_description">Para enviar los mensajes ingresa tu cuenta de correo <b>@nauta</b></string>
+    <string name="user">Usuario</string>
+    <string name="pass">Contraseña</string>
 
-    <!--Converstation fragment-->
-    <string name="compose_message_view_hint_text">Escribe un mensaje</string>
+    <!--Intro Validation-->
+    <string name="email_required">El correo es requerido</string>
+    <string name="email_not_valid">Ingresa un correo válido</string>
+    <string name="email_is_not_nauta">Ingresa tu correo @nauta.cu</string>
+    <string name="pass_required">La contraseña es requerida</string>
+    <string name="install_yuupi_cuba">Para enviar mensajes fuera de Cuba instala Yuupi Cuba</string>
+    <string name="host_not_connected_cuba">No se pudo conectar a tu cuenta de correo. Comprueba los ajustes de red.</string>
 
-    <!--Contact fragment-->
-    <string name="new_contact">Nuevo contacto</string>
+    <!--World-->
+    <!--Intro-->
+    <string name="intro_app_description_world">Contacta con tus amigos y familiares de Cuba.\n\nTus mensajes serán enviados a través de tu conexión de internet y tus contactos los recibirán como <b>sms</b>.</string>
+    <string name="country">País</string>
+
+    <!--Intro validation-->
+    <string name="choose_country">Elige un país</string>
+    <string name="country_not_supported">País no soportado.</string>
+    <string name="host_not_connected_world">No se pudo conectar al servidor. Comprueba los ajustes de la red.</string>
+    <string name="install_yuupi_world">Para enviar mensajes desde Cuba instala Yuupi World</string>
 
     <!--Intro-->
+    <string name="where_are_you">¿Dónde te encuentras?</string>
+    <string name="in_cuba">En Cuba</string>
+    <string name="outside_cuba">Fuera de Cuba</string>
     <string name="phone_number">Número de teléfono</string>
     <string name="intro_phone_description">Para que tus contactos puedan responderte, ingresa tu número de teléfono.</string>
     <string name="intro_conclusion_title">Listo</string>
@@ -35,6 +56,15 @@
 
     <!--General validation-->
     <string name="network_not_connected">Active los datos móviles o conéctese a una red Wi-Fi.</string>
+
+    <!--MainFragment-->
+    <string name="empty_contacts">No tienes contactos.</string>
+
+    <!--Converstation fragment-->
+    <string name="compose_message_view_hint_text">Escribe un mensaje</string>
+
+    <!--Contact fragment-->
+    <string name="new_contact">Nuevo contacto</string>
 
     <string name="contacts">Contactos</string>
     <string name="empty_messages">No tienes mensajes.</string>

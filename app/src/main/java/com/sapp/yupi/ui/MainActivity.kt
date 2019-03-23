@@ -14,7 +14,7 @@ import com.sapp.yupi.data.Contact
 import com.sapp.yupi.databinding.ActivityMainBinding
 import com.sapp.yupi.ui.appintro.IntroActivity
 import com.sapp.yupi.utils.PhoneUtil
-import com.sapp.yupi.utils.UserInfo
+import com.sapp.yupi.Config
 
 const val CONTACT = "contact"
 
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (UserInfo.getInstance(this).isReady()) {
+        if (Config.getInstance(this).isReady()) {
             mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
             val navController = Navigation.findNavController(this, R.id.nav_host_fragment)

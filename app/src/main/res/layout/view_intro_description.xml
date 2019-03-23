@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout style="@style/IntroSlide">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/IntroTitle"
+            tools:text="@string/app_name" />
+
+        <LinearLayout style="@style/IntroImageLayout">
+
+            <ImageView
+                android:id="@+id/image"
+                style="@style/IntroImage"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/icons8_sms_384" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/IntroDescLayout">
+
+            <TextView
+                android:id="@+id/description"
+                style="@style/IntroDesc"
+                tools:text="@string/intro_app_description_cuba" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

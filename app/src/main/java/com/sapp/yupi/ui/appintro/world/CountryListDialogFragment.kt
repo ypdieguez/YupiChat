@@ -1,4 +1,4 @@
-package com.sapp.yupi.ui.appintro
+package com.sapp.yupi.ui.appintro.world
 
 import android.annotation.SuppressLint
 import android.os.AsyncTask
@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.sapp.yupi.databinding.CountryListDialogBinding
-import com.sapp.yupi.databinding.CountryListDialogItemBinding
-import com.sapp.yupi.ui.appintro.data.Country
+import com.sapp.yupi.databinding.CountryListDialogItemWorldBinding
+import com.sapp.yupi.databinding.CountryListDialogWorldBinding
+import com.sapp.yupi.ui.appintro.world.data.Country
 import java.util.*
 
 
@@ -26,11 +26,11 @@ class CountryListDialogFragment : BottomSheetDialogFragment() {
     private var mListener: Listener? = null
 
     private var mAdapter = CountryAdapter()
-    private lateinit var mBinding: CountryListDialogBinding
+    private lateinit var mBinding: CountryListDialogWorldBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mBinding = CountryListDialogBinding.inflate(inflater, container, false)
+        mBinding = CountryListDialogWorldBinding.inflate(inflater, container, false)
         mBinding.apply {
             list.layoutManager = LinearLayoutManager(context)
             list.adapter = mAdapter
@@ -88,7 +88,7 @@ class CountryListDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private inner class ViewHolder internal constructor(binding: CountryListDialogItemBinding)
+    private inner class ViewHolder internal constructor(binding: CountryListDialogItemWorldBinding)
         : RecyclerView.ViewHolder(binding.root) {
         internal val countryView: TextView = binding.country
         internal val codeView: TextView = binding.code
@@ -98,7 +98,7 @@ class CountryListDialogFragment : BottomSheetDialogFragment() {
         internal val mCountries: MutableList<Country> = mutableListOf()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val binding = CountryListDialogItemBinding.inflate(
+            val binding = CountryListDialogItemWorldBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false)
             return ViewHolder(binding)
         }

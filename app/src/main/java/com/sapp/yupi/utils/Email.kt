@@ -1,7 +1,7 @@
 package com.sapp.yupi.utils
 
 import android.content.Context
-import com.sapp.yupi.BuildConfig
+import com.sapp.yupi.Config
 import com.sapp.yupi.STATUS_SUCCESS
 import com.sun.mail.util.MailConnectException
 import javax.mail.AuthenticationFailedException
@@ -20,7 +20,7 @@ const val STATUS_OTHER_EXCEPTION: Byte = 5
 
 class Email private constructor(context: Context) {
 
-    private val mUser = UserInfo.getInstance(context)
+    private val config = Config.getInstance(context)
 
     /**
      * Send message via email.
@@ -31,25 +31,21 @@ class Email private constructor(context: Context) {
      */
     fun send(address: String, subject: String, content: String): Byte {
         try {
-            val user = mUser.email
-            val pass = mUser.pass
-            val phone = mUser.phone
-
             val props = System.getProperties()
-            props["mail.smtp.host"] = BuildConfig.HOST
-            props["mail.smtp.port"] = BuildConfig.PORT
-            props["mail.smtp.ssl.enable"] = BuildConfig.SSL_ENABLED
+            props["mail.smtp.host"] = config.host
+            props["mail.smtp.port"] = config.port
+            props["mail.smtp.ssl.enable"] = config.sslEnabled
 
             val session = Session.getInstance(props)
 
             val msg = MimeMessage(session)
-            msg.setFrom(InternetAddress(user))
+            msg.setFrom(InternetAddress(config.email))
             msg.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(address, false))
             msg.subject = subject
-            msg.setText(SmsUtil.createMsg(content, phone))
+            msg.setText(SmsUtil.createMsg(content, config.phone))
 
-            Transport.send(msg, user, pass)
+            Transport.send(msg, config.email, config.pass)
 
             return STATUS_SUCCESS
         } catch (e: MailConnectException) {
