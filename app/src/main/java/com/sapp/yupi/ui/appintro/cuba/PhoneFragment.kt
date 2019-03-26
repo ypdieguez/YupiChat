@@ -73,7 +73,7 @@ class PhoneFragment : PhoneBaseFragment() {
                                 val countryCode = phoneNumber.countryCode
 
                                 prefix = "+$countryCode"
-                                text = SpannableStringBuilder(phoneNumber.nationalNumber.toString())
+                                text = SpannableStringBuilder("+$countryCode${phoneNumber.nationalNumber}")
                             } catch (e: NumberParseException) {
                                 prefix = PREFIX_CUBA
                             }

@@ -10,5 +10,10 @@ class PermissionUtil {
         fun hasReadContactPermission(context: Context) =
                 ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) ==
                         PackageManager.PERMISSION_GRANTED
+
+        fun hasSmsPermission(context: Context) =
+                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) ==
+                        PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                        context, Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED
     }
 }

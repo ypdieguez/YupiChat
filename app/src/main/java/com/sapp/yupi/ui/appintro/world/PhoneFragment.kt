@@ -267,7 +267,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                     textInputCountry.setText(country)
                     textInputPhone.apply {
                         prefix = "+$countryCode"
-                        append(phoneNumber.nationalNumber.toString())
+                        text = SpannableStringBuilder("+$countryCode${phoneNumber.nationalNumber}")
                     }
                     true
                 } catch (e: NumberParseException) {

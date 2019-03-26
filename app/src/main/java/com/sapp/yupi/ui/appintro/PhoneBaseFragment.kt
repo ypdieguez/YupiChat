@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -19,20 +18,18 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat
 import com.google.i18n.phonenumbers.PhoneNumberUtil.MatchType
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat
 import com.google.i18n.phonenumbers.Phonenumber
 import com.sapp.yupi.*
-import com.sapp.yupi.utils.*
+import com.sapp.yupi.utils.Email
+import com.sapp.yupi.utils.PermissionUtil
 
 const val TAG_FRAGMENT_PHONE = "fragment_phone"
 
 abstract class PhoneBaseFragment : IntroFragment() {
-
-
 
     private val receiver = object : BroadcastReceiver() {
         private var isRegistered: Boolean = false
@@ -151,14 +148,14 @@ abstract class PhoneBaseFragment : IntroFragment() {
 
     private fun askForReadSmsPermission(): Boolean {
         requireContext().let { context ->
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) !=
-                    PackageManager.PERMISSION_GRANTED) {
+            if (!PermissionUtil.hasSmsPermission(context)) {
 
                 val pref = context.getSharedPreferences(PERMISSION_PREFERENCES, Context.MODE_PRIVATE)
                 val isPermanentlyDenied = pref.run {
                     val isPermanentlyDenied =
                             getBoolean(PREF_READ_SMS_PERMISSION_ASKED, false)
-                                    && !shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)
+                                    && (!shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)
+                                    || !shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS))
 
                     isPermanentlyDenied
                 }
@@ -205,7 +202,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
                         } else {
                             setText(R.string.go_on)
                             setOnClickListener {
-                                requestPermissions(arrayOf(Manifest.permission.READ_SMS),
+                                requestPermissions(arrayOf(Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS),
                                         REQUEST_CODE_READ_SMS)
                                 pref.edit {
                                     putBoolean(PREF_READ_SMS_PERMISSION_ASKED, true)
@@ -237,7 +234,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
         }
 
         override fun onPostExecute(result: Byte) {
-            if(checkSentVerificationEmail(result)) {
+            if (checkSentVerificationEmail(result)) {
                 // Wait for a notification in receiver
                 receiver.register(requireContext())
             }
