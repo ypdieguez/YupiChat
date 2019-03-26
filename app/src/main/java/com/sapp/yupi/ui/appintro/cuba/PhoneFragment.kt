@@ -19,6 +19,7 @@ import com.sapp.yupi.utils.STATUS_AUTHENTICATION_FAILED_EXCEPTION
 import com.sapp.yupi.utils.STATUS_MAIL_CONNECT_EXCEPTION
 import com.sapp.yupi.utils.STATUS_OTHER_EXCEPTION
 import com.sapp.yupi.UserPref
+import java.util.*
 
 const val PREFIX_CUBA = "+53"
 
@@ -65,6 +66,8 @@ class PhoneFragment : PhoneBaseFragment() {
                         val tMgr = context?.getSystemService(Context.TELEPHONY_SERVICE)
                                 as TelephonyManager
                         val number = tMgr.line1Number
+                        val networkCountryIso = tMgr.networkCountryIso
+                        val simCountryIso = tMgr.simCountryIso
 
                         if (number.isNotEmpty()) {
                             val phoneUtil = PhoneNumberUtil.getInstance()
@@ -77,6 +80,19 @@ class PhoneFragment : PhoneBaseFragment() {
                             } catch (e: NumberParseException) {
                                 prefix = PREFIX_CUBA
                             }
+                        } else if (networkCountryIso.isNotEmpty() || simCountryIso.isNotEmpty()) {
+                            val iso = (networkCountryIso ?: simCountryIso).toUpperCase()
+                            val phoneUtil = PhoneNumberUtil.getInstance()
+
+                            val countryCode = phoneUtil.getCountryCodeForRegion(iso)
+
+                            // Update Text Watcher always first
+                            addTextChangedListener(PhoneNumberFormattingTextWatcher(iso))
+
+                            textInputPhone.prefix = "+$countryCode"
+                            textInputPhone.setText("")
+                        } else {
+                            prefix = PREFIX_CUBA
                         }
                     }
                 }
