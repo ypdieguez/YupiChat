@@ -26,7 +26,7 @@
     <!--Intro validation-->
     <string name="choose_country">Choose a country</string>
     <string name="country_not_supported">Country not supported.</string>
-    <string name="host_not_connected_world">Couldn\'t connect to the server. Check your network settings.</string>
+    <string name="host_not_connected_world">Could not connect to the server. Check your network settings.</string>
     <string name="install_yuupi_world">To send messages from Cuba install Yuuupi World</string>
 
     <!--Intro-->
@@ -34,7 +34,7 @@
     <string name="in_cuba">In Cuba</string>
     <string name="outside_cuba">Outside of Cuba</string>
     <string name="phone_number">Phone number</string>
-    <string name="intro_phone_description">"Enter your phone number   "</string>
+    <string name="intro_phone_description">"Enter your phone number"</string>
     <string name="intro_conclusion_title">Ready</string>
     <string name="intro_conclusion_description">Yuupi… The app are ready to send and receive messages.</string>
     <string name="back">Back</string>

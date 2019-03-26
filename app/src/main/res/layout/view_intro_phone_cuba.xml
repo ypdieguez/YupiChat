@@ -33,12 +33,12 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_layout_phone"
-                    style="@style/IntroTextInputLayout">
+                    style="@style/IntroTextInputLayout"
+                    android:hint="@string/phone_number">
 
                     <com.sapp.yupi.ui.appintro.ExtendedEditText
                         android:id="@+id/text_input_phone"
                         style="@style/IntroTextInputEditText"
-                        android:hint="@string/phone_number"
                         android:inputType="text|phone" />
 
                 </com.google.android.material.textfield.TextInputLayout>
