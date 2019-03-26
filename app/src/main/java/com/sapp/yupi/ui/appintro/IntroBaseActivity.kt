@@ -12,8 +12,6 @@ import com.sapp.yupi.ui.MainActivity
 
 abstract class IntroBaseActivity : AppIntro() {
 
-    protected var done = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,19 +20,21 @@ abstract class IntroBaseActivity : AppIntro() {
 
         // Define colors
         val colorPrimary = ContextCompat.getColor(this, R.color.primary_color)
-        val coloBackground = ContextCompat.getColor(this, R.color.background)
+        val colorBackground = ContextCompat.getColor(this, R.color.background)
 
         // Set properties
-        skipButtonEnabled = false
-        backButtonVisibilityWithDone = true
-
+        showSkipButton(true)
+        setSkipText(getString(R.string.back))
+        setColorSkipButton(colorPrimary)
         setIndicatorColor(colorPrimary, colorPrimary)
         setNextArrowColor(colorPrimary)
         setColorDoneText(colorPrimary)
         setSeparatorColor(colorPrimary)
-        (backButton as ImageButton).setColorFilter(colorPrimary)
-        setBarColor(coloBackground)
-
+        (backButton as ImageButton).apply {
+            setColorFilter(colorPrimary)
+//            background = ContextCompat.getDrawable(this@IntroBaseActivity, R.drawable.back)
+        }
+        setBarColor(colorBackground)
         setScrollDurationFactor(2)
         setSwipeLock(true)
     }
@@ -42,9 +42,22 @@ abstract class IntroBaseActivity : AppIntro() {
     override fun onDonePressed(currentFragment: Fragment?) {
         // Phone number is validated in IncomingMsgWorker worker class
 
-        done = true
-
         startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
+        newFragment?.apply {
+            if(this == fragments.first()) {
+                showSkipButton(true)
+            } else {
+                showSkipButton(false)
+            }
+        }
+    }
+
+    override fun onSkipPressed() {
+        startActivity(Intent(this, IntroActivity::class.java))
         finish()
     }
 

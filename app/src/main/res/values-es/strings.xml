@@ -35,6 +35,7 @@
     <string name="intro_phone_description">Para que tus contactos puedan responderte, ingresa tu número de teléfono.</string>
     <string name="intro_conclusion_title">Listo</string>
     <string name="intro_conclusion_description">Yuupi… La app está lista para enviar y recibir mensajes.</string>
+    <string name="back">Atrás</string>
 
     <!--Intro Validation-->
     <string name="phone_required">El número de teléfono es requerido</string>

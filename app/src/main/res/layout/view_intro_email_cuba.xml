@@ -29,7 +29,6 @@
         </LinearLayout>
 
         <LinearLayout style="@style/IntroFieldsLayout">
-
             <LinearLayout style="@style/IntroTextFieldsLayout">
 
                 <com.google.android.material.textfield.TextInputLayout

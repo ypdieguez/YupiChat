@@ -32,7 +32,7 @@
         <!--Intro-->
         <activity android:name=".ui.appintro.IntroActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppIntroTheme"/>
+            android:theme="@style/AppIntroMaterialTheme"/>
         <activity
             android:name=".ui.appintro.cuba.IntroCubaActivity"
             android:screenOrientation="portrait"

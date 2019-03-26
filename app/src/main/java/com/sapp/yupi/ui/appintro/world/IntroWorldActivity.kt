@@ -5,25 +5,15 @@ import com.sapp.yupi.BuildConfig
 import com.sapp.yupi.R
 import com.sapp.yupi.ui.appintro.DescriptionFragment
 import com.sapp.yupi.ui.appintro.IntroBaseActivity
-import com.sapp.yupi.Config
+import com.sapp.yupi.UserPref
 
 class IntroWorldActivity : IntroBaseActivity() {
-
-    // Save config for Cuba
-    private var cubaEmail = ""
-    private var cubaEmailPass = ""
-    private var cubaEmailValidated = false
-    private var cubaEmailPassValidated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Config.getInstance(this).apply {
-            // Save Cuba email
-            cubaEmail = email
-            cubaEmailPass = pass
-            cubaEmailValidated = emailValidated
-            cubaEmailPassValidated = passValidated
+        UserPref.getInstance(this).apply {
+            from = UserPref.OUTSIDE_CUBA
 
             email = BuildConfig.WORLD_SENDER_EMAIL
             pass = BuildConfig.WORLD_SENDER_EMAIL_PASS
@@ -46,18 +36,5 @@ class IntroWorldActivity : IntroBaseActivity() {
                 imageRes = R.drawable.icons8_chat_bubble_512,
                 description = R.string.intro_conclusion_description
         ))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (!done) {
-            // Restore cuba email
-            Config.getInstance(this).apply {
-                email = cubaEmail
-                pass = cubaEmailPass
-                emailValidated = cubaEmailValidated
-                passValidated = cubaEmailPassValidated
-            }
-        }
     }
 }

@@ -12,7 +12,7 @@ import android.telephony.PhoneNumberUtils
 import androidx.lifecycle.MutableLiveData
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.sapp.yupi.utils.PhoneUtil
-import com.sapp.yupi.Config
+import com.sapp.yupi.UserPref
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -23,7 +23,7 @@ import java.util.concurrent.Executors
 class ContactRepository constructor(context: Context) {
 
     private val contentResolver = context.contentResolver
-    private val regionCode = Config.getInstance(context).regionCode
+    private val regionCode = UserPref.getInstance(context).regionCode
 
     private var contacts: MutableLiveData<List<Contact>> = MutableLiveData()
     private var executor: Executor = Executors.newSingleThreadExecutor()

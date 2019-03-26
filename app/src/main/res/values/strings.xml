@@ -37,6 +37,7 @@
     <string name="intro_phone_description">"Enter your phone number   "</string>
     <string name="intro_conclusion_title">Ready</string>
     <string name="intro_conclusion_description">Yuupi… The app are ready to send and receive messages.</string>
+    <string name="back">Back</string>
 
     <!--Validation-->
     <string name="phone_required">Phone is required</string>

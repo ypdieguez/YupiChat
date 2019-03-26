@@ -42,7 +42,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
                 val phone = intent.getStringExtra(PHONE_NOTIFICATION)
 
                 // Utils
-                val user = Config.getInstance(context)
+                val user = UserPref.getInstance(context)
                 val phoneUtil = PhoneNumberUtil.getInstance()
 
                 if (isValidating && phoneUtil.isNumberMatch(phone, user.phone)
@@ -50,7 +50,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
                     isValidating = false
                     isValidated = true
 
-                    // Config is too updated in IncomingMsgWorker
+                    // UserPref is too updated in IncomingMsgWorker
                     user.phoneValidated = true
 
                     runOnUiThread {
@@ -86,7 +86,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Config.getInstance(context!!).apply {
+        UserPref.getInstance(context!!).apply {
             isValidated = phoneValidated
         }
     }
@@ -130,7 +130,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
 
     protected fun updateUserInfo(phoneNumber: Phonenumber.PhoneNumber) {
         val phoneUtil = PhoneNumberUtil.getInstance()
-        Config.getInstance(context!!).apply {
+        UserPref.getInstance(context!!).apply {
             val matchType = phoneUtil.isNumberMatch(phoneNumber, phone)
             if (matchType == MatchType.NO_MATCH || matchType == MatchType.NOT_A_NUMBER) {
                 // Save to Preferences
@@ -142,7 +142,7 @@ abstract class PhoneBaseFragment : IntroFragment() {
         }
     }
 
-    protected abstract fun ass(result: Byte): Boolean
+    protected abstract fun checkSentVerificationEmail(result: Byte): Boolean
 
     private fun doRequest() {
         if (!askForReadSmsPermission())
@@ -231,13 +231,13 @@ abstract class PhoneBaseFragment : IntroFragment() {
         }
 
         override fun doInBackground(vararg strings: String): Byte {
-            val phone = Config.getInstance(context!!).phone
+            val phone = UserPref.getInstance(context!!).phone
             return Email.getInstance(context!!).send(BuildConfig.RECIPIENT_EMAIL, phone,
                     getString(R.string.subscription))
         }
 
         override fun onPostExecute(result: Byte) {
-            if(ass(result)) {
+            if(checkSentVerificationEmail(result)) {
                 // Wait for a notification in receiver
                 receiver.register(requireContext())
             }

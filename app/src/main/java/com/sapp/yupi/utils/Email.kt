@@ -1,7 +1,7 @@
 package com.sapp.yupi.utils
 
 import android.content.Context
-import com.sapp.yupi.Config
+import com.sapp.yupi.UserPref
 import com.sapp.yupi.STATUS_SUCCESS
 import com.sun.mail.util.MailConnectException
 import javax.mail.AuthenticationFailedException
@@ -20,7 +20,7 @@ const val STATUS_OTHER_EXCEPTION: Byte = 5
 
 class Email private constructor(context: Context) {
 
-    private val config = Config.getInstance(context)
+    private val config = UserPref.getInstance(context)
 
     /**
      * Send message via email.

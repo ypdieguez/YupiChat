@@ -12,7 +12,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.sapp.yupi.*
 import com.sapp.yupi.data.*
 import com.sapp.yupi.utils.PhoneUtil
-import com.sapp.yupi.Config
+import com.sapp.yupi.UserPref
 import java.util.*
 
 /**
@@ -39,7 +39,7 @@ class IncomingMsgWorker(context: Context, workerParams: WorkerParameters)
             val text = inputData.getString(KEY_BODY)!!
 
             // Utils
-            val user = Config.getInstance(context)
+            val user = UserPref.getInstance(context)
             val phoneUtil = PhoneNumberUtil.getInstance()
 
             if (phoneUtil.isNumberMatch(user.phone, phone) != PhoneNumberUtil.MatchType.EXACT_MATCH) {

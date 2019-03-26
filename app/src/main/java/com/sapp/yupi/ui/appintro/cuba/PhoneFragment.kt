@@ -12,14 +12,13 @@ import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroPhoneCubaBinding
-import com.sapp.yupi.databinding.ViewIntroPhoneWorldBinding
 import com.sapp.yupi.ui.appintro.PhoneBaseFragment
 import com.sapp.yupi.ui.appintro.PhoneNumberFormattingTextWatcher
 import com.sapp.yupi.ui.appintro.TAG_FRAGMENT_PHONE
 import com.sapp.yupi.utils.STATUS_AUTHENTICATION_FAILED_EXCEPTION
 import com.sapp.yupi.utils.STATUS_MAIL_CONNECT_EXCEPTION
 import com.sapp.yupi.utils.STATUS_OTHER_EXCEPTION
-import com.sapp.yupi.Config
+import com.sapp.yupi.UserPref
 
 const val PREFIX_CUBA = "+53"
 
@@ -37,7 +36,7 @@ class PhoneFragment : PhoneBaseFragment() {
 
                 addTextChangedListener(PhoneNumberFormattingTextWatcher("CU"))
 
-                Config.getInstance(context).apply {
+                UserPref.getInstance(context).apply {
                     if (phone.isNotEmpty()) {
                         prefix = PREFIX_CUBA
                         text = SpannableStringBuilder(phone)
@@ -61,8 +60,8 @@ class PhoneFragment : PhoneBaseFragment() {
         context?.let {
             (mBinding as ViewIntroPhoneCubaBinding).apply {
                 textInputPhone.apply {
-                    val text = text.toString()
-                    if (text.isEmpty() || text == prefix) {
+                    val phone = text.toString()
+                    if (phone.isEmpty() || phone == prefix) {
                         val tMgr = context?.getSystemService(Context.TELEPHONY_SERVICE)
                                 as TelephonyManager
                         val number = tMgr.line1Number
@@ -74,7 +73,7 @@ class PhoneFragment : PhoneBaseFragment() {
                                 val countryCode = phoneNumber.countryCode
 
                                 prefix = "+$countryCode"
-                                append(phoneNumber.nationalNumber.toString())
+                                text = SpannableStringBuilder(phoneNumber.nationalNumber.toString())
                             } catch (e: NumberParseException) {
                                 prefix = PREFIX_CUBA
                             }
@@ -118,8 +117,8 @@ class PhoneFragment : PhoneBaseFragment() {
         }
     }
 
-    override fun ass(result: Byte): Boolean {
-        (mBinding as ViewIntroPhoneWorldBinding).apply {
+    override fun checkSentVerificationEmail(result: Byte): Boolean {
+        (mBinding as ViewIntroPhoneCubaBinding).apply {
             val msgId: Int = when (result) {
                 STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected_world
                 STATUS_AUTHENTICATION_FAILED_EXCEPTION -> R.string.wrong_user_or_password
@@ -136,17 +135,17 @@ class PhoneFragment : PhoneBaseFragment() {
                 }
                 setViewStateInActivationMode(true)
 
-                true
+                false
             } else {
                 extraFields.textViewError.visibility = View.GONE
 
-                false
+                true
             }
         }
     }
 
     override fun showError(show: Boolean) {
-        (mBinding as ViewIntroPhoneWorldBinding).extraFields.apply {
+        (mBinding as ViewIntroPhoneCubaBinding).extraFields.apply {
             if (show) {
                 textViewError.setText(errorMsgId)
                 textViewError.visibility = View.VISIBLE

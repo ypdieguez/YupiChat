@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.sapp.yupi.BuildConfig
-import com.sapp.yupi.Config
+import com.sapp.yupi.UserPref
 import com.sapp.yupi.R
 import com.sapp.yupi.databinding.ViewIntroEmailCubaBinding
 import com.sapp.yupi.ui.appintro.IntroFragment
@@ -22,7 +22,7 @@ class EmailFragment : IntroFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (mBinding as ViewIntroEmailCubaBinding).apply {
             textInputEmail.apply {
-                Config.getInstance(context).email.apply {
+                UserPref.getInstance(context).email.apply {
                     if (isNotEmpty()) {
                         setText(this)
                     }
@@ -37,7 +37,7 @@ class EmailFragment : IntroFragment() {
             }
 
             textInputPass.apply {
-                Config.getInstance(context).pass.apply {
+                UserPref.getInstance(context).pass.apply {
                     if (isNotEmpty()) {
                         setText(this)
                     }
@@ -57,7 +57,7 @@ class EmailFragment : IntroFragment() {
             }
         }
 
-        Config.getInstance(context!!).apply {
+        UserPref.getInstance(context!!).apply {
             isValidated = emailValidated && passValidated
         }
     }
@@ -113,7 +113,7 @@ class EmailFragment : IntroFragment() {
             return if (errorMsgId != -1) {
                 false
             } else {
-                Config.getInstance(context!!).apply {
+                UserPref.getInstance(context!!).apply {
                     if (this.email != email) {
                         // Save to Preferences
                         this.email = email
@@ -138,7 +138,7 @@ class EmailFragment : IntroFragment() {
             return if (errorMsgId != -1) {
                 false
             } else {
-                Config.getInstance(context!!).apply {
+                UserPref.getInstance(context!!).apply {
                     if (this.pass != pass) {
                         // Save to Preferences
                         this.pass = pass
@@ -159,7 +159,7 @@ class EmailFragment : IntroFragment() {
         }
 
         override fun doInBackground(vararg strings: String): Byte {
-            val email = Config.getInstance(context!!).email
+            val email = UserPref.getInstance(context!!).email
             return Email.getInstance(context!!).send(BuildConfig.SUBSCRIBER_EMAIL, email, email)
         }
 
@@ -180,7 +180,7 @@ class EmailFragment : IntroFragment() {
                     false
                 } else {
                     showError(false)
-                    Config.getInstance(context!!).apply {
+                    UserPref.getInstance(context!!).apply {
                         emailValidated = true
                         passValidated = true
                     }

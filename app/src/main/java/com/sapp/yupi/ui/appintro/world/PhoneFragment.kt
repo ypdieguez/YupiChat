@@ -21,7 +21,7 @@ import com.sapp.yupi.ui.appintro.world.data.Country
 import com.sapp.yupi.utils.STATUS_AUTHENTICATION_FAILED_EXCEPTION
 import com.sapp.yupi.utils.STATUS_MAIL_CONNECT_EXCEPTION
 import com.sapp.yupi.utils.STATUS_OTHER_EXCEPTION
-import com.sapp.yupi.Config
+import com.sapp.yupi.UserPref
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
@@ -84,7 +84,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
             }
         }
 
-        fillFields(Config.getInstance(requireContext()).phone)
+        fillFields(UserPref.getInstance(requireContext()).phone)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -208,7 +208,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
         return errorMsgId == -1
     }
 
-    override fun ass(result: Byte): Boolean {
+    override fun checkSentVerificationEmail(result: Byte): Boolean {
         (mBinding as ViewIntroPhoneWorldBinding).apply {
             val msgId: Int = when (result) {
                 STATUS_MAIL_CONNECT_EXCEPTION -> R.string.host_not_connected_world
@@ -226,11 +226,11 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                 }
                 setViewStateInActivationMode(true)
 
-                true
+                false
             } else {
                 extraFields.textViewError.visibility = View.GONE
 
-                false
+                true
             }
         }
     }

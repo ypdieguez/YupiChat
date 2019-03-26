@@ -14,7 +14,9 @@ import com.sapp.yupi.data.Contact
 import com.sapp.yupi.databinding.ActivityMainBinding
 import com.sapp.yupi.ui.appintro.IntroActivity
 import com.sapp.yupi.utils.PhoneUtil
-import com.sapp.yupi.Config
+import com.sapp.yupi.UserPref
+import com.sapp.yupi.ui.appintro.cuba.IntroCubaActivity
+import com.sapp.yupi.ui.appintro.world.IntroWorldActivity
 
 const val CONTACT = "contact"
 
@@ -25,30 +27,37 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Config.getInstance(this).isReady()) {
-            mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        UserPref.getInstance(this).apply {
+            if (isReady()) {
+                mBinding = DataBindingUtil.setContentView(this@MainActivity, R.layout.activity_main)
+                val navController = Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
 
-            val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+                // Set up ActionBar
+                setSupportActionBar(mBinding.toolbar)
+                NavigationUI.setupActionBarWithNavController(this@MainActivity, navController)
 
-            // Set up ActionBar
-            setSupportActionBar(mBinding.toolbar)
-            NavigationUI.setupActionBarWithNavController(this, navController)
+                // Go to ConversationFragment if notification is clicked.
+                intent.extras?.apply {
+                    val contact = getParcelable(CONTACT) as Contact?
+                    contact?.apply {
+                        val phone = PhoneUtil.toE164(number, null)
 
-            // Go to ConversationFragment if notification is clicked.
-            intent.extras?.apply {
-                val contact = getParcelable(CONTACT) as Contact?
-                contact?.apply {
-                    val phone = PhoneUtil.toE164(number, null)
-
-                    val direction = MainFragmentDirections
-                            .actionMainFragmentToConversationFragment(phone, name)
-                    findNavController(R.id.nav_host_fragment).navigate(direction)
+                        val direction = MainFragmentDirections
+                                .actionMainFragmentToConversationFragment(phone, name)
+                        findNavController(R.id.nav_host_fragment).navigate(direction)
+                    }
                 }
+            } else {
+                when (from) {
+                    UserPref.IN_CUBA -> startActivity(Intent(this@MainActivity, IntroCubaActivity::class.java))
+                    UserPref.OUTSIDE_CUBA -> startActivity(Intent(this@MainActivity, IntroWorldActivity::class.java))
+                    else -> startActivity(Intent(this@MainActivity, IntroActivity::class.java))
+                }
+
+                finish()
             }
-        } else {
-            startActivity(Intent(this, IntroActivity::class.java))
-            finish()
         }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -5,7 +5,6 @@ import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.sapp.yupi.R
-import com.sapp.yupi.databinding.ViewIntroBinding
 import com.sapp.yupi.databinding.ViewIntroDescriptionBinding
 
 private const val TAG_FRAGMENT_BASIC = "fragment_presentation"
