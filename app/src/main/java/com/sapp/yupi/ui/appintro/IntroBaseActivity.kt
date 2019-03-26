@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.github.paolorotolo.appintro.AppIntro
 import com.sapp.yupi.R
 import com.sapp.yupi.ui.MainActivity
@@ -23,6 +24,7 @@ abstract class IntroBaseActivity : AppIntro() {
         val colorBackground = ContextCompat.getColor(this, R.color.background)
 
         // Set properties
+        setGoBackLock(true)
         showSkipButton(true)
         setSkipText(getString(R.string.back))
         setColorSkipButton(colorPrimary)
@@ -30,10 +32,7 @@ abstract class IntroBaseActivity : AppIntro() {
         setNextArrowColor(colorPrimary)
         setColorDoneText(colorPrimary)
         setSeparatorColor(colorPrimary)
-        (backButton as ImageButton).apply {
-            setColorFilter(colorPrimary)
-//            background = ContextCompat.getDrawable(this@IntroBaseActivity, R.drawable.back)
-        }
+        (backButton as ImageButton).setColorFilter(colorPrimary)
         setBarColor(colorBackground)
         setScrollDurationFactor(2)
         setSwipeLock(true)
@@ -59,6 +58,14 @@ abstract class IntroBaseActivity : AppIntro() {
     override fun onSkipPressed() {
         startActivity(Intent(this, IntroActivity::class.java))
         finish()
+    }
+
+    override fun onBackPressed() {
+        // Go to home screen
+        val i = Intent(Intent.ACTION_MAIN)
+        i.addCategory(Intent.CATEGORY_HOME)
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(i)
     }
 
     /**
