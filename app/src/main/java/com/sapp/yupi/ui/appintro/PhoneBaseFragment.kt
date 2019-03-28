@@ -13,17 +13,20 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.edit
+import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.PhoneNumberUtil.MatchType
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat
 import com.google.i18n.phonenumbers.Phonenumber
 import com.sapp.yupi.*
+import com.sapp.yupi.ui.appintro.data.PhoneNumber
 import com.sapp.yupi.utils.Email
 import com.sapp.yupi.utils.PermissionUtil
 
@@ -135,11 +138,63 @@ abstract class PhoneBaseFragment : IntroFragment() {
                 phoneValidated = false
 
                 isValidated = false
+            } else {
+                isValidated = phoneValidated
             }
         }
     }
 
     protected abstract fun checkSentVerificationEmail(result: Byte): Boolean
+
+    @SuppressLint("MissingPermission", "HardwareIds")
+    protected fun getNumber(defaultIso: String): PhoneNumber {
+        val tMgr = context?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val number = tMgr.line1Number ?: ""
+        var iso = tMgr.networkCountryIso ?: ""
+        if (iso.isEmpty()) {
+            iso = tMgr.simCountryIso ?: ""
+            if (iso.isEmpty()) {
+                iso = defaultIso
+            }
+        }
+        iso = iso.toUpperCase()
+
+        return if (number.isNotEmpty() && iso.isNotEmpty()) {
+            fromNumber(number, iso) ?: fromIso(number, iso) ?: PhoneNumber(iso, getCountryCodeForRegion(iso), number)
+        } else if (number.isNotEmpty()) {
+            fromNumber(number, "") ?: PhoneNumber("", getCountryCodeForRegion(iso), number)
+        } else {
+            fromIso("", iso) ?: PhoneNumber(iso, getCountryCodeForRegion(iso), "")
+        }
+    }
+
+    private fun fromNumber(number: String, iso: String): PhoneNumber? {
+        return try {
+            val phoneUtil = PhoneNumberUtil.getInstance()
+            val phoneNumber = phoneUtil.parse(number, iso)
+            PhoneNumber(iso, phoneNumber.countryCode.toString(), phoneNumber.nationalNumber.toString())
+        } catch (e: NumberParseException) {
+            null
+        }
+    }
+
+    private fun fromIso(number: String, iso: String): PhoneNumber? {
+        val countryCode = getCountryCodeForRegion(iso)
+        return if (countryCode != "0") {
+            PhoneNumber(iso, countryCode, number)
+        } else {
+            null
+        }
+    }
+
+    private fun getCountryCodeForRegion(regionCode: String): String {
+        val phoneUtil = PhoneNumberUtil.getInstance()
+        return try {
+            phoneUtil.getCountryCodeForRegion(regionCode).toString()
+        } catch (e: IllegalArgumentException) {
+            "0"
+        }
+    }
 
     private fun doRequest() {
         if (!askForReadSmsPermission())

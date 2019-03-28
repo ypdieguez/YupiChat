@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.github.paolorotolo.appintro.AppIntro
 import com.sapp.yupi.R
 import com.sapp.yupi.ui.MainActivity
@@ -24,6 +23,7 @@ abstract class IntroBaseActivity : AppIntro() {
         val colorBackground = ContextCompat.getColor(this, R.color.background)
 
         // Set properties
+        showBackButtonWithDone = true
         setGoBackLock(true)
         showSkipButton(true)
         setSkipText(getString(R.string.back))
@@ -47,7 +47,7 @@ abstract class IntroBaseActivity : AppIntro() {
 
     override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
         newFragment?.apply {
-            if(this == fragments.first()) {
+            if (this == fragments.first()) {
                 showSkipButton(true)
             } else {
                 showSkipButton(false)

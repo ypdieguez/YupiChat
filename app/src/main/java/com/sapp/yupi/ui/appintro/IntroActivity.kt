@@ -17,9 +17,11 @@ class IntroActivity : AppCompatActivity() {
 
         UserPref.getInstance(this).apply {
             from = ""
+
             email = ""
             pass = ""
             phone = ""
+
             emailValidated = false
             passValidated = false
             phoneValidated = false

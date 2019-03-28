@@ -81,7 +81,7 @@
     <style name="IntroDescLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">8</item>
+        <item name="android:layout_weight">9</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:weightSum">1</item>
@@ -101,7 +101,7 @@
     <style name="IntroFieldsLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">5</item>"
+        <item name="android:layout_weight">5</item>
         <item name="android:gravity">center</item>
         <item name="android:orientation">vertical</item>
         <item name="android:focusableInTouchMode">true</item>
@@ -129,11 +129,10 @@
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColor">@color/secondary_text_color</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textCursorDrawable">@color/primary_color</item>
     </style>
 
     <style name="IntroDescLayoutWithFields" parent="IntroDescLayout">
-        <item name="android:layout_weight">3</item>
+        <item name="android:layout_weight">4</item>
     </style>
 
 </resources>

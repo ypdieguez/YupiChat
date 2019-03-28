@@ -1,9 +1,6 @@
 package com.sapp.yupi.ui.appintro.cuba
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
-import android.telephony.TelephonyManager
 import android.text.SpannableStringBuilder
 import android.util.Patterns
 import android.view.View
@@ -11,6 +8,7 @@ import android.widget.ProgressBar
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.sapp.yupi.R
+import com.sapp.yupi.UserPref
 import com.sapp.yupi.databinding.ViewIntroPhoneCubaBinding
 import com.sapp.yupi.ui.appintro.PhoneBaseFragment
 import com.sapp.yupi.ui.appintro.PhoneNumberFormattingTextWatcher
@@ -18,8 +16,6 @@ import com.sapp.yupi.ui.appintro.TAG_FRAGMENT_PHONE
 import com.sapp.yupi.utils.STATUS_AUTHENTICATION_FAILED_EXCEPTION
 import com.sapp.yupi.utils.STATUS_MAIL_CONNECT_EXCEPTION
 import com.sapp.yupi.utils.STATUS_OTHER_EXCEPTION
-import com.sapp.yupi.UserPref
-import java.util.*
 
 const val PREFIX_CUBA = "+53"
 
@@ -56,44 +52,17 @@ class PhoneFragment : PhoneBaseFragment() {
         }
     }
 
-    @SuppressLint("MissingPermission", "HardwareIds")
     override fun tryGetPhoneNumber() {
         context?.let {
             (mBinding as ViewIntroPhoneCubaBinding).apply {
                 textInputPhone.apply {
                     val phone = text.toString()
-                    if (phone.isEmpty() || phone == prefix) {
-                        val tMgr = context?.getSystemService(Context.TELEPHONY_SERVICE)
-                                as TelephonyManager
-                        val number = tMgr.line1Number
-                        val networkCountryIso = tMgr.networkCountryIso
-                        val simCountryIso = tMgr.simCountryIso
-
-                        if (number.isNotEmpty()) {
-                            val phoneUtil = PhoneNumberUtil.getInstance()
-                            try {
-                                val phoneNumber = phoneUtil.parse(number, "CU")
-                                val countryCode = phoneNumber.countryCode
-
-                                prefix = "+$countryCode"
-                                text = SpannableStringBuilder("+$countryCode${phoneNumber.nationalNumber}")
-                            } catch (e: NumberParseException) {
-                                prefix = PREFIX_CUBA
-                            }
-                        } else if (networkCountryIso.isNotEmpty() || simCountryIso.isNotEmpty()) {
-                            val iso = (networkCountryIso ?: simCountryIso).toUpperCase()
-                            val phoneUtil = PhoneNumberUtil.getInstance()
-
-                            val countryCode = phoneUtil.getCountryCodeForRegion(iso)
-
-                            // Update Text Watcher always first
-                            addTextChangedListener(PhoneNumberFormattingTextWatcher(iso))
-
-                            textInputPhone.prefix = "+$countryCode"
-                            textInputPhone.setText("")
-                        } else {
-                            prefix = PREFIX_CUBA
-                        }
+                    if (phone.isEmpty()) {
+                        val phoneNumber = getNumber("CU")
+                        // Update Text Watcher always first
+                        addTextChangedListener(PhoneNumberFormattingTextWatcher(phoneNumber.regionCode))
+                        prefix = "+${phoneNumber.countryCode}"
+                        append(phoneNumber.number)
                     }
                 }
             }
@@ -103,11 +72,9 @@ class PhoneFragment : PhoneBaseFragment() {
     override fun isValidPhone(): Boolean {
         (mBinding as ViewIntroPhoneCubaBinding).apply {
             val number = textInputPhone.text.toString().trim()
-            val prefix = textInputPhone.prefix
 
             errorMsgId = when {
                 number.isEmpty() -> R.string.phone_required
-                prefix != PREFIX_CUBA -> R.string.install_yuupi_cuba
                 !Patterns.PHONE.matcher(number).matches() -> R.string.phone_number_not_valid
                 else -> {
                     try {
@@ -116,7 +83,7 @@ class PhoneFragment : PhoneBaseFragment() {
                         val countryCode = phoneNumber.countryCode
 
                         if (countryCode != 53) {
-                            R.string.install_yuupi_cuba
+                            R.string.choose_yuupi_cuba
                         } else if (!phoneUtil.isValidNumber(phoneNumber)) {
                             R.string.phone_number_not_valid
                         } else {
@@ -129,7 +96,12 @@ class PhoneFragment : PhoneBaseFragment() {
                 }
             }
 
-            return errorMsgId == -1
+            return if (errorMsgId != -1) {
+                isValidated = false
+                false
+            } else {
+                true
+            }
         }
     }
 

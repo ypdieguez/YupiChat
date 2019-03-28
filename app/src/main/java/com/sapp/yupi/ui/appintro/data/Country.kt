@@ -1,4 +1,4 @@
-package com.sapp.yupi.ui.appintro.world.data
+package com.sapp.yupi.ui.appintro.data
 
 data class Country(
         val code: Int,

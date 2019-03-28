@@ -13,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.sapp.yupi.databinding.CountryListDialogItemWorldBinding
 import com.sapp.yupi.databinding.CountryListDialogWorldBinding
-import com.sapp.yupi.ui.appintro.world.data.Country
+import com.sapp.yupi.ui.appintro.data.Country
 import java.util.*
 
 

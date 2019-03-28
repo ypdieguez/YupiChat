@@ -111,6 +111,7 @@ class EmailFragment : IntroFragment() {
             }
 
             return if (errorMsgId != -1) {
+                isValidated = false
                 false
             } else {
                 UserPref.getInstance(context!!).apply {
@@ -120,6 +121,8 @@ class EmailFragment : IntroFragment() {
                         this.emailValidated = false
 
                         isValidated = false
+                    } else {
+                        isValidated = emailValidated
                     }
                 }
                 true
@@ -136,6 +139,7 @@ class EmailFragment : IntroFragment() {
             }
 
             return if (errorMsgId != -1) {
+                isValidated = false
                 false
             } else {
                 UserPref.getInstance(context!!).apply {
@@ -145,6 +149,8 @@ class EmailFragment : IntroFragment() {
                         this.passValidated = false
 
                         isValidated = false
+                    } else {
+                        isValidated = passValidated
                     }
                 }
                 true

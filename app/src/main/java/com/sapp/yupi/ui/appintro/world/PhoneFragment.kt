@@ -1,9 +1,6 @@
 package com.sapp.yupi.ui.appintro.world
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
-import android.telephony.TelephonyManager
 import android.text.InputType
 import android.text.SpannableStringBuilder
 import android.view.KeyEvent
@@ -13,15 +10,15 @@ import android.widget.ProgressBar
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.sapp.yupi.R
+import com.sapp.yupi.UserPref
 import com.sapp.yupi.databinding.ViewIntroPhoneWorldBinding
 import com.sapp.yupi.ui.appintro.PhoneBaseFragment
 import com.sapp.yupi.ui.appintro.PhoneNumberFormattingTextWatcher
 import com.sapp.yupi.ui.appintro.TAG_FRAGMENT_PHONE
-import com.sapp.yupi.ui.appintro.world.data.Country
+import com.sapp.yupi.ui.appintro.data.Country
 import com.sapp.yupi.utils.STATUS_AUTHENTICATION_FAILED_EXCEPTION
 import com.sapp.yupi.utils.STATUS_MAIL_CONNECT_EXCEPTION
 import com.sapp.yupi.utils.STATUS_OTHER_EXCEPTION
-import com.sapp.yupi.UserPref
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
@@ -67,7 +64,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                             errorMsgId = if (country.isEmpty()) {
                                 R.string.choose_country
                             } else if (country == "Cuba" || prefix == "+53") {
-                                R.string.install_yuupi_world
+                                R.string.choose_yuupi_world
                             } else {
                                 -1
                             }
@@ -110,50 +107,19 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
         }
     }
 
-    @SuppressLint("MissingPermission", "HardwareIds")
     override fun tryGetPhoneNumber() {
         (mBinding as ViewIntroPhoneWorldBinding).apply {
-            var country = textInputCountry.text?.toString() ?: ""
-            var number = textInputPhone.text?.toString() ?: ""
+            val country = textInputCountry.text?.toString() ?: ""
+            val number = textInputPhone.text?.toString() ?: ""
             if (country.isEmpty() && number.isEmpty()) {
-                val tMgr = context?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                number = tMgr.line1Number
-                val networkCountryIso = tMgr.networkCountryIso
-                val simCountryIso = tMgr.simCountryIso
+                val locale = Locale.getDefault()
+                val phoneNumber = getNumber(locale.country)
 
-                if (!fillFields(number)) {
-                    if (networkCountryIso.isNotEmpty() || simCountryIso.isNotEmpty()) {
-                        val iso = (networkCountryIso ?: simCountryIso).toUpperCase()
-                        val phoneUtil = PhoneNumberUtil.getInstance()
-
-                        country = Locale(Locale.getDefault().language, iso).displayCountry
-                        val countryCode = phoneUtil.getCountryCodeForRegion(iso)
-
-                        // Update Text Watcher always first
-                        updateTextWatcher(iso)
-                        // Update EditText
-                        textInputCountry.setText(country)
-                        textInputPhone.prefix = "+$countryCode"
-                        textInputPhone.setText("")
-                    } else {
-                        val phoneUtil = PhoneNumberUtil.getInstance()
-                        val locale = Locale.getDefault()
-
-                        country = locale.displayCountry
-                        textInputCountry.setText(country)
-
-                        val iso = locale.country.toUpperCase()
-                        if (iso.isNotEmpty()) {
-                            val countryCode = phoneUtil.getCountryCodeForRegion(iso)
-
-                            // Update Text Watcher always first
-                            updateTextWatcher(iso)
-                            // Update EditText
-                            textInputPhone.prefix = "+$countryCode "
-                            textInputPhone.setText("")
-                        }
-                    }
-                }
+                // Update Text Watcher always first
+                updateTextWatcher(phoneNumber.regionCode)
+                textInputCountry.setText(Locale(locale.language, phoneNumber.regionCode).displayCountry)
+                textInputPhone.prefix = "+${phoneNumber.countryCode}"
+                textInputPhone.append(phoneNumber.number)
             }
         }
     }
@@ -192,7 +158,7 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                     val phoneNumber = phoneUtil.parse(phone, null)
 
                     if (phoneNumber.countryCode == 53) {
-                        R.string.install_yuupi_world
+                        R.string.choose_yuupi_world
                     } else if (!phoneUtil.isValidNumber(phoneNumber)) {
                         R.string.phone_number_not_valid
                     } else {
@@ -203,9 +169,14 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                     R.string.phone_number_not_valid
                 }
             }
-        }
 
-        return errorMsgId == -1
+            return if (errorMsgId != -1) {
+                isValidated = false
+                false
+            } else {
+                true
+            }
+        }
     }
 
     override fun checkSentVerificationEmail(result: Byte): Boolean {
@@ -256,8 +227,8 @@ class PhoneFragment : PhoneBaseFragment(), CountryListDialogFragment.Listener {
                     val phoneNumber = phoneUtil.parse(number, null)
 
                     val countryCode = phoneNumber.countryCode
-                    val regionCode = phoneUtil.getRegionCodeForNumber(phoneNumber) ?:
-                            phoneUtil.getRegionCodeForCountryCode(countryCode)
+                    val regionCode = phoneUtil.getRegionCodeForNumber(phoneNumber)
+                            ?: phoneUtil.getRegionCodeForCountryCode(countryCode)
 
                     val country = Locale(Locale.getDefault().language, regionCode).displayCountry
 

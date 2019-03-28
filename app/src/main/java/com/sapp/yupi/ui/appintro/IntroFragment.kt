@@ -76,7 +76,10 @@ abstract class IntroFragment : Fragment(), ISlidePolicy {
 
     protected fun isNetworkConnected(): Boolean {
         errorMsgId = when {
-            !NetworkStatus.isConnected() -> R.string.network_not_connected
+            !NetworkStatus.isConnected() -> {
+                isValidated = false
+                R.string.network_not_connected
+            }
             else -> -1
         }
 
