@@ -53,7 +53,7 @@ android {
         buildConfigField "String", "CUBA_PORT", '"25"'
         buildConfigField "String", "CUBA_SSL_ENABLED", '"false"'
 
-        archivesBaseName = "yuupi-v$versionName"
+        archivesBaseName = "yuuupi-v$versionName"
     }
 
     buildTypes {
