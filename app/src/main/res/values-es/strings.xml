@@ -71,4 +71,7 @@
     <string name="empty_messages">No tienes mensajes.</string>
     <string name="sms">SMS</string>
 
+    <!--Channels-->
+    <string name="channel_name_messages">Mensajes</string>
+
 </resources>

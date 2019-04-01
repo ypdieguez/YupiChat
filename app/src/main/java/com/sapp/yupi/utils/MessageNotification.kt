@@ -6,10 +6,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.sapp.yupi.R
 import com.sapp.yupi.data.Contact
 import com.sapp.yupi.ui.CONTACT
 import com.sapp.yupi.ui.MainActivity
+import android.app.NotificationChannel
+import android.os.Build
+import com.sapp.yupi.R
+
 
 /**
  * Helper class for showing and canceling message
@@ -22,7 +25,9 @@ object MessageNotification {
     /**
      * The unique identifier for this type of notification.
      */
-    private const val NOTIFICATION_TAG = "YuupiMessage"
+    private const val NOTIFICATION_TAG = "notification_tag_message"
+
+    private const val CHANNEL_ID = "channel_id_messages"
 
     /**
      * Shows the notification, or updates a previously shown notification of
@@ -35,7 +40,7 @@ object MessageNotification {
         val title = contact.name
         val picture = AvatarUtil.with(context).bitmapFromContact(contact)
 
-        val builder = NotificationCompat.Builder(context)
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
 
                 // Set appropriate defaults for the notification light, sound,
                 // and vibration.
@@ -51,7 +56,7 @@ object MessageNotification {
 
                 // Use a default priority (recognized on devices running Android
                 // 4.1 or later)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
 
                 // Provide a large icon, shown with the notification in the
                 // notification drawer on devices running Android 3.0 or later.
@@ -85,6 +90,11 @@ object MessageNotification {
 
     private fun notify(context: Context, notification: Notification) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            nm.createNotificationChannel(NotificationChannel(CHANNEL_ID,
+                    context.getString(R.string.channel_name_messages),
+                    NotificationManager.IMPORTANCE_HIGH))
+        }
         nm.notify(NOTIFICATION_TAG, 0, notification)
     }
 

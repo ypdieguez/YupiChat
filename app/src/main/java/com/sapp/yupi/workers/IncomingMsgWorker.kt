@@ -3,6 +3,7 @@ package com.sapp.yupi.workers
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.content.ContextCompat
@@ -13,6 +14,7 @@ import com.sapp.yupi.*
 import com.sapp.yupi.data.*
 import com.sapp.yupi.utils.PhoneUtil
 import com.sapp.yupi.UserPref
+import com.sapp.yupi.receivers.NotificationReceiver
 import java.util.*
 
 /**
@@ -96,14 +98,22 @@ class IncomingMsgWorker(context: Context, workerParams: WorkerParameters)
     }
 
     private fun sendNotification(notification: Notification, phone: String) {
+        // Register NotificationReceiver
+//        val filter = IntentFilter(BROADCAST_NOTIFICATION)
+//        filter.priority = 0
+//        applicationContext.registerReceiver(NotificationReceiver(), filter)
+
+        // Create broadcast
         val extras = Bundle()
         extras.putParcelable(NOTIFICATION, notification)
         extras.putString(PHONE_NOTIFICATION, phone)
 
-        val broadcast = Intent()
-        broadcast.putExtras(extras)
-        broadcast.action = BROADCAST_NOTIFICATION
+        val intent = Intent()
+        intent.putExtras(extras)
+        intent.action = BROADCAST_NOTIFICATION
+        intent.setPackage(applicationContext.packageName)
 
-        applicationContext.sendOrderedBroadcast(broadcast, null)
+        // Send broadcast
+        applicationContext.sendOrderedBroadcast(intent, null)
     }
 }
