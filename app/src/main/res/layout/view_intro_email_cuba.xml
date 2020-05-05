@@ -15,7 +15,7 @@
             <ImageView
                 android:id="@+id/image"
                 style="@style/IntroImage"
-                android:src="@drawable/icons8_new_post_512"
+                app:srcCompat="@drawable/icons8_new_post_512"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
 

@@ -6,18 +6,19 @@ buildscript {
     }
     repositories {
         mavenLocal()
+        google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:$nav_version"
-
     }
 }
 
 allprojects {
     repositories {
         mavenLocal()
+        google()
     }
 }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout style="@style/IntroSlide">
@@ -14,7 +15,7 @@
             <ImageView
                 android:id="@+id/image"
                 style="@style/IntroImage"
-                android:src="@drawable/icons8_phone_480"
+                app:srcCompat="@drawable/icons8_phone_480"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
 

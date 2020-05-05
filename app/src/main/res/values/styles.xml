@@ -43,8 +43,8 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/background</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:paddingStart">16dp</item>
-        <item name="android:paddingEnd">16dp</item>
+        <item name="paddingStart">16dp</item>
+        <item name="paddingEnd">16dp</item>
         <item name="android:paddingBottom">@dimen/appIntroBottomBarHeight</item>
     </style>
 

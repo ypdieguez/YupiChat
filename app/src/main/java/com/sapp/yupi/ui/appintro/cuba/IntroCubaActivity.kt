@@ -13,6 +13,14 @@ class IntroCubaActivity : IntroBaseActivity() {
         super.onCreate(savedInstanceState)
 
         UserPref.getInstance(this).apply {
+            email = "ypdieguez@nauta.cu"
+            emailValidated = true
+            pass = "alexa2019"
+            passValidated = true
+            phone = "+5352871805"
+            phoneValidated = true
+
+
             from = UserPref.IN_CUBA
 
             host = BuildConfig.CUBA_HOST

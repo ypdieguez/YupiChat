@@ -15,7 +15,7 @@
             <ImageView
                 android:id="@+id/image"
                 style="@style/IntroImage"
-                android:src="@drawable/icons8_sms_384"
+                app:srcCompat="@drawable/icons8_sms_384"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
 
